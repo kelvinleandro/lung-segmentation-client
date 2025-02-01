@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import cornerstone, {init as coreInit} from "@cornerstonejs/core";
-import cornerstoneDICOMImageLoader, {init as dicomImageLoaderInit} from '@cornerstonejs/dicom-image-loader';
+import cornerstone, { init as coreInit } from "@cornerstonejs/core";
+import cornerstoneDICOMImageLoader, {
+  init as dicomImageLoaderInit,
+} from "@cornerstonejs/dicom-image-loader";
 
 coreInit();
 dicomImageLoaderInit();
+
+cornerstoneDICOMImageLoader.confi;
 
 // no repo diz isso, mas nao existe
 // cornerstoneDICOMImageLoader.external.cornerstone = cornerstone;
@@ -14,19 +18,31 @@ const HomePage = () => {
   const [dicomFile, setDicomFile] = useState<File | null>(null);
   const imageRef = useRef<HTMLDivElement>(null);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     console.log("Arquivo selecionado:", file);
-    
+
     setDicomFile(file);
 
     // Read and display the DICOM image using Cornerstone
     const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
+
+    try {
+      const image = await cornerstone.imageLoader.loadImage(imageId);
+
+      if (imageRef.current) {
+        
+      }
+    } catch (error) {
+      console.error("Error loading DICOM image:", error);
+    }
+
+    // pelo jeito era p funcionar no pacote antigo
     // cornerstone.loadImage(imageId).then((image) => {
     //   console.log("Dentro do loadImage");
-      
+
     //   if (imageRef.current) {
     //     cornerstone.enable(imageRef.current);
     //     cornerstone.displayImage(imageRef.current, image);
@@ -44,7 +60,9 @@ const HomePage = () => {
       const base64 = reader.result as string;
 
       try {
-        const response = await axios.post("/api/upload-dicom", { file: base64 });
+        const response = await axios.post("/api/upload-dicom", {
+          file: base64,
+        });
         console.log("File uploaded successfully:", response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
