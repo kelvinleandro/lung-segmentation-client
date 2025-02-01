@@ -1,7 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import * as cornerstone from "cornerstone-core";
+import cornerstone from "cornerstone-core";
 import cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader';
+
+cornerstoneDICOMImageLoader.init({
+  maxWebWorkers: 1,
+});
+
+// no repo diz isso, mas nao existe
+// cornerstoneDICOMImageLoader.external.cornerstone = cornerstone;
 
 const HomePage = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -12,11 +19,15 @@ const HomePage = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    console.log("Arquivo selecionado:", file);
+    
     setDicomFile(file);
 
     // Read and display the DICOM image using Cornerstone
     const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
     cornerstone.loadImage(imageId).then((image) => {
+      console.log("Dentro do loadImage");
+      
       if (imageRef.current) {
         cornerstone.enable(imageRef.current);
         cornerstone.displayImage(imageRef.current, image);
@@ -54,7 +65,6 @@ const HomePage = () => {
 
   return (
     <div className="bg-gray-300 h-screen w-full flex flex-col gap-8 items-center justify-center py-8">
-      {/* Image Selection Area */}
       <div
         onClick={() => document.getElementById("dicom-upload")?.click()}
         className="border-2 border-dashed rounded-lg p-6 cursor-pointer border-gray-400 h-40 w-40 transition-colors"
@@ -65,13 +75,13 @@ const HomePage = () => {
               {/* Cornerstone will render the DICOM image here */}
             </div>
             <p className="text-sm text-gray-500 text-center mt-2">
-              Click to change image
+              Clique para mudar a imagem
             </p>
           </div>
         ) : (
           <div className="text-center">
             <p className="mt-2 text-sm text-gray-500">
-              Click to select DICOM image
+              Clique para selecionar imagem DICOM
             </p>
           </div>
         )}
@@ -89,7 +99,7 @@ const HomePage = () => {
         disabled={!dicomFile}
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
       >
-        Send DICOM to Server
+        Enviar
       </button>
     </div>
   );
