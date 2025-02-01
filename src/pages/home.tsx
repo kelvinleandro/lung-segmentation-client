@@ -1,12 +1,10 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-import cornerstone, { init as coreInit } from "@cornerstonejs/core";
-import cornerstoneDICOMImageLoader, {
-  init as dicomImageLoaderInit,
-} from "@cornerstonejs/dicom-image-loader";
+import * as cornerstone from "@cornerstonejs/core";
+import * as cornerstoneDICOMImageLoader from "@cornerstonejs/dicom-image-loader";
 
-coreInit();
-dicomImageLoaderInit();
+cornerstone.init();
+cornerstoneDICOMImageLoader.init();
 
 const HomePage = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -21,18 +19,16 @@ const HomePage = () => {
 
     setDicomFile(file);
 
-    // Read and display the DICOM image using Cornerstone
-    // const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
+    const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
 
-    // try {
-    //   const _image = await cornerstone.imageLoader.loadImage(imageId);
+    try {
+      const _image = await cornerstone.imageLoader.loadImage(imageId);
 
-    //   if (imageRef.current) {
-
-    //   }
-    // } catch (error) {
-    //   console.error("Error loading DICOM image:", error);
-    // }
+      console.log("Image loaded:", _image);
+      
+    } catch (error) {
+      console.error("Error loading DICOM image:", error);
+    }
 
     // pelo jeito era p funcionar no pacote antigo
     // cornerstone.loadImage(imageId).then((image) => {
