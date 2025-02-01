@@ -10,13 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cornerstonejs/dicom-image-loader": "^2.18.3",
     "@tailwindcss/vite": "^4.0.2",
+    "axios": "^1.7.9",
+    "cornerstone-core": "^2.6.1",
+    "cornerstone-tools": "^6.0.10",
+    "cornerstone-wado-image-loader": "^4.13.2",
+    "dicom-parser": "^1.8.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.5",
     "tailwindcss": "^4.0.2"
   },
   "devDependencies": {
+    "@types/cornerstone-core": "^2.3.3",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
