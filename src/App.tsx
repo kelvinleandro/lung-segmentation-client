@@ -1,15 +1,15 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/home";
+import NotFoundPage from "./pages/not-found";
+
 function App() {
   return (
-    <div className="bg-gray-300 h-screen w-full flex flex-col gap-8 items-center py-8">
-      <h1 className="text-3xl font-bold text-center">
-        Nada aqui por enquanto...
-      </h1>
-      <img
-        className="w-[300px] h-auto"
-        src="https://i.pinimg.com/originals/89/5c/e7/895ce751ba0379700381d17a67086931.gif"
-        alt="NEVER GONNA GIVE YOU UP"
-      />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Router>
   );
 }
 
