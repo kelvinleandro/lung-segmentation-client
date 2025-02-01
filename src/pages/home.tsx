@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import cornerstone from "cornerstone-core";
-import cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader';
+import cornerstone, {init as coreInit} from "@cornerstonejs/core";
+import cornerstoneDICOMImageLoader, {init as dicomImageLoaderInit} from '@cornerstonejs/dicom-image-loader';
 
-cornerstoneDICOMImageLoader.init({
-  maxWebWorkers: 1,
-});
+coreInit();
+dicomImageLoaderInit();
 
 // no repo diz isso, mas nao existe
 // cornerstoneDICOMImageLoader.external.cornerstone = cornerstone;
@@ -25,15 +24,15 @@ const HomePage = () => {
 
     // Read and display the DICOM image using Cornerstone
     const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
-    cornerstone.loadImage(imageId).then((image) => {
-      console.log("Dentro do loadImage");
+    // cornerstone.loadImage(imageId).then((image) => {
+    //   console.log("Dentro do loadImage");
       
-      if (imageRef.current) {
-        cornerstone.enable(imageRef.current);
-        cornerstone.displayImage(imageRef.current, image);
-        setImage(imageId); // Set the image ID for reference
-      }
-    });
+    //   if (imageRef.current) {
+    //     cornerstone.enable(imageRef.current);
+    //     cornerstone.displayImage(imageRef.current, image);
+    //     setImage(imageId); // Set the image ID for reference
+    //   }
+    // });
   };
 
   const sendFileToServer = async () => {
