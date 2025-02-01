@@ -24,4 +24,4 @@
 
 4. Acesse o projeto
 
-    Abra o navegador e acesse a URL fornecida pelo Vite http://localhost:5173
+    Abra o navegador e acesse a URL fornecida pelo Vite

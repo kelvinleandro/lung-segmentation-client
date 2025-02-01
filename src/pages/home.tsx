@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 import cornerstone, { init as coreInit } from "@cornerstonejs/core";
 import cornerstoneDICOMImageLoader, {
@@ -7,11 +7,6 @@ import cornerstoneDICOMImageLoader, {
 
 coreInit();
 dicomImageLoaderInit();
-
-cornerstoneDICOMImageLoader.confi;
-
-// no repo diz isso, mas nao existe
-// cornerstoneDICOMImageLoader.external.cornerstone = cornerstone;
 
 const HomePage = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -27,17 +22,17 @@ const HomePage = () => {
     setDicomFile(file);
 
     // Read and display the DICOM image using Cornerstone
-    const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
+    // const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
 
-    try {
-      const image = await cornerstone.imageLoader.loadImage(imageId);
+    // try {
+    //   const _image = await cornerstone.imageLoader.loadImage(imageId);
 
-      if (imageRef.current) {
-        
-      }
-    } catch (error) {
-      console.error("Error loading DICOM image:", error);
-    }
+    //   if (imageRef.current) {
+
+    //   }
+    // } catch (error) {
+    //   console.error("Error loading DICOM image:", error);
+    // }
 
     // pelo jeito era p funcionar no pacote antigo
     // cornerstone.loadImage(imageId).then((image) => {
@@ -69,16 +64,6 @@ const HomePage = () => {
       }
     };
   };
-
-  // Cleanup Cornerstone on component unmount
-  useEffect(() => {
-    return () => {
-      if (imageRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        cornerstone.disable(imageRef.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="bg-gray-300 h-screen w-full flex flex-col gap-8 items-center justify-center py-8">
