@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import * as cornerstone from "@cornerstonejs/core";
 import * as cornerstoneDICOMImageLoader from "@cornerstonejs/dicom-image-loader";
+import { Upload } from "lucide-react";
 
 cornerstone.init();
 cornerstoneDICOMImageLoader.init();
@@ -65,7 +66,7 @@ const HomePage = () => {
     <div className="bg-gray-300 h-screen w-full flex flex-col gap-8 items-center justify-center py-8">
       <div
         onClick={() => document.getElementById("dicom-upload")?.click()}
-        className="border-2 border-dashed rounded-lg p-6 cursor-pointer border-gray-400 h-40 w-40 transition-colors"
+        className="border-2 border-dashed rounded-lg cursor-pointer border-gray-400 h-40 w-40 transition-colors"
       >
         {image ? (
           <div className="relative">
@@ -77,8 +78,9 @@ const HomePage = () => {
             </p>
           </div>
         ) : (
-          <div className="text-center">
-            <p className="mt-2 text-sm text-gray-500">
+          <div className="flex flex-col items-center justify-center gap-2 w-full h-full">
+            <Upload size={40} />
+            <p className="text-md font-semibold text-center text-gray-500">
               Clique para selecionar imagem DICOM
             </p>
           </div>
@@ -95,10 +97,11 @@ const HomePage = () => {
       <button
         onClick={sendFileToServer}
         disabled={!dicomFile}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
+        className="py-1 text-lg w-18 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
       >
         Enviar
       </button>
+
     </div>
   );
 };
