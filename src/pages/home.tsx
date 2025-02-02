@@ -83,18 +83,22 @@ const HomePage = () => {
 
       console.log("Resposta do servidor:", response.data);
 
-      // const blob = new Blob([response.data], { type: "application/dicom" });
+      const blob = new Blob([response.data], { type: "application/dicom" });
       // const file = new File([blob], "rotated.dcm");
+      // Create a downloadable URL
+      const downloadUrl = URL.createObjectURL(blob);
 
-      // const imageId = wadouri.fileManager.add(file);
-      // setImage(imageId);
+      // Create a temporary link and trigger download
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = "rotated_image.dcm"; // Filename to save
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
 
-      // const renderingEngine = renderingEngineRef.current;
-      // if (renderingEngine) {
-      //   const viewport = renderingEngine.getViewport(viewportId) as Types.IStackViewport;
-      //   await viewport.setStack([imageId]);
-      //   viewport.render();
-      // }
+      // Free memory
+      URL.revokeObjectURL(downloadUrl);
+
     } catch (error) {
       console.error("Erro ao enviar arquivo DICOM:", error);
     }
