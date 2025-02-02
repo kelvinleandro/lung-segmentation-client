@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import * as cornerstone from "@cornerstonejs/core";
 import * as cornerstoneDICOMImageLoader from "@cornerstonejs/dicom-image-loader";
@@ -7,10 +7,22 @@ import { Upload } from "lucide-react";
 cornerstone.init();
 cornerstoneDICOMImageLoader.init();
 
+const renderingEngineId = "myRenderingEngine";
+const viewportId = "dicomViewport";
+
 const HomePage = () => {
   const [image, setImage] = useState<string | null>(null);
   const [dicomFile, setDicomFile] = useState<File | null>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+  const renderingEngineRef = useRef<cornerstone.RenderingEngine | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (renderingEngineRef.current) {
+        renderingEngineRef.current.destroy();
+      }
+    };
+  }, []);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -21,26 +33,41 @@ const HomePage = () => {
     setDicomFile(file);
 
     const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file);
+    console.log("ID da imagem:", imageId);
+    setImage(imageId);
 
     try {
       const _image = await cornerstone.imageLoader.loadImage(imageId);
-
-      console.log("Image loaded:", _image);
+      console.log("Imagem carregada:", _image);
       
+
+      if (!imageRef.current) {
+        console.error("imageRef.current é null");
+        return;
+      }
+
+      if (!renderingEngineRef.current) {
+        renderingEngineRef.current = new cornerstone.RenderingEngine(renderingEngineId);
+      }
+
+      const renderingEngine = renderingEngineRef.current;
+
+      const viewportInput = {
+        viewportId,
+        type: cornerstone.Enums.ViewportType.STACK,
+        element: imageRef.current,
+      }
+
+      renderingEngine.enableElement(viewportInput);
+      const viewport = renderingEngine.getViewport(viewportId) as cornerstone.StackViewport;
+      viewport.setStack([imageId]);
+      viewport.render();
+
+      setTimeout(function(){ const metadata = viewport.getImageData(); console.log('Metadados:', metadata);  }, 5000);
+
     } catch (error) {
       console.error("Error loading DICOM image:", error);
     }
-
-    // pelo jeito era p funcionar no pacote antigo
-    // cornerstone.loadImage(imageId).then((image) => {
-    //   console.log("Dentro do loadImage");
-
-    //   if (imageRef.current) {
-    //     cornerstone.enable(imageRef.current);
-    //     cornerstone.displayImage(imageRef.current, image);
-    //     setImage(imageId); // Set the image ID for reference
-    //   }
-    // });
   };
 
   const sendFileToServer = async () => {
@@ -66,11 +93,11 @@ const HomePage = () => {
     <div className="bg-gray-300 h-screen w-full flex flex-col gap-8 items-center justify-center py-8">
       <div
         onClick={() => document.getElementById("dicom-upload")?.click()}
-        className="border-2 border-dashed rounded-lg cursor-pointer border-gray-400 h-40 w-40 transition-colors"
+        className="border-2 border-dashed rounded-lg cursor-pointer border-gray-400 h-[512px] w-[512px] transition-colors"
       >
         {image ? (
-          <div className="relative">
-            <div ref={imageRef} className="w-full h-full">
+          <div className="relative w-full h-full">
+            <div ref={imageRef} className="w-[512px] h-[512px]">
               {/* Cornerstone will render the DICOM image here */}
             </div>
             <p className="text-sm text-gray-500 text-center mt-2">
