@@ -3,12 +3,13 @@ import axios from "axios";
 import { init as coreInit, RenderingEngine, imageLoader, Types, Enums} from "@cornerstonejs/core";
 import {init as dicomImageLoaderInit, wadouri} from "@cornerstonejs/dicom-image-loader";
 import { Upload } from "lucide-react";
+import { applyWindowing } from "@/utils";
 
 coreInit();
 dicomImageLoaderInit();
 
 const renderingEngineId = "myRenderingEngine";
-const viewportId = "dicomViewport";
+const viewportId = "dicomSelectViewport";
 
 const HomePage = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -16,6 +17,7 @@ const HomePage = () => {
   const imageRef = useRef<HTMLDivElement>(null);
   const renderingEngineRef = useRef<RenderingEngine | null>(null);
 
+  // Clean up the rendering engine when the component unmounts
   useEffect(() => {
     return () => {
       if (renderingEngineRef.current) {
@@ -23,6 +25,36 @@ const HomePage = () => {
       }
     };
   }, []);
+
+  // Render the DICOM image when the image state changes
+  useEffect(() => {
+    if (image && imageRef.current) {
+      renderDicomImage(image);
+    }
+  }, [image]);
+
+  const renderDicomImage = async (imageId: string) => {
+    if (!imageRef.current) {
+      console.error("imageRef.current is null");
+      return;
+    }
+  
+    if (!renderingEngineRef.current) {
+      renderingEngineRef.current = new RenderingEngine(renderingEngineId);
+    }
+  
+    const renderingEngine = renderingEngineRef.current;
+    renderingEngine.enableElement({
+      viewportId,
+      type: Enums.ViewportType.STACK,
+      element: imageRef.current,
+    });
+  
+    const viewport = renderingEngine.getViewport(viewportId) as Types.IStackViewport;
+    await viewport.setStack([imageId]);
+    viewport.setProperties({ voiRange: { lower: -1000, upper: 2000 } });
+    viewport.render();
+  };
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -39,36 +71,6 @@ const HomePage = () => {
     try {
       const _image = await imageLoader.loadImage(imageId);
       console.log("Imagem carregada:", _image);
-      console.log("Pixel Data:", _image.getPixelData?.());
-      console.log("Min Pixel Value:", _image.minPixelValue);
-      console.log("Max Pixel Value:", _image.maxPixelValue);
-
-      if (!imageRef.current) {
-        console.error("imageRef.current é null");
-        return;
-      }
-
-      if (!renderingEngineRef.current) {
-        renderingEngineRef.current = new RenderingEngine(renderingEngineId);
-      }
-
-      const renderingEngine = renderingEngineRef.current;
-
-      const viewportInput = {
-        viewportId,
-        type: Enums.ViewportType.STACK,
-        element: imageRef.current,
-      }
-
-      renderingEngine.enableElement(viewportInput);
-      const viewport = renderingEngine.getViewport(viewportId) as Types.IStackViewport;
-      await viewport.setStack([imageId]);
-      viewport.setProperties({
-        voiRange: { lower: -1024, upper: 3072 }, // Adjust this based on the DICOM metadata
-      });
-      viewport.render();
-      setTimeout(function(){ const metadata = viewport.getImageData(); console.log('Metadados:', metadata);  }, 5000);
-
     } catch (error) {
       console.error("Erro ao carregar imagem DICOM:", error);
     }
