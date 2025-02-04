@@ -39,7 +39,9 @@ const HomePage = () => {
     try {
       const _image = await imageLoader.loadImage(imageId);
       console.log("Imagem carregada:", _image);
-      
+      console.log("Pixel Data:", _image.getPixelData?.());
+      console.log("Min Pixel Value:", _image.minPixelValue);
+      console.log("Max Pixel Value:", _image.maxPixelValue);
 
       if (!imageRef.current) {
         console.error("imageRef.current é null");
@@ -61,8 +63,10 @@ const HomePage = () => {
       renderingEngine.enableElement(viewportInput);
       const viewport = renderingEngine.getViewport(viewportId) as Types.IStackViewport;
       await viewport.setStack([imageId]);
+      viewport.setProperties({
+        voiRange: { lower: -1024, upper: 3072 }, // Adjust this based on the DICOM metadata
+      });
       viewport.render();
-
       setTimeout(function(){ const metadata = viewport.getImageData(); console.log('Metadados:', metadata);  }, 5000);
 
     } catch (error) {
@@ -84,14 +88,14 @@ const HomePage = () => {
       console.log("Resposta do servidor:", response.data);
 
       const blob = new Blob([response.data], { type: "application/dicom" });
-      // const file = new File([blob], "rotated.dcm");
+
       // Create a downloadable URL
       const downloadUrl = URL.createObjectURL(blob);
 
       // Create a temporary link and trigger download
       const a = document.createElement("a");
       a.href = downloadUrl;
-      a.download = "rotated_image.dcm"; // Filename to save
+      a.download = "rotated_image.dcm";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
