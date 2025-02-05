@@ -38,13 +38,13 @@ export const applyWindowing = (
  *   - `width` - The width of the image (in pixels).
  *   - `height` - The height of the image (in pixels).
  * @param points - Optional array of pixel coordinates ({ x, y }) to be drawn as red points on the image. If not provided, no points will be overlaid.
- * @param segmentationOpacity - Opacity level for the segmentation overlay (points). A value between 0 (transparent) and 1 (fully opaque). Defaults to 1.
+ * @param fillOpacity - Opacity level for the segmentation overlay (points). A value between 0 (transparent) and 1 (fully opaque). Defaults to 0.
  * @returns A data URL string representing the image with or without the overlay, or `null` if there is an error creating the image.
  */
 export const drawImageWithOverlay = (
   { pixelData, width, height }: ImageData,
   points: PixelCoordinate[] | null = null,
-  segmentationOpacity: number = 1
+  fillOpacity: number = 0
 ) => {
   const canvas = document.createElement("canvas");
   canvas.width = width;
@@ -61,11 +61,28 @@ export const drawImageWithOverlay = (
     }
     ctx.putImageData(image, 0, 0);
 
-    if (points) {
-      ctx.fillStyle = `rgba(255, 0, 0, ${segmentationOpacity})`;
+    if (points && points.length > 1) {
+      ctx.strokeStyle = `rgba(255, 0, 0, 1)`;
+      ctx.fillStyle = `rgba(255, 0, 0, ${fillOpacity})`; // Set a lighter color for filling
+      ctx.lineWidth = 2; // Adjust the thickness of the contour line
+
+      // Begin the path
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+
+      // Connect the points with lines
       points.forEach(({ x, y }) => {
-        ctx.fillRect(x, y, 1, 1);
+        ctx.lineTo(x, y);
       });
+
+      // Close the contour
+      ctx.closePath();
+
+      // Fill the polygon (the area inside the connected points)
+      ctx.fill();
+
+      // Draw the line
+      ctx.stroke();
     }
     return canvas.toDataURL();
   }

@@ -16,7 +16,7 @@ import { ImageData, PixelCoordinate } from "@/types/image";
 coreInit();
 dicomImageLoaderInit();
 
-const DEFAULT_OPACITY = 0.7;
+const DEFAULT_OPACITY = 0;
 
 const HomePage = () => {
   const [segmentationOpacity, setSegmentationOpacity] =
