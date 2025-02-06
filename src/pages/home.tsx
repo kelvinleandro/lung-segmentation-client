@@ -1,11 +1,11 @@
 import { useState, useMemo } from "react";
-import axios from "axios";
 import { init as coreInit, imageLoader } from "@cornerstonejs/core";
 import {
   init as dicomImageLoaderInit,
   wadouri,
 } from "@cornerstonejs/dicom-image-loader";
 import { Upload } from "lucide-react";
+import useApi from "@/hooks/use-api";
 import {
   applyWindowing,
   drawImageWithOverlay,
@@ -26,6 +26,8 @@ const HomePage = () => {
   const [segmentationPoints, setSegmentationPoints] = useState<
     PixelCoordinate[] | null
   >(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const {sendFileToServer} = useApi();
 
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
@@ -67,28 +69,19 @@ const HomePage = () => {
     }
   };
 
-  const sendFileToServer = async () => {
+  const handleSendFile = async () => {
     if (!dicomFile) return;
 
-    const formData = new FormData();
-    formData.append("dicom", dicomFile);
-
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      console.log("Response from server:", response.data);
-
-      if (response.data.points) {
-        setSegmentationPoints(response.data.points as PixelCoordinate[]);
+      setIsSubmitting(true);
+      const coordinates = await sendFileToServer(dicomFile);
+      if (coordinates) {
+        setSegmentationPoints(coordinates);
       }
     } catch (error) {
-      console.error("Error sending DICOM file:", error);
+      console.error("Error sending file:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -123,8 +116,8 @@ const HomePage = () => {
         </div>
 
         <button
-          onClick={sendFileToServer}
-          disabled={!dicomFile}
+          onClick={handleSendFile}
+          disabled={!dicomFile || isSubmitting}
           className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
         >
           Segmentar imagem
