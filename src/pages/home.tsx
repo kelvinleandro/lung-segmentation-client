@@ -122,6 +122,11 @@ const HomePage = () => {
         >
           Segmentar imagem
         </button>
+        
+        <button className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer "> 
+          
+          Gerar CSV
+        </button>
       </div>
 
       <div className="w-[38%] flex flex-col items-start">
