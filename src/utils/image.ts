@@ -108,3 +108,35 @@ export const downloadImage = (imageSrc: string, fileName: string) => {
   link.click();
   document.body.removeChild(link);
 };
+
+
+
+
+/**
+ * Saves an array of pixel coordinates as a CSV file and triggers the download.
+ * The CSV file will contain two columns: `x` and `y`, representing the coordinates of each point.
+ *
+ * @param points - An array of pixel coordinates ({ x, y }) to be saved as CSV.
+ *                 If the array is empty or `null`, the function exits without saving.
+ * @param fileName - The name to be used for the downloaded CSV file, including the file extension (e.g., "points.csv").
+ * 
+ * @returns void
+ */
+export const savePointAsCSV = (points: PixelCoordinate[] | null = null, fileName: string) => {
+  if (!points || points.length === 0) return; 
+  const csvContent = ["x,y", ...points.map(({ x, y }) => `${x},${y}`)].join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.href = url;
+  link.download = fileName;
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url); 
+};
+
