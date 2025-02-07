@@ -27,7 +27,7 @@ const HomePage = () => {
     PixelCoordinate[] | null
   >(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const {sendFileToServer} = useApi();
+  const { sendFileToServer } = useApi();
 
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
@@ -122,9 +122,8 @@ const HomePage = () => {
         >
           Segmentar imagem
         </button>
-        
-        <button className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer "> 
-          
+
+        <button className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer ">
           Gerar CSV
         </button>
       </div>
@@ -146,7 +145,14 @@ const HomePage = () => {
               />
             </label>
             <button
-              onClick={() => downloadImage(imageSrc!, "output_image.png")}
+              onClick={() => {
+                if (dicomFile) {
+                  const fileName = dicomFile.name.replace(/\.[^/.]+$/, ""); 
+                  downloadImage(imageSrc!, `points_${fileName}.png`);
+                } else {
+                  alert("Nenhum arquivo selecionado");
+                }
+              }}
               className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               Download
