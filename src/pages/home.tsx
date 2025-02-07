@@ -10,6 +10,7 @@ import {
   applyWindowing,
   drawImageWithOverlay,
   downloadImage,
+  savePointAsCSV,
 } from "@/utils/image";
 import { ImageData, PixelCoordinate } from "@/types/image";
 
@@ -123,7 +124,23 @@ const HomePage = () => {
           Segmentar imagem
         </button>
 
-        <button className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer ">
+        <button
+          onClick={() => {
+            if (dicomFile) {
+              if (segmentationPoints && segmentationPoints.length > 0) {
+                const fileName = dicomFile.name.replace(/\.[^/.]+$/, "");
+                savePointAsCSV(segmentationPoints, `points_${fileName}.csv`);
+              } else {
+                alert(
+                  "A segmentação precisa ser feita antes de exportar o CSV."
+                );
+              }
+            } else {
+              alert("Nenhum arquivo selecionado.");
+            }
+          }}
+          className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer "
+        >
           Gerar CSV
         </button>
       </div>
@@ -147,8 +164,8 @@ const HomePage = () => {
             <button
               onClick={() => {
                 if (dicomFile) {
-                  const fileName = dicomFile.name.replace(/\.[^/.]+$/, ""); 
-                  downloadImage(imageSrc!, `points_${fileName}.png`);
+                  const fileName = dicomFile.name.replace(/\.[^/.]+$/, "");
+                  downloadImage(imageSrc!, `${fileName}.png`);
                 } else {
                   alert("Nenhum arquivo selecionado");
                 }
