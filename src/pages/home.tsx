@@ -6,6 +6,7 @@ import {
 } from "@cornerstonejs/dicom-image-loader";
 import { Upload } from "lucide-react";
 import useApi from "@/hooks/use-api";
+import DICOMViewer from "@/components/dicom-Viewer";
 import {
   applyWindowing,
   drawImageWithOverlay,
@@ -85,12 +86,11 @@ const HomePage = () => {
       setIsSubmitting(false);
     }
   };
-
+  console.log(imageData)
   return (
-    <div className="bg-gray-300 h-screen w-full flex flex-row items-center justify-center py-8">
-      <div className="flex flex-col w-[60%] items-center justify-center gap-8">
+    <div className="bg-gray-300 h-screen w-full flex flex-row items-center justify-center py-8 gap-8 flex-wrap">
+      <div className="flex flex-col w-[45%] items-center justify-center gap-8">
         <div
-          onClick={() => document.getElementById("dicom-upload")?.click()}
           className="cursor-pointer border-gray-400 w-[512px] h-[512px] transition-colors"
         >
           {imageSrc ? (
@@ -114,8 +114,14 @@ const HomePage = () => {
             className="hidden"
             onChange={handleFileSelect}
           />
+          
         </div>
-
+        <button
+          onClick={() => document.getElementById("dicom-upload")?.click()}
+          className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
+          >
+            Selecionar Imagem
+        </button>
         <button
           onClick={handleSendFile}
           disabled={!dicomFile || isSubmitting}
@@ -144,6 +150,7 @@ const HomePage = () => {
           Gerar CSV
         </button>
       </div>
+      <DICOMViewer imageData={imageData} segmentationPoints={[]} />
 
       <div className="w-[38%] flex flex-col items-start">
         {segmentationPoints && (
