@@ -1,9 +1,20 @@
-import React, { useRef, useEffect, useMemo, useState } from "react";
-import { Upload } from "lucide-react";
-import { ImageData } from "@/types/image";
+import { useRef, useEffect, useMemo, useState } from "react";
+import { ImageData, PixelCoordinate } from "@/types/image";
 import { drawImageWithOverlay } from "@/utils/image";
 
-const DICOMViewer = ({ imageData }: { imageData: ImageData | null }) => {
+type Props = {
+  imageData: ImageData | null;
+  segmentationPoints?: PixelCoordinate[] | null;
+  fillOpacity?: number;
+  drawable?: boolean;
+};
+
+const DICOMViewer = ({
+  imageData,
+  segmentationPoints = null,
+  fillOpacity = 0,
+  drawable = true,
+}: Props) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDrawing = useRef(false);
   const [color, setColor] = useState("#ff0000"); // Cor padrão: vermelho
@@ -11,8 +22,8 @@ const DICOMViewer = ({ imageData }: { imageData: ImageData | null }) => {
 
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
-    return drawImageWithOverlay(imageData, [], 0);
-  }, [imageData]);
+    return drawImageWithOverlay(imageData, segmentationPoints, fillOpacity);
+  }, [imageData, segmentationPoints, fillOpacity]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -26,14 +37,14 @@ const DICOMViewer = ({ imageData }: { imageData: ImageData | null }) => {
     ctx.lineCap = "round";
 
     const startDrawing = (event: MouseEvent) => {
-      if (!imageSrc) return;
+      if (!imageSrc || !drawable) return;
       isDrawing.current = true;
       ctx.beginPath();
       ctx.moveTo(event.offsetX, event.offsetY);
     };
 
     const draw = (event: MouseEvent) => {
-      if (!isDrawing.current || !imageSrc) return;
+      if (!isDrawing.current || !imageSrc || !drawable) return;
       ctx.lineTo(event.offsetX, event.offsetY);
       ctx.stroke();
     };
@@ -54,7 +65,7 @@ const DICOMViewer = ({ imageData }: { imageData: ImageData | null }) => {
       canvas.removeEventListener("mouseup", stopDrawing);
       canvas.removeEventListener("mouseleave", stopDrawing);
     };
-  }, [imageSrc, color, lineWidth]);
+  }, [imageSrc, color, lineWidth, drawable]);
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
@@ -65,17 +76,12 @@ const DICOMViewer = ({ imageData }: { imageData: ImageData | null }) => {
   };
 
   return (
-    <div className="flex flex-col w-[45%] items-center justify-center gap-4 relative">
-      <div className="relative w-[512px] h-[512px] border border-gray-400">
+    <div className="flex flex-col w-full items-center justify-center gap-4">
+      <div className="relative w-full h-full">
         {imageSrc ? (
           <img src={imageSrc} alt="Imagem DICOM" className="w-full h-full" />
         ) : (
-          <div className="flex flex-col items-center justify-center gap-2 w-full h-full border-2 border-dashed rounded-lg">
-            <Upload size={40} />
-            <p className="text-md font-semibold text-center text-gray-500">
-              Clique para selecionar imagem DICOM
-            </p>
-          </div>
+          <div className="flex flex-col items-center justify-center gap-2 w-full h-full" />
         )}
         <canvas
           ref={canvasRef}
@@ -84,8 +90,8 @@ const DICOMViewer = ({ imageData }: { imageData: ImageData | null }) => {
           height={512}
         />
       </div>
-      
-      <div className="flex gap-4 items-center">
+
+      <div className={`flex gap-4 items-center ${drawable ? "" : "hidden"}`}>
         <label className="flex items-center gap-2">
           Cor:
           <input
@@ -108,10 +114,11 @@ const DICOMViewer = ({ imageData }: { imageData: ImageData | null }) => {
           {lineWidth}px
         </label>
       </div>
-      
       <button
         onClick={clearCanvas}
-        className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
+        className={`py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 ${
+          drawable ? "" : "hidden"
+        }`}
       >
         Apagar Rabisco
       </button>

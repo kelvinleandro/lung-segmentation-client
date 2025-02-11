@@ -4,7 +4,6 @@ import {
   init as dicomImageLoaderInit,
   wadouri,
 } from "@cornerstonejs/dicom-image-loader";
-import { Upload } from "lucide-react";
 import useApi from "@/hooks/use-api";
 import DICOMViewer from "@/components/dicom-Viewer";
 import {
@@ -86,27 +85,17 @@ const HomePage = () => {
       setIsSubmitting(false);
     }
   };
-  console.log(imageData)
+  console.log(imageData);
   return (
     <div className="bg-gray-300 h-screen w-full flex flex-row items-center justify-center py-8 gap-8 flex-wrap">
       <div className="flex flex-col w-[45%] items-center justify-center gap-8">
-        <div
-          className="cursor-pointer border-gray-400 w-[512px] h-[512px] transition-colors"
-        >
-          {imageSrc ? (
-            <img
-              src={imageSrc}
-              alt="Imagem DICOM"
-              className="w-[512px] h-[512px]"
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-2 w-[512px] h-[512px] border-2 border-dashed rounded-lg">
-              <Upload size={40} />
-              <p className="text-md font-semibold text-center text-gray-500">
-                Clique para selecionar imagem DICOM
-              </p>
-            </div>
-          )}
+        <div className="cursor-pointer border-gray-400 w-[512px] h-[512px] transition-colors border-2 border-dashed">
+          <DICOMViewer
+            imageData={imageData}
+            segmentationPoints={segmentationPoints}
+            fillOpacity={segmentationOpacity}
+            drawable={false}
+          />
           <input
             id="dicom-upload"
             type="file"
@@ -114,13 +103,12 @@ const HomePage = () => {
             className="hidden"
             onChange={handleFileSelect}
           />
-          
         </div>
         <button
           onClick={() => document.getElementById("dicom-upload")?.click()}
           className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
-          >
-            Selecionar Imagem
+        >
+          Selecionar Imagem
         </button>
         <button
           onClick={handleSendFile}
@@ -150,7 +138,9 @@ const HomePage = () => {
           Gerar CSV
         </button>
       </div>
-      <DICOMViewer imageData={imageData} segmentationPoints={[]} />
+      <div className="w-[512px] h-[512px] border-2 border-gray-400 border-dashed">
+        <DICOMViewer imageData={imageData} drawable />
+      </div>
 
       <div className="w-[38%] flex flex-col items-start">
         {segmentationPoints && (
