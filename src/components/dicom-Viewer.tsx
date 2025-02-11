@@ -91,7 +91,11 @@ const DICOMViewer = ({
         />
       </div>
 
-      <div className={`flex gap-4 items-center ${drawable ? "" : "hidden"}`}>
+      <div
+        className={`flex gap-4 items-center ${
+          drawable && imageSrc ? "" : "hidden"
+        }`}
+      >
         <label className="flex items-center gap-2">
           Cor:
           <input
@@ -117,7 +121,7 @@ const DICOMViewer = ({
       <button
         onClick={clearCanvas}
         className={`py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600 ${
-          drawable ? "" : "hidden"
+          drawable && imageSrc ? "" : "hidden"
         }`}
       >
         Apagar Rabisco
