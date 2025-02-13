@@ -1,8 +1,9 @@
 import { Types } from "@cornerstonejs/core";
 
-export interface PixelCoordinate {
-  x: number;
-  y: number;
+export type PixelCoordinate = [number, number];
+
+export interface Contours {
+  [key: string]: PixelCoordinate[];
 }
 
 export interface ImageData {

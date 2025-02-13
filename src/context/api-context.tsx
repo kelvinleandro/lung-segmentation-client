@@ -1,11 +1,11 @@
 import { createContext, useState, useCallback, useMemo } from "react";
 import axios from "axios";
-import { PixelCoordinate } from "@/types/image";
+import { Contours } from "@/types/image";
 
 type ApiContextType = {
   changeBaseUrl: (url: string) => void;
   baseUrl: string;
-  sendFileToServer: (file: File) => Promise<PixelCoordinate[] | undefined>;
+  sendFileToServer: (file: File) => Promise<Contours | undefined>;
 };
 
 export const ApiContext = createContext<ApiContextType | null>(null);
@@ -53,8 +53,8 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
         console.log("Response from server:", response.data);
 
-        if (response.data.points) {
-          return response.data.points as PixelCoordinate[];
+        if (response.data) {
+          return response.data as Contours;
         }
       } catch (error) {
         console.error("Error sending DICOM file:", error);

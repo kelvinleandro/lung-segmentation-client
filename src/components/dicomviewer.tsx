@@ -1,18 +1,16 @@
 import { useRef, useEffect, useMemo, useState } from "react";
-import { ImageData, PixelCoordinate } from "@/types/image";
-import { drawImageWithOverlay } from "@/utils/image";
+import { Contours, ImageData } from "@/types/image";
+import { drawImageWithContours } from "@/utils/image";
 
 type Props = {
   imageData: ImageData | null;
-  segmentationPoints?: PixelCoordinate[] | null;
-  fillOpacity?: number;
+  contours?: Contours | null;
   drawable?: boolean;
 };
 
 const DICOMViewer = ({
   imageData,
-  segmentationPoints = null,
-  fillOpacity = 0,
+  contours = null,
   drawable = true,
 }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -22,8 +20,8 @@ const DICOMViewer = ({
 
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
-    return drawImageWithOverlay(imageData, segmentationPoints, fillOpacity);
-  }, [imageData, segmentationPoints, fillOpacity]);
+    return drawImageWithContours(imageData, contours);
+  }, [imageData, contours]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

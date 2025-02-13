@@ -4,40 +4,30 @@ import {
   init as dicomImageLoaderInit,
   wadouri,
 } from "@cornerstonejs/dicom-image-loader";
-import DICOMViewer from "@/components/dicom-viewer";
+import DICOMViewer from "@/components/dicomviewer";
 import useApi from "@/hooks/use-api";
 import {
   applyWindowing,
-  drawImageWithOverlay,
+  drawImageWithContours,
   downloadImage,
-  savePointAsCSV,
+  saveContoursAsCSV,
 } from "@/utils/image";
-import { ImageData, PixelCoordinate } from "@/types/image";
+import { ImageData, Contours } from "@/types/image";
 
 coreInit();
 dicomImageLoaderInit();
 
-const DEFAULT_OPACITY = 0;
-
 const TestPage = () => {
-  const [segmentationOpacity, setSegmentationOpacity] =
-    useState<number>(DEFAULT_OPACITY);
   const [dicomFile, setDicomFile] = useState<File | null>(null);
   const [imageData, setImageData] = useState<ImageData | null>(null);
-  const [segmentationPoints, setSegmentationPoints] = useState<
-    PixelCoordinate[] | null
-  >(null);
+  const [contours, setContours] = useState<Contours | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { sendFileToServer } = useApi();
 
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
-    return drawImageWithOverlay(
-      imageData,
-      segmentationPoints,
-      segmentationOpacity
-    );
-  }, [imageData, segmentationPoints, segmentationOpacity]);
+    return drawImageWithContours(imageData, contours);
+  }, [imageData, contours]);
 
   const handleFileSelect = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -48,7 +38,7 @@ const TestPage = () => {
     console.log("File selected:", file);
 
     setDicomFile(file);
-    setSegmentationPoints(null);
+    setContours(null);
 
     const imageId = wadouri.fileManager.add(file);
     console.log("Image ID:", imageId);
@@ -58,7 +48,7 @@ const TestPage = () => {
       console.log("Loaded image:", _image);
 
       const pixelData = _image.getPixelData();
-      const normalizedPixelData = applyWindowing(pixelData, 500, 3000);
+      const normalizedPixelData = applyWindowing(pixelData);
 
       setImageData({
         pixelData: normalizedPixelData,
@@ -75,9 +65,9 @@ const TestPage = () => {
 
     try {
       setIsSubmitting(true);
-      const coordinates = await sendFileToServer(dicomFile);
-      if (coordinates) {
-        setSegmentationPoints(coordinates);
+      const contours = await sendFileToServer(dicomFile);
+      if (contours) {
+        setContours(contours);
       }
     } catch (error) {
       console.error("Error sending file:", error);
@@ -92,8 +82,7 @@ const TestPage = () => {
         <div className="cursor-pointer border-gray-400 w-[512px] h-[512px] transition-colors border-2 border-dashed">
           <DICOMViewer
             imageData={imageData}
-            segmentationPoints={segmentationPoints}
-            fillOpacity={segmentationOpacity}
+            contours={contours}
             drawable={false}
           />
           <input
@@ -121,9 +110,9 @@ const TestPage = () => {
         <button
           onClick={() => {
             if (dicomFile) {
-              if (segmentationPoints && segmentationPoints.length > 0) {
+              if (contours) {
                 const fileName = dicomFile.name.replace(/\.[^/.]+$/, "");
-                savePointAsCSV(segmentationPoints, `points_${fileName}.csv`);
+                saveContoursAsCSV(contours, `contours_${fileName}.csv`);
               } else {
                 alert(
                   "A segmentação precisa ser feita antes de exportar o CSV."
@@ -143,35 +132,20 @@ const TestPage = () => {
       </div>
 
       <div className="w-[38%] flex flex-col items-start">
-        {segmentationPoints && (
-          <>
-            <label>
-              Opacidade: {Math.round(segmentationOpacity * 100)}%
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={segmentationOpacity}
-                onChange={(e) =>
-                  setSegmentationOpacity(parseFloat(e.target.value))
-                }
-              />
-            </label>
-            <button
-              onClick={() => {
-                if (dicomFile) {
-                  const fileName = dicomFile.name.replace(/\.[^/.]+$/, "");
-                  downloadImage(imageSrc!, `${fileName}.png`);
-                } else {
-                  alert("Nenhum arquivo selecionado");
-                }
-              }}
-              className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Download
-            </button>
-          </>
+        {contours && (
+          <button
+            onClick={() => {
+              if (dicomFile) {
+                const fileName = dicomFile.name.replace(/\.[^/.]+$/, "");
+                downloadImage(imageSrc!, `${fileName}.png`);
+              } else {
+                alert("Nenhum arquivo selecionado");
+              }
+            }}
+            className="py-1 px-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Download
+          </button>
         )}
       </div>
     </div>
