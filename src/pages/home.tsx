@@ -1,19 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/page-layout";
+import { selectFile } from "@/utils/file";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      navigate(`/segmentation`, { state: { file: file } });
+    try {
+      const file = selectFile(event);
+      navigate("/segmentation", { state: { file } });
+    } catch (error) {
+      console.log("Deu ruim.");
     }
   };
 
   return (
     <PageLayout>
-      <main>Home Page</main>
+      <main className="flex flex-1">Home Page</main>
     </PageLayout>
   );
 };
