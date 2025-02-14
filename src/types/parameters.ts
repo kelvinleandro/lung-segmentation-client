@@ -15,4 +15,6 @@ export interface SelectionParameters {
   lineWidth: number;
   color: string;
   zoom: number;
+  isPanning: boolean;
+  isDrawing: boolean;
 }

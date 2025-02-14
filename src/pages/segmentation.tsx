@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import PageLayout from "@/components/page-layout";
 import ParametersSelector from "@/components/parameters-selector";
@@ -9,15 +7,7 @@ import SelectionSection from "@/components/selection-section";
 import { ApplicationMode } from "@/types/parameters";
 
 const SegmentationPage = () => {
-  const location = useLocation();
-  const [dicomFile, setDicomFile] = useState<File | null>(null);
   const mode: ApplicationMode = "segmentation";
-
-  useEffect(() => {
-    if (location.state && location.state.file) {
-      setDicomFile(location.state.file);
-    }
-  }, [location.state]);
 
   return (
     <PageLayout>
