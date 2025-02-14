@@ -22,9 +22,11 @@ const TestPage = () => {
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [contours, setContours] = useState<Contours | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [color, setColor] = useState("#ff0000"); // Cor padrão: vermelho
+  const [color, setColor] = useState("#ff0000");
   const [lineWidth, setLineWidth] = useState(2);
   const [zoom, setZoom] = useState(1);
+  const [isPanning, setIsPanning] = useState(false);
+  const [isDrawing, setIsDrawing] = useState(false);
   const clearRef = useRef<HTMLButtonElement | null>(null);
   const { sendFileToServer } = useApi();
 
@@ -88,6 +90,8 @@ const TestPage = () => {
             imageData={imageData}
             contours={contours}
             drawable={false}
+            isPanning={false}
+            isDrawing={false}
           />
           <input
             id="dicom-upload"
@@ -139,6 +143,8 @@ const TestPage = () => {
           lineWidth={lineWidth}
           tintColor={color}
           clearRef={clearRef}
+          isPanning={isPanning}
+          isDrawing={isDrawing}
         />
       </div>
 
@@ -177,6 +183,32 @@ const TestPage = () => {
             className="w-24"
           />
           {zoom}
+        </label>
+
+        <label className="flex items-center gap-2">
+          Pan:
+          <input
+            type="checkbox"
+            checked={isPanning}
+            onChange={(e) => {
+              setIsPanning(e.target.checked);
+              setIsDrawing(!e.target.checked);
+            }}
+            className="w-4 h-4"
+          />
+        </label>
+
+        <label className="flex items-center gap-2">
+          Draw:
+          <input
+            type="checkbox"
+            checked={isDrawing}
+            onChange={(e) => {
+              setIsDrawing(e.target.checked);
+              setIsPanning(!e.target.checked);
+            }}
+            className="w-4 h-4"
+          />
         </label>
       </div>
       <button

@@ -10,6 +10,8 @@ type Props = {
   lineWidth?: number;
   zoom?: number;
   clearRef?: React.RefObject<HTMLButtonElement>;
+  isPanning: boolean;
+  isDrawing: boolean;
 };
 
 const DICOMViewer = ({
@@ -20,12 +22,12 @@ const DICOMViewer = ({
   lineWidth = 2,
   zoom = 1,
   clearRef,
+  isPanning,
+  isDrawing,
 }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const isDrawing = useRef(false);
-  const isPanning = useRef(false);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
-  const lastTouchDistance = useRef<number | null>(null);
+  const lastMousePosition = useRef<{ x: number; y: number } | null>(null);
 
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
@@ -40,20 +42,6 @@ const DICOMViewer = ({
   }, [zoom]);
 
   useEffect(() => {
-    const handleContextMenu = (event: MouseEvent) => {
-      if (isPanning.current) {
-        event.preventDefault(); // Prevent right-click menu from appearing
-      }
-    };
-
-    document.addEventListener("contextmenu", handleContextMenu);
-
-    return () => {
-      document.removeEventListener("contextmenu", handleContextMenu);
-    };
-  }, []);
-
-  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -66,165 +54,68 @@ const DICOMViewer = ({
     ctx.lineCap = "round";
 
     // Convert screen coordinates to canvas coordinates
-    const getCanvasCoordinates = (event: MouseEvent | TouchEvent) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return { x: 0, y: 0 };
-
+    const getCanvasCoordinates = (event: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const clientX =
-        "touches" in event ? event.touches[0].clientX : event.clientX;
-      const clientY =
-        "touches" in event ? event.touches[0].clientY : event.clientY;
 
-      const x = (clientX - rect.left - panOffset.x) / zoom;
-      const y = (clientY - rect.top - panOffset.y) / zoom;
-      return { x, y };
+      return {
+        x: (event.clientX - rect.left - panOffset.x) / zoom,
+        y: (event.clientY - rect.top - panOffset.y) / zoom,
+      };
     };
 
-    // Start drawing
-    const startDrawing = (event: MouseEvent | TouchEvent) => {
-      if (!imageSrc || !drawable) return;
+    const handleMouseDown = (event: MouseEvent) => {
+      if (event.button === 0) {
+        if (isDrawing && drawable) {
+          const { x, y } = getCanvasCoordinates(event);
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+        } else if (isPanning && zoom > 1) {
+          lastMousePosition.current = { x: event.clientX, y: event.clientY };
+        }
+      }
+    };
 
-      // Only draw if the left mouse button is pressed and panning is not active
-      if ("buttons" in event && event.buttons === 1 && !isPanning.current) {
-        isDrawing.current = true;
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.buttons !== 1) return;
+
+      if (isDrawing && drawable) {
         const { x, y } = getCanvasCoordinates(event);
-        ctx.beginPath();
-        ctx.moveTo(x, y);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      } else if (isPanning && lastMousePosition.current && zoom > 1) {
+        const deltaX = event.clientX - lastMousePosition.current.x;
+        const deltaY = event.clientY - lastMousePosition.current.y;
+        setPanOffset((prev) => ({ x: prev.x + deltaX, y: prev.y + deltaY }));
+        lastMousePosition.current = { x: event.clientX, y: event.clientY };
       }
     };
 
-    // Draw
-    const draw = (event: MouseEvent | TouchEvent) => {
-      if (!isDrawing.current || !imageSrc || !drawable || isPanning.current)
-        return;
-      const { x, y } = getCanvasCoordinates(event);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-    };
-
-    // Stop drawing
-    const stopDrawing = () => {
-      isDrawing.current = false;
+    const handleMouseUp = () => {
       ctx.closePath();
+      lastMousePosition.current = null;
     };
 
-    // Start panning (mouse wheel click or two-finger touch)
-    const startPanning = (event: MouseEvent | TouchEvent) => {
-      if (zoom <= 1) return; // Only pan if zoom > 1
-
-      if ("buttons" in event && event.buttons === 2) {
-        // Right mouse button for panning
-        isPanning.current = true;
-        event.preventDefault(); // Prevents context menu on right-click
-      } else if ("touches" in event && event.touches.length === 2) {
-        // Two-finger touch for panning
-        isPanning.current = true;
-        const touch1 = event.touches[0];
-        const touch2 = event.touches[1];
-        lastTouchDistance.current = Math.hypot(
-          touch2.clientX - touch1.clientX,
-          touch2.clientY - touch1.clientY
-        );
-      }
-    };
-
-    // Pan (move image/canvas)
-    const pan = (event: MouseEvent | TouchEvent) => {
-      if (!isPanning.current || zoom <= 1 || isDrawing.current) return;
-
-      if ("movementX" in event) {
-        // Mouse right-click + drag
-        setPanOffset((prev) => ({
-          x: prev.x + event.movementX,
-          y: prev.y + event.movementY,
-        }));
-      } else if ("touches" in event && event.touches.length === 2) {
-        // Two-finger touch pan
-        const touch1 = event.touches[0];
-        const touch2 = event.touches[1];
-        const currentDistance = Math.hypot(
-          touch2.clientX - touch1.clientX,
-          touch2.clientY - touch1.clientY
-        );
-
-        if (lastTouchDistance.current !== null) {
-          const deltaX =
-            (touch1.clientX + touch2.clientX) / 2 - event.touches[0].clientX;
-          const deltaY =
-            (touch1.clientY + touch2.clientY) / 2 - event.touches[0].clientY;
-          setPanOffset((prev) => ({
-            x: prev.x - deltaX,
-            y: prev.y - deltaY,
-          }));
-        }
-
-        lastTouchDistance.current = currentDistance;
-      }
-    };
-
-    // Stop panning
-    const stopPanning = () => {
-      isPanning.current = false;
-      lastTouchDistance.current = null;
-
-      // Ensure the image stays within bounds after panning
-      const container = canvasRef.current?.parentElement;
-      if (!container) return;
-
-      const containerRect = container.getBoundingClientRect();
-      const canvasRect = canvasRef.current?.getBoundingClientRect();
-      if (!canvasRect) return;
-
-      setPanOffset((prev) => {
-        let newX = prev.x;
-        let newY = prev.y;
-
-        if (canvasRect.left > containerRect.left) {
-          newX -= canvasRect.left - containerRect.left;
-        }
-        if (canvasRect.top > containerRect.top) {
-          newY -= canvasRect.top - containerRect.top;
-        }
-        if (canvasRect.right < containerRect.right) {
-          newX += containerRect.right - canvasRect.right;
-        }
-        if (canvasRect.bottom < containerRect.bottom) {
-          newY += containerRect.bottom - canvasRect.bottom;
-        }
-
-        return { x: newX, y: newY };
-      });
-    };
-
-    // Add event listeners
-    canvas.addEventListener("mousedown", startDrawing);
-    canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("mouseup", stopDrawing);
-    canvas.addEventListener("mouseleave", stopDrawing);
-    canvas.addEventListener("mousedown", startPanning);
-    canvas.addEventListener("mousemove", pan);
-    canvas.addEventListener("mouseup", stopPanning);
-    canvas.addEventListener("mouseover", stopPanning);
-    canvas.addEventListener("touchstart", startPanning);
-    canvas.addEventListener("touchmove", pan);
-    canvas.addEventListener("touchend", stopPanning);
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("mouseleave", handleMouseUp);
 
     return () => {
-      // Clean up event listeners
-      canvas.removeEventListener("mousedown", startDrawing);
-      canvas.removeEventListener("mousemove", draw);
-      canvas.removeEventListener("mouseup", stopDrawing);
-      canvas.removeEventListener("mouseleave", stopDrawing);
-      canvas.removeEventListener("mousedown", startPanning);
-      canvas.removeEventListener("mousemove", pan);
-      canvas.removeEventListener("mouseup", stopPanning);
-      canvas.removeEventListener("mouseover", stopPanning);
-      canvas.removeEventListener("touchstart", startPanning);
-      canvas.removeEventListener("touchmove", pan);
-      canvas.removeEventListener("touchend", stopPanning);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mouseleave", handleMouseUp);
     };
-  }, [imageSrc, tintColor, lineWidth, drawable, zoom, panOffset]);
+  }, [
+    imageSrc,
+    tintColor,
+    lineWidth,
+    drawable,
+    zoom,
+    panOffset,
+    isDrawing,
+    isPanning,
+  ]);
 
   // Clear canvas
   const clearCanvas = () => {
