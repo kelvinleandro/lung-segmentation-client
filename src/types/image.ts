@@ -11,3 +11,11 @@ export interface ImageData {
   width: number;
   height: number;
 }
+
+export interface ClassDistribution {
+  hyperaerated: number;
+  normallyAerated: number;
+  poorlyAerated: number;
+  nonAerated: number;
+  bone: number;
+}
