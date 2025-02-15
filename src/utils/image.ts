@@ -1,14 +1,14 @@
-import { ImageData, Contours } from "@/types/image";
+import { ImageData, Contours, ClassDistribution } from "@/types/image";
 import { Types } from "@cornerstonejs/core";
 
 /**
  * Applies windowing to an image represented as a pixel data array.
- * Windowing maps pixel values to a specific range defined by window center and window width.
+ * Windowing maps pixel values to a specific range defined by `imgMin` and `imgMax`.
  * It also normalizes the resulting pixel values to the range [0, 255].
  *
  * @param imageData - The pixel data array of the image to which windowing will be applied.
- * @param windowCenter - The center of the window for intensity mapping.
- * @param windowWidth - The width of the window for intensity mapping.
+ * @param imgMin - The minimum intensity value for clipping (default: -1000).
+ * @param imgMax - The maximum intensity value for clipping (default: 2000).
  * @returns A new array with pixel values normalized to the range [0, 255] after windowing.
  */
 export const applyWindowing = (
@@ -136,4 +136,46 @@ export const saveContoursAsCSV = (
   // Cleanup
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+};
+
+/**
+ * Processes image pixel data by clipping values to the range [-1000, 2000]
+ * and calculating the percentage of pixels in each predefined class.
+ *
+ * @param pixelData - An array of pixel intensity values representing an image.
+ * @returns An object with the percentage distribution of pixel values in each class.
+ */
+export const computeClassDistribution = (
+  pixelData: Types.PixelDataTypedArray
+): ClassDistribution => {
+  const clippedData = pixelData.map((val) =>
+    Math.min(Math.max(val, -1000), 2000)
+  );
+
+  const classCounts: ClassDistribution = {
+    hyperaerated: 0, // -1000 to -950
+    normallyAerated: 0, // -950 to -500
+    poorlyAerated: 0, // -500 to -100
+    nonAerated: 0, // -100 to 100
+    bone: 0, // 600 to 2000
+  };
+
+  clippedData.forEach((val) => {
+    if (val >= -1000 && val < -950) classCounts.hyperaerated++;
+    else if (val >= -950 && val < -500) classCounts.normallyAerated++;
+    else if (val >= -500 && val < -100) classCounts.poorlyAerated++;
+    else if (val >= -100 && val <= 100) classCounts.nonAerated++;
+    else if (val >= 600 && val <= 2000) classCounts.bone++;
+  });
+
+  const totalPixels = clippedData.length;
+
+  // Convert counts to percentages
+  return {
+    hyperaerated: (classCounts.hyperaerated / totalPixels) * 100,
+    normallyAerated: (classCounts.normallyAerated / totalPixels) * 100,
+    poorlyAerated: (classCounts.poorlyAerated / totalPixels) * 100,
+    nonAerated: (classCounts.nonAerated / totalPixels) * 100,
+    bone: (classCounts.bone / totalPixels) * 100,
+  };
 };
