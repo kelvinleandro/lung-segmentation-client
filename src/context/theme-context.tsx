@@ -9,13 +9,18 @@ interface ThemeContextProps {
   toggleColorScheme: () => void;
 }
 
-export const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextProps | undefined>(
+  undefined
+);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [currentColorScheme, setCurrentColorScheme] = useState<ThemeType>("light");
+  const [currentColorScheme, setCurrentColorScheme] =
+    useState<ThemeType>("dark");
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("currentColorScheme") as ThemeType | null;
+    const savedTheme = localStorage.getItem(
+      "currentColorScheme"
+    ) as ThemeType | null;
     if (savedTheme) {
       setCurrentColorScheme(savedTheme);
     }
@@ -30,7 +35,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, currentColorScheme, toggleColorScheme }}>
+    <ThemeContext.Provider
+      value={{ theme, currentColorScheme, toggleColorScheme }}
+    >
       {children}
     </ThemeContext.Provider>
   );
