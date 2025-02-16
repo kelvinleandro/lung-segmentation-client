@@ -36,7 +36,7 @@ const Header = () => {
         <Button
           onClick={toggleLanguage}
           variant="outline"
-          className="bg-black hover:bg-white/20 hover:text-white border-0"
+          className="bg-black hover:bg-white/20 hover:text-white border-0 font-poppins font-medium"
         >
           <img
             src={

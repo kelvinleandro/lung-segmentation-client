@@ -99,7 +99,7 @@ const DensityScaleSection = () => {
   }, [dicomFile]);
 
   return (
-    <section className="w-full h-full flex flex-col gap-8 items-center">
+    <section className="w-full h-full flex flex-col gap-6 items-center">
       <div className="w-[60%] border-2 rounded-xl flex flex-col p-6 gap-4 items-center justify-center">
         <h2 className="text-xl font-poppins font-medium self-start">
           Ipsum Lorem
@@ -123,7 +123,7 @@ const DensityScaleSection = () => {
         </div>
       </div>
 
-      <ScrollArea className="w-[60%] h-72">
+      <ScrollArea className="w-[60%] max-h-[40vh]">
         {classDescriptions.map((classDescription, index) => (
           <div
             key={index}
