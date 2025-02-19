@@ -20,6 +20,8 @@ const SegmentationPage = () => {
                 <TabsTrigger value="results">Resultados</TabsTrigger>
                 <TabsTrigger value="density">Escala de Densidades</TabsTrigger>
               </TabsList>
+              
+
               <TabsContent value="results">
                 <ResultsSection />
               </TabsContent>
