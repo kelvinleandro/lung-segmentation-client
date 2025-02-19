@@ -16,9 +16,22 @@ const SegmentationPage = () => {
         <div className="w-full">
           {mode === "segmentation" ? (
             <Tabs defaultValue="results" className="w-full h-full">
-              <TabsList className="flex border-b">
-                <TabsTrigger value="results">Resultados</TabsTrigger>
-                <TabsTrigger value="density">Escala de Densidades</TabsTrigger>
+              <TabsList className="flex mt-1 ml-1">
+                {/* <TabsList className="flex overflow-hidden border border-black mt-1 ml-1"> */}
+                <TabsTrigger
+                  value="results"
+                  className="data-[state=active]:text-blue-700 data-[state=active]:border-b-2 data-[state=active]:border-blue-700 hover:bg-black/10 border-b-2 border-black text-lg"
+                  // className="data-[state=active]:text-white data-[state=active]:bg-black bg-white text-black hover:bg-black hover:text-white text-lg"
+                >
+                  Resultados
+                </TabsTrigger>
+                <TabsTrigger
+                  value="density"
+                  className="data-[state=active]:text-blue-700 data-[state=active]:border-b-2 data-[state=active]:border-blue-700 hover:bg-black/10 border-b-2 border-black text-lg"
+                  // className="data-[state=active]:text-white data-[state=active]:bg-black bg-white text-black hover:bg-black hover:text-white text-lg"
+                >
+                  Escala de Densidades
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="results">
                 <ResultsSection />
