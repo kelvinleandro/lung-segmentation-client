@@ -4,6 +4,7 @@ import {
   SegmentationParameters,
   SelectionParameters,
 } from "@/types/parameters";
+import { Contours } from "@/types/image";
 
 type ParametersContextType = {
   mode: ApplicationMode;
@@ -13,6 +14,8 @@ type ParametersContextType = {
   dicomFile: File | null;
   changeDicomFile: (file: File) => void;
   clearRef: React.RefObject<HTMLButtonElement> | null;
+  contours: Contours | null;
+  setContours: (contours: Contours | null) => void;
 };
 
 export const ParametersContext = createContext<ParametersContextType | null>(
@@ -26,6 +29,7 @@ export const ParametersProvider = ({
 }) => {
   const [mode, setMode] = useState<ApplicationMode>("segmentation");
   const [dicomFile, setDicomFile] = useState<File | null>(null);
+  const [contours, setContours] = useState<Contours | null>(null);
   const [selectionParameters, setSelectionParameters] =
     useState<SelectionParameters>({} as SelectionParameters);
   const [segmentationParameters, setSegmentationParameters] =
@@ -35,6 +39,7 @@ export const ParametersProvider = ({
 
   const changeDicomFile = (file: File) => {
     setDicomFile(file);
+    setContours(null);
   };
 
   return (
@@ -47,6 +52,8 @@ export const ParametersProvider = ({
         segmentationParameters,
         changeDicomFile,
         clearRef,
+        contours,
+        setContours,
       }}
     >
       {children}
