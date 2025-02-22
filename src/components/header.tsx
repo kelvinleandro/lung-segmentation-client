@@ -5,6 +5,7 @@ import { Sun, Moon } from "lucide-react";
 import useLanguage from "@/hooks/use-language";
 import { Separator } from "./ui/separator";
 import useTheme from "@/hooks/use-theme";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -12,14 +13,27 @@ const Header = () => {
   const { currentColorScheme, toggleColorScheme } = useTheme();
 
   return (
-    <header className="bg-black text-white py-2 px-8 flex items-center justify-between">
+    <header
+      className={cn(
+        "py-3 px-28 flex items-center justify-between",
+        currentColorScheme === "dark"
+          ? "bg-black text-[#fcfcfd]"
+          : "bg-[#ee6c4d] text-black"
+      )}
+    >
       <div
         onClick={() => navigate("/")}
         className="flex items-center gap-2 h-full cursor-pointer"
       >
-        <img src="/images/segmentation-logo.png" alt="Logo" className="h-10" />
-        <Separator orientation="vertical" className="h-full border-1" />
-        <p className="font-bold font-dm-sans text-lg">Lorem Ipsum</p>
+        <img src="/images/segmentation-logo.png" alt="Logo" className="h-12" />
+        <Separator
+          orientation="vertical"
+          className={cn(
+            "data-[orientation=vertical]:h-[1.5rem] border-1",
+            currentColorScheme === "dark" ? "border-[#fcfcfd]" : "border-black"
+          )}
+        />
+        <p className="font-bold font-dm-sans text-lg">Lungs Segmentation</p>
       </div>
 
       <div className="flex items-center gap-2">
@@ -36,7 +50,12 @@ const Header = () => {
         <Button
           onClick={toggleLanguage}
           variant="outline"
-          className="bg-black hover:bg-white/20 hover:text-white border-0 font-poppins font-medium"
+          className={cn(
+            "bg-transparent hover:bg-white/20 border-0 font-poppins font-medium",
+            currentColorScheme === "dark"
+              ? "hover:text-white"
+              : "hover:text-black"
+          )}
         >
           <img
             src={

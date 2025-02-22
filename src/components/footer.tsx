@@ -1,26 +1,33 @@
-// const Footer = () => {
-//   return <footer className="bg-black text-white text-lg">Footer</footer>;
-// };
-
-// export default Footer;
-
-import { Separator } from "@/components/ui/separator"; // Importando o componente Separator (caso seja necessário)
+import { Separator } from "@/components/ui/separator";
+import useTheme from "@/hooks/use-theme";
+import { cn } from "@/lib/utils";
 
 const Footer = () => {
-  return (
-    <footer className="bg-black text-white py-2 px-8 flex items-center justify-between">
+  const { currentColorScheme } = useTheme();
 
-      <div className="flex items-center gap-2 h-full"> 
-        <img 
-          src="/images/ufc-crest.png" 
-          alt="Logo"
-          className="h-7"
+  return (
+    <footer
+      className={cn(
+        "py-2 px-8 flex items-center justify-between",
+        currentColorScheme === "dark"
+          ? "bg-black text-[#fcfcfd]"
+          : "bg-[#ee6c4d] text-black"
+      )}
+    >
+      <div className="flex items-center gap-2 h-full">
+        <img src="/images/ufc-crest.png" alt="Logo" className="h-7" />
+
+        <Separator
+          orientation="vertical"
+          className={cn(
+            "mx-4 border-1 data-[orientation=vertical]:h-[1rem]",
+            currentColorScheme === "dark" ? "border-[#fcfcfd]" : "border-black"
+          )}
         />
 
-        <Separator orientation="vertical" className="mx-5 border-1" />
-        
-        <p className="font-bold font-dm-sans text-lg">
-          TI0147 - Fundamentos de Processamento Digital de Imagens - 2024.2 - Paulo Cesar Cortez
+        <p className="font-bold font-dm-sans text-md">
+          TI0147 - Fundamentos de Processamento Digital de Imagens - 2024.2 -
+          Paulo Cesar Cortez
         </p>
       </div>
     </footer>
