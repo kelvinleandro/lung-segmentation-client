@@ -21,59 +21,57 @@ const DensityScaleSection = () => {
   const classDescriptions = useMemo(() => {
     return [
       {
-        class: "Lorem Ipsum",
+        class: "Hiperareadas",
         color: "#3B82F6",
         name: classDistribution?.hyperaerated
-          ? `Lorem Ipsum (${classDistribution.hyperaerated.toFixed(2)}%)`
-          : "Lorem Ipsum",
-        limits: "-1000 to -950 HU",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse laoreet.",
-        example: "Lorem ipsum dolor sit amet",
+          ? `Hiperareadas (${classDistribution.hyperaerated.toFixed(2)}%)`
+          : "Hiperareadas",
+        limits: "-1000 a -950 HU",
+        description: "Regiões com muito ar, como espaços aéreos no pulmão.",
+        example: "Cavidades aéreas, bronquíolos.",
       },
       {
-        class: "Lorem Ipsum",
+        class: "Normalmente areadas",
         color: "#27E23D",
         name: classDistribution?.normallyAerated
-          ? `Lorem Ipsum (${classDistribution.normallyAerated.toFixed(2)}%)`
-          : "Lorem Ipsum",
-        limits: "-950 to -500 HU",
+          ? `Normalmente areadas (${classDistribution.normallyAerated.toFixed(
+              2
+            )}%)`
+          : "Normalmente areadas",
+        limits: "-950 a -500 HU",
         description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse laoreet.",
-        example: "Lorem ipsum dolor sit amet",
+          "Tecido pulmonar normal, densidade típica do pulmão saudável.",
+        example: "Parênquima pulmonar normal.",
       },
       {
-        class: "Lorem Ipsum",
+        class: "Pouco areadas",
         color: "#E78421",
         name: classDistribution?.poorlyAerated
-          ? `Lorem Ipsum (${classDistribution.poorlyAerated.toFixed(2)}%)`
-          : "Lorem Ipsum",
-        limits: "-500 to -100 HU",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse laoreet.",
-        example: "Lorem ipsum dolor sit amet",
+          ? `Pouco areadas (${classDistribution.poorlyAerated.toFixed(2)}%)`
+          : "Pouco areadas",
+        limits: "-500 a -100 HU",
+        description: "Regiões com menos ar que o normal.",
+        example: "Áreas de atelectasia parcial.",
       },
       {
-        class: "Lorem Ipsum",
+        class: "Não areadas",
         color: "#DC2626",
         name: classDistribution?.nonAerated
-          ? `Lorem Ipsum (${classDistribution.nonAerated.toFixed(2)}%)`
-          : "Lorem Ipsum",
-        limits: "-100 to 100 HU",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse laoreet.",
-        example: "Lorem ipsum dolor sit amet",
+          ? `Não areadas (${classDistribution.nonAerated.toFixed(2)}%)`
+          : "Não areadas",
+        limits: "-100 a 100 HU",
+        description: "Regiões sem ar, possível consolidação.",
+        example: "Consolidação, derrame pleural.",
       },
       {
-        class: "Lorem Ipsum",
+        class: "Osso",
         color: "#D9D9D9",
         name: classDistribution?.bone
-          ? `Lorem Ipsum (${classDistribution.bone.toFixed(2)}%)`
-          : "Lorem Ipsum",
-        limits: "600 to 2000 HU",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse laoreet.",
-        example: "Lorem ipsum dolor sit amet",
+          ? `Osso (${classDistribution.bone.toFixed(2)}%)`
+          : "Osso",
+        limits: "600 a 2000 HU",
+        description: "Estruturas ósseas, densidade muito alta.",
+        example: "Costelas, vértebras.",
       },
     ];
   }, [classDistribution]);
@@ -100,16 +98,16 @@ const DensityScaleSection = () => {
 
   return (
     <section className="w-full h-full flex flex-col gap-6 items-center">
-      <div className="w-[60%] border-2 rounded-xl flex flex-col p-6 gap-4 items-center justify-center">
+      <div className="w-[70%] border-2 rounded-xl flex flex-col p-6 gap-4 items-center justify-center">
         <h2 className="text-xl font-poppins font-medium self-start">
-          Ipsum Lorem
+          Escalas de Densidades (HU)
         </h2>
 
-        <div className="rounded-md overflow-hidden flex">
+        <div className="w-full rounded-xl overflow-hidden flex">
           {classDescriptions.map((classDescription, index) => (
             <div
               key={index}
-              className="px-3 py-2 font-poppins font-medium"
+              className="px-3 py-2 font-poppins font-sm flex-1 text-center text-black"
               style={{ backgroundColor: classDescription.color }}
             >
               {classDescription.class}
@@ -123,11 +121,11 @@ const DensityScaleSection = () => {
         </div>
       </div>
 
-      <ScrollArea className="w-[60%] h-[40vh]">
+      <ScrollArea className="w-[70%] h-[30vh]">
         {classDescriptions.map((classDescription, index) => (
           <div
             key={index}
-            className="mb-4 border-2 rounded-xl flex p-4 items-start gap-2"
+            className="mb-4 border-2 rounded-xl flex p-4 items-start gap-2 border-gray-300"
           >
             <div
               className="w-6 h-6 rounded-full"

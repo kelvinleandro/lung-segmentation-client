@@ -1,5 +1,20 @@
+import useTheme from "@/hooks/use-theme";
+import { cn } from "@/lib/utils";
+
 const ParametersSelector = () => {
-  return <aside className="bg-blue-400 h-full w-48">Parameters Selector</aside>;
+  const { currentColorScheme } = useTheme();
+  return (
+    <aside
+      className={cn(
+        "h-full w-full",
+        currentColorScheme == "dark"
+          ? "bg-[#001d3d] text-white"
+          : "bg-white text-black"
+      )}
+    >
+      Parameters Selector
+    </aside>
+  );
 };
 
 export default ParametersSelector;
