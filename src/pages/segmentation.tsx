@@ -34,15 +34,22 @@ const SegmentationPage = () => {
         >
           {mode === "segmentation" ? (
             <Tabs defaultValue="results" className="w-full h-full">
-              <TabsList className="flex mt-1 ml-1 bg-transparent gap-3">
+              <TabsList
+                className={cn(
+                  "flex pl-8 mt-2 justify-start bg-transparent gap-6 border-b-2 w-full rounded-none relative",
+                  currentColorScheme === "dark"
+                    ? "border-white"
+                    : "border-black"
+                )}
+              >
                 {/* <TabsList className="flex overflow-hidden border border-black mt-1 ml-1"> */}
                 <TabsTrigger
                   value="results"
                   className={cn(
-                    "text-lg rounded-full data-[state=active]:rounded-full transition-all duration-300 ease-in-out",
+                    "text-lg rounded-t-lg transition-all duration-300 ease-in-out border-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-4",
                     currentColorScheme === "dark"
-                      ? "data-[state=active]:text-white text-white data-[state=active]:bg-black hover:bg-white/10"
-                      : "data-[state=active]:text-black text-black data-[state=active]:bg-[#ee6c4d] hover:bg-black/10"
+                      ? "data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:border-b-[#001d3d]  border-gray-600 border-b-0"
+                      : "data-[state=active]:text-black  data-[state=active]:border-black border-gray-600 border-b-0"
                   )}
                   // className={cn(
                   //   "bg-background text-black text-lg",
@@ -57,10 +64,10 @@ const SegmentationPage = () => {
                 <TabsTrigger
                   value="density"
                   className={cn(
-                    "text-lg rounded-full data-[state=active]:rounded-full transition-all duration-300 ease-in-out",
+                    "text-lg rounded-t-lg transition-all duration-300 ease-in-out border-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-4",
                     currentColorScheme === "dark"
-                      ? "data-[state=active]:text-white text-white data-[state=active]:bg-black hover:bg-white/10"
-                      : "data-[state=active]:text-black text-black data-[state=active]:bg-[#ee6c4d] hover:bg-black/10"
+                      ? "data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:border-b-[#001d3d]  border-gray-600 border-b-0"
+                      : "data-[state=active]:text-black  data-[state=active]:border-black border-gray-600 border-b-0"
                   )}
                   // className={cn(
                   //   "bg-background text-black text-lg",
