@@ -85,6 +85,20 @@ const ParametersSelector = () => {
         <label>Window Center:</label>
         <input type="range" min="0" max="100" defaultValue="50" className="w-full" />
       </div>
+
+      {/* Radio */}
+      <div>
+        <h3 className="font-semibold">RADIO</h3>
+      </div>
+
+      {/* Desenhar e Pan */}
+      {mode == "selection" && (
+        <div className="flex gap-2">
+          <Button variant={isDrawing ? "default" : "outline"} onClick={toggleDrawing}><Paintbrush size={20} className="mr-2"/>Desenhar</Button>
+          <Button variant={isPanning ? "default" :  "outline"} onClick={togglePanning}><Move size={20} className="mr-2"/>Pan</Button>
+        </div>
+      )}
+
     </aside>
   );
 };
