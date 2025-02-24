@@ -65,6 +65,26 @@ const ParametersSelector = () => {
           </label>
         ))}
       </div>
+
+      {/* Text Input */}
+      <div>
+        <h3 className="font-semibold">TEXT INPUT</h3>
+        {["Item 1", "Item 2"].map((item, index) => (
+          <div key={index}>
+            <label>{item}:</label>
+            <input type="text" placeholder="Text here" className="border p-2 w-full" />
+          </div>
+        ))}
+      </div>
+
+      {/* Range */}
+      <div>
+        <h3 className="font-semibold">CONTRASTE</h3>
+        <label>Window Width:</label>
+        <input type="range" min="0" max="100" defaultValue="50" className="w-full" />
+        <label>Window Center:</label>
+        <input type="range" min="0" max="100" defaultValue="50" className="w-full" />
+      </div>
     </aside>
   );
 };
