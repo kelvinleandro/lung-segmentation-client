@@ -54,6 +54,17 @@ const ParametersSelector = () => {
         className={`px-4 py-2 border rounded ${mode == "segmentation" ? "bg-black text-white" : "bg-gray-200"}`} 
         onClick={() => setMode("segmentation")}>Segmentação</Button>
       </div>
+
+      {/* Checkbox */}
+      <div>
+        <h3 className="font-semibold">CHECKBOX</h3>
+        {["Item 1", "Item 2", "Item 3"].map((item, index) => (
+          <label key={index} className="flex items-center space-x-2">
+            <input type="checkbox" defaultChecked={index !== 0} />
+            <span>{item}</span>
+          </label>
+        ))}
+      </div>
     </aside>
   );
 };
