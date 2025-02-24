@@ -99,6 +99,30 @@ const ParametersSelector = () => {
         </div>
       )}
 
+      {/* Dinamicidade de modo */}
+      <div className="flex flex-col gap-4">
+        {mode == "selection" ? (
+          <>
+            <label className="text-sm font-semibold">Selecionar Imagem</label>
+            <input type="file" className="border p-2 rounded" onChange={(e) => {
+              if (e.target.files?.[0]) {
+                changeDicomFile(e.target.files[0]);
+              }
+            }}/>
+          </>
+        ) : (
+          <>
+            <label className="text-sm font-semibold">Parâmetros de Segmentação</label>
+            <pre className="bg-white text-black p-2 rounded">
+              {JSON.stringify(segmentationParameters, null, 2)}
+            </pre>
+          </>
+        )};
+      </div>
+
+      {/* Botão de Executar */}
+      <Button className="w-full mt-auto">Executar</Button>
+
     </aside>
   );
 };
