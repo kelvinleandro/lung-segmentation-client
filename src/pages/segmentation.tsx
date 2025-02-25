@@ -80,6 +80,8 @@ const SegmentationPage = () => {
                   <p>Escala de Densidades</p>
                 </TabsTrigger>
               </TabsList>
+              
+
               <TabsContent value="results">
                 <ResultsSection />
               </TabsContent>
