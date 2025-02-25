@@ -22,3 +22,23 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ambiente virtual
+.venv/
+env/
+venv/
+
+# Arquivos do sistema
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs e dependências
+*.log
+*.sqlite3
+*.db
+.DS_Store
+
+# Configurações do editor
+.vscode/
+.idea/
