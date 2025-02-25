@@ -46,7 +46,7 @@ const SegmentationPage = () => {
                 <TabsTrigger
                   value="results"
                   className={cn(
-                    "text-lg rounded-t-lg transition-all duration-300 ease-in-out border-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-4",
+                    "-translate-y-0.5 text-lg rounded-t-lg transition-all duration-300 ease-in-out border-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-4",
                     currentColorScheme === "dark"
                       ? "data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:border-b-[#001d3d]  border-gray-600 border-b-0"
                       : "data-[state=active]:text-black  data-[state=active]:border-black data-[state=active]:border-b-white  border-gray-600 border-b-0"
@@ -64,7 +64,7 @@ const SegmentationPage = () => {
                 <TabsTrigger
                   value="density"
                   className={cn(
-                    "text-lg rounded-t-lg transition-all duration-300 ease-in-out border-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-4",
+                    "-translate-y-0.5 text-lg rounded-t-lg transition-all duration-300 ease-in-out border-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-4",
                     currentColorScheme === "dark"
                       ? "data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:border-b-[#001d3d]  border-gray-600 border-b-0"
                       : "data-[state=active]:text-black  data-[state=active]:border-black data-[state=active]:border-b-white border-gray-600 border-b-0"
