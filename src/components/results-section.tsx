@@ -15,7 +15,7 @@ import {
   downloadImage,
   saveContoursAsCSV,
 } from "@/utils/image";
-import { ImageData, Contours } from "@/types/image";
+import { ImageData } from "@/types/image";
 
 coreInit();
 dicomImageLoaderInit();
@@ -35,7 +35,7 @@ const ResultsSection = () => {
   const { dicomFile, contours, setContours } = useParameters();
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  
+
   const { sendFileToServer } = useApi();
 
   // Carrega a imagem DICOM e aplica o windowing
@@ -88,10 +88,10 @@ const ResultsSection = () => {
   }, [imageData, contours]);
 
   return (
-    <section className="w-full h-full flex gap-40 pl-40">
-      <div className="flex flex-col gap-9 pt-5">
-        <h1 className="font-bold text-[32px] font-dm-sans">Original Image</h1>
-        <div className="w-[512px] h-[512px] rounded-3xl overflow-hidden">
+    <section className="w-full h-full flex gap-40 px-20 pb-2">
+      <div className="flex flex-col gap-5 pt-3 w-full">
+        <h1 className="font-bold text-3xl font-dm-sans">Original Image</h1>
+        <div className="w-full h-full rounded-3xl overflow-hidden">
           <DICOMViewer
             imageData={imageData}
             contours={null}
@@ -102,13 +102,13 @@ const ResultsSection = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-9 pt-5">
-        <div className="flex items-center gap-7">
-          <h1 className="font-bold text-[32px] font-dm-sans">Result Image</h1>
+      <div className="flex flex-col gap-5 pt-3 w-full">
+        <div className="flex items-center gap-7 justify-between">
+          <h1 className="font-bold text-3xl font-dm-sans">Result Image</h1>
 
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <button className="ml-28 cursor-pointer flex items-center gap-2 border border-gray-500 px-6 py-2 rounded-4xl font-poppins text-[14px] font-medium hover:border-amber-400 hover:text-amber-400 transition-all">
+              <button className="cursor-pointer flex items-center gap-2 border border-gray-500 px-6 py-2 rounded-4xl font-poppins text-[14px] font-medium hover:border-amber-400 hover:text-amber-400 transition-all">
                 <Download />
                 Download
               </button>
@@ -116,7 +116,7 @@ const ResultsSection = () => {
             <DialogContent className="max-w-sm [&_svg:not([class*='size-'])]:size-7">
               <DialogHeader className="flex flex-col items-center text-center">
                 <MdOutlineDownloading className="size-20 mt-2" />
-                <DialogTitle className="text-[32px] font-bold font-dm-sans">
+                <DialogTitle className="text-3xl font-bold font-dm-sans">
                   Download de Resultado
                 </DialogTitle>
                 <DialogDescription className="mt-2 text-gray-900 font-poppins text-[16px]">
@@ -152,7 +152,7 @@ const ResultsSection = () => {
           </Dialog>
         </div>
 
-        <div className="w-[512px] h-[512px] rounded-3xl overflow-hidden">
+        <div className="w-full h-full rounded-3xl overflow-hidden">
           <DICOMViewer
             imageData={imageData}
             contours={contours}
