@@ -16,12 +16,28 @@ const ParametersSelector = () => {
     return <div>Loading...</div>;
   }
 
-  const {
-    mode,
-    setMode,
-    segmentationParameters,
-    changeDicomFile,
-  } = parametersContext;
+  const {selectionParameters, setSelectionParameters} = useContext(ParametersContext);
+  const handleContrastChange = (param: "windowWidth" | "windowCenter", value: number) => {
+    setSelectionParameters((prev) => ({
+      ...prev,
+      [param]:value,
+    }));
+  };
+
+  const { segmentationParameters, setSegmentationParameters} = useContext(ParametersContext);
+  const handleSegmentationChange = (method: string, isChecked: boolean) => {
+    setSegmentationParameters((prev) => ({
+      ...prev,
+      method: isChecked ? method : "",
+    }));
+  };
+
+  const {mode, setMode} = useContext(ParametersContext);
+  const toggleMode = (newMode: "selection" | "segmentation") => {
+    setMode(newMode);
+  }
+
+  const changeDicomFile = parametersContext;
 
   const toggleDrawing = () => {
     setIsDrawing(true);
@@ -45,25 +61,33 @@ const ParametersSelector = () => {
       <h2 className="text-2xl font-bold">Customising</h2>
 
       {/* Tabs de Segmentação e Seleção */}
-      <div className="flex space-x-2">
+      <div className="flex">
         <Button
-        className={`px-4 py-2 border rounded ${mode == "selection" ? "bg-black text-white" : "bg-gray-200"}`}
+        className={`text-black px-4 py-2 border rounded-l-lg ${mode == "selection" ? "bg-black text-white" : "bg-white"}`}
         onClick={() => setMode("selection")}>Seleção</Button>
 
         <Button 
-        className={`px-4 py-2 border rounded ${mode == "segmentation" ? "bg-black text-white" : "bg-gray-200"}`} 
+        className={`text-black px-4 py-2 border rounded-r-lg ${mode == "segmentation" ? "bg-black text-white" : "bg-white"}`} 
         onClick={() => setMode("segmentation")}>Segmentação</Button>
       </div>
 
-      {/* Checkbox */}
-      <div>
-        <h3 className="font-semibold">CHECKBOX</h3>
-        {["Item 1", "Item 2", "Item 3"].map((item, index) => (
-          <label key={index} className="flex items-center space-x-2">
-            <input type="checkbox" defaultChecked={index !== 0} />
-            <span>{item}</span>
-          </label>
-        ))}
+      {/* Radio 1 */}
+      <div className="flex flex-col space-y-2 items-center">
+        <h3 className="font-semibold">SELECIONE O MÉTODO</h3>
+        <label>
+          <input type="radio" className="mr-1" checked={segmentationParameters.method === "Metodo1"} onChange={(e) => handleSegmentationChange("Metodo1", e.target.checked)} />
+            Método 1
+        </label>
+
+        <label>
+          <input type="radio" className="mr-1" checked={segmentationParameters.method === "Metodo2"} onChange={(e) => handleSegmentationChange("Metodo2", e.target.checked)} />
+            Método 2
+        </label>
+
+        <label>
+          <input type="radio" className="mr-1" checked={segmentationParameters.method === "Metodo3"} onChange={(e) => handleSegmentationChange("Metodo3", e.target.checked)} />
+            Método 3
+        </label>
       </div>
 
       {/* Text Input */}
@@ -81,12 +105,12 @@ const ParametersSelector = () => {
       <div>
         <h3 className="font-semibold">CONTRASTE</h3>
         <label>Window Width:</label>
-        <input type="range" min="0" max="100" defaultValue="50" className="w-full" />
+        <input type="range" min="0" max="255" value={selectionParameters.windowWidth} onChange={(e) => handleContrastChange("windowWidth", Number(e.target.value))} className="w-full" />
         <label>Window Center:</label>
-        <input type="range" min="0" max="100" defaultValue="50" className="w-full" />
+        <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowCenter", Number(e.target.value))} className="w-full" />
       </div>
 
-      {/* Radio */}
+      {/* Radio 2 */}
       <div>
         <h3 className="font-semibold">RADIO</h3>
         {["Item 1", "Item 2"].map((item, index) => (
@@ -99,17 +123,17 @@ const ParametersSelector = () => {
 
       {/* Interação */}
       <div className="flex space-x-2">
-        <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(true)}>
+        <Button variant={isDrawing ? "default" : "outline"} className={`${isDrawing ? "text-white" : "text-black"}`} onClick={() => setIsDrawing(true)}>
           <LucidePenTool size={16} />
         </Button>
-        <Button variant={!isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(false)}>
+        <Button variant={!isDrawing ? "default" : "outline"} className={`${!isDrawing ? "text-white" : "text-black"}`} onClick={() => setIsDrawing(false)}>
           <LucideMove size={16} />
         </Button>
       </div>
 
       {/* Botões principais */}
       <Button className="w-full">Run</Button>
-      <Button className="w-full" variant="outline" onClick={() => changeDicomFile(null)}>
+      <Button className="w-full text-black" variant="outline" onClick={() => changeDicomFile(null)}>
         Choose Image
       </Button>
     </aside>
