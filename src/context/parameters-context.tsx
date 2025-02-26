@@ -62,7 +62,7 @@ export const ParametersProvider = ({
   // clear ref for canvas
   const clearRef = useRef<HTMLButtonElement | null>(null);
 
-  const changeDicomFile = (file: File) => {
+  const changeDicomFile = (file: File | null) => {
     setDicomFile(file);
     setContours(null);
   };
