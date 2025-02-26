@@ -29,7 +29,7 @@ const ParametersSelector = () => {
   };
 
   const togglePanning = () => {
-    setIsPanning(true);
+    setIsPanning((prev) => !prev);
     setIsDrawing(false);
   }
 
@@ -89,40 +89,29 @@ const ParametersSelector = () => {
       {/* Radio */}
       <div>
         <h3 className="font-semibold">RADIO</h3>
+        {["Item 1", "Item 2"].map((item, index) => (
+          <label key={index} className="flex items-center space-x-2">
+            <input type="radio" name="radio-group" defaultChecked={index === 0} />
+            <span>{item}</span>
+          </label>
+        ))}
       </div>
 
-      {/* Desenhar e Pan */}
-      {mode == "selection" && (
-        <div className="flex gap-2">
-          <Button variant={isDrawing ? "default" : "outline"} onClick={toggleDrawing}><Paintbrush size={20} className="mr-2"/>Desenhar</Button>
-          <Button variant={isPanning ? "default" :  "outline"} onClick={togglePanning}><Move size={20} className="mr-2"/>Pan</Button>
-        </div>
-      )}
-
-      {/* Dinamicidade de modo */}
-      <div className="flex flex-col gap-4">
-        {mode == "selection" ? (
-          <>
-            <label className="text-sm font-semibold">Selecionar Imagem</label>
-            <input type="file" className="border p-2 rounded" onChange={(e) => {
-              if (e.target.files?.[0]) {
-                changeDicomFile(e.target.files[0]);
-              }
-            }}/>
-          </>
-        ) : (
-          <>
-            <label className="text-sm font-semibold">Parâmetros de Segmentação</label>
-            <pre className="bg-white text-black p-2 rounded">
-              {JSON.stringify(segmentationParameters, null, 2)}
-            </pre>
-          </>
-        )};
+      {/* Interação */}
+      <div className="flex space-x-2">
+        <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(true)}>
+          <LucidePenTool size={16} />
+        </Button>
+        <Button variant={!isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(false)}>
+          <LucideMove size={16} />
+        </Button>
       </div>
 
-      {/* Botão de Executar */}
-      <Button className="w-full mt-auto">Executar</Button>
-
+      {/* Botões principais */}
+      <Button className="w-full">Run</Button>
+      <Button className="w-full" variant="outline" onClick={() => changeDicomFile(null)}>
+        Choose Image
+      </Button>
     </aside>
   );
 };
