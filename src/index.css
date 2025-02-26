@@ -55,7 +55,7 @@
   --btn-text: white;
   --btn-shadow: rgba(0, 0, 0, 0.3);
   --btn-active-bg: #09223b;
-  --btn-active-text: rgba(255, 255, 255, 0.7);
+  --btn-active-text: hsl(27 87% 67%);
 
 }
 
@@ -88,7 +88,7 @@
   --btn-text: black;
   --btn-shadow: rgba(255, 255, 255, 0.3);
   --btn-active-bg: #d1d1d1;
-  --btn-active-text: rgba(0, 0, 0, 0.7);
+  --btn-active-text: hsl(30 87% 67%);
 
 }
 
