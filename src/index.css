@@ -37,6 +37,7 @@
   --secondary-foreground: hsl(0 0% 9%);
   --muted: hsl(0 0% 96.1%);
   --muted-foreground: hsl(0 0% 45.1%);
+  --light-background: #cecece;
   --accent: hsl(0 0% 96.1%);
   --accent-foreground: hsl(0 0% 9%);
   --destructive: hsl(0 84.2% 60.2%);
@@ -50,6 +51,11 @@
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
   --radius: 0.6rem;
+  --btn-bg: black;
+  --btn-text: white;
+  --btn-shadow: rgba(0, 0, 0, 0.3);
+  --btn-active-bg: #09223b;
+  --btn-active-text: hsl(27 87% 67%);
 
 }
 
@@ -78,6 +84,11 @@
   --chart-3: hsl(30 80% 55%);
   --chart-4: hsl(280 65% 60%);
   --chart-5: hsl(340 75% 55%);
+  --btn-bg: white;
+  --btn-text: black;
+  --btn-shadow: rgba(255, 255, 255, 0.3);
+  --btn-active-bg: #d1d1d1;
+  --btn-active-text: hsl(30 87% 67%);
 
 }
 
@@ -123,4 +134,28 @@
 
   }
 
+}
+
+.btn-blk {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border-radius: 100px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition:
+    background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.167s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.1s ease-in-out;
+}
+
+.btn-blk:hover,
+.btn-blk:focus { 
+  box-shadow: 0 8px 16px var(--btn-shadow);
+  transform: scale(1.05);
+}
+
+.btn-blk:active {
+  background: var(--btn-active-bg);
+  color: var(--btn-active-text);
 }

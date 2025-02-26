@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer
       className={cn(
-        "py-2 px-8 flex items-center justify-between",
+        "py-2 px-8 flex items-center justify-between ",
         currentColorScheme === "dark"
           ? "bg-black text-[#fcfcfd]"
           : "bg-[#ee6c4d] text-black"
