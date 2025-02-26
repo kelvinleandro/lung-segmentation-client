@@ -121,7 +121,7 @@ const DensityScaleSection = () => {
         </div>
       </div>
 
-      <ScrollArea className="w-[70%] h-[30vh]">
+      <ScrollArea className="w-[70%] h-[30vh] 2xl:h-[40vh]">
         {classDescriptions.map((classDescription, index) => (
           <div
             key={index}
