@@ -16,10 +16,6 @@ import {
   saveContoursAsCSV,
 } from "@/utils/image";
 import { ImageData } from "@/types/image";
-
-coreInit();
-dicomImageLoaderInit();
-
 import {
   Dialog,
   DialogTrigger,
@@ -28,6 +24,9 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+
+coreInit();
+dicomImageLoaderInit();
 
 const ResultsSection = () => {
   const [open, setOpen] = useState(false);
@@ -64,6 +63,7 @@ const ResultsSection = () => {
     if (dicomFile) {
       handleSendFile();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dicomFile]);
 
   const handleSendFile = async () => {
