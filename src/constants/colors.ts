@@ -1,6 +1,26 @@
 export const COLORS = {
-    light: {
-    },
-    dark: {
-    }
-  }
+  light: {
+    background: "#FFFFFF",
+    text: "#212529", 
+    layoutBackground: "#F8F9FA",
+    layoutText: "#495057",
+    dialogBackground: "#FFFFFF",
+    dialogText: "#212529",
+    buttonBackground: "#EE6C4D",
+    buttonText: "#FFFFFF", 
+    buttonSecondaryBackground: "#6C757D",
+    buttonSecondaryText: "#FFFFFF",
+  },
+  dark: {
+    background: "#001D3D",
+    text: "#FFFFFF",
+    layoutBackground: "#2D2D2D",
+    layoutText: "#DEE2E6",
+    dialogBackground: "#2D2D2D",
+    dialogText: "#F8F9FA",
+    buttonBackground: "#0D6EFD",
+    buttonText: "#FFFFFF",
+    buttonSecondaryBackground: "#7A7A7A", 
+    buttonSecondaryText: "#FFFFFF",
+  },
+};
