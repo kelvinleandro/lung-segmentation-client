@@ -7,17 +7,17 @@ export const COLORS = {
     layoutText: "#000000",
     dialogBackground: "#ffffff",
     dialogText: "#212529",
-    buttonBackground: "#ee6c4d",
+    buttonBackground: "#000000",
     buttonText: "#ffffff",
-    buttonSecondaryBackground: "#6c757d",
-    buttonSecondaryText: "#ffffff",
+    buttonSecondaryBackground: "#ffffff",
+    buttonSecondaryText: "#000000",
 
     //density scale:
     hyperHU: "#3b82f6",
     normalHU: "#27e23d",
     badHU: "#e78421",
     noHU: "#dc2626",
-    BoneHU: "#d9d9d9",
+    boneHU: "#d9d9d9",
 
     //brush color selection:
     whiteBrush: "#ffffff",
@@ -38,17 +38,17 @@ export const COLORS = {
     layoutText: "#ffffff",
     dialogBackground: "#2d2d2d",
     dialogText: "#f8f9fa",
-    buttonBackground: "#0d6efd",
+    buttonBackground: "#000000",
     buttonText: "#ffffff",
-    buttonSecondaryBackground: "#7a7a7a",
-    buttonSecondaryText: "#ffffff",
+    buttonSecondaryBackground: "#ffffff",
+    buttonSecondaryText: "#000000",
 
     //density scale:
     hyperHU: "#3b82f6",
     normalHU: "#27e23d",
     badHU: "#e78421",
     noHU: "#dc2626",
-    BoneHU: "#d9d9d9",
+    boneHU: "#d9d9d9",
 
     //brush color selection:
     whiteBrush: "#ffffff",

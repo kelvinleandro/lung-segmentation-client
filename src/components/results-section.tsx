@@ -24,6 +24,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import useLanguage from "@/hooks/use-language";
+import useTheme from "@/hooks/use-theme";
 
 coreInit();
 dicomImageLoaderInit();
@@ -33,7 +35,8 @@ const ResultsSection = () => {
   // Desestruturação para obter o dicomFile, os contornos e a função de atualização
   const { dicomFile, contours, setContours } = useParameters();
   const [imageData, setImageData] = useState<ImageData | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { text } = useLanguage();
+  const { theme } = useTheme();
 
   const { sendFileToServer } = useApi();
 
@@ -69,15 +72,12 @@ const ResultsSection = () => {
   const handleSendFile = async () => {
     if (!dicomFile) return;
     try {
-      setIsSubmitting(true);
       const contoursResponse = await sendFileToServer(dicomFile);
       if (contoursResponse) {
         setContours(contoursResponse);
       }
     } catch (error) {
       console.error("Error sending file:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -90,7 +90,9 @@ const ResultsSection = () => {
   return (
     <section className="w-full h-full flex gap-40 px-20 pb-2">
       <div className="flex flex-col gap-5 pt-3 w-full">
-        <h1 className="font-bold text-3xl font-dm-sans">Original Image</h1>
+        <h1 className="font-bold text-3xl font-dm-sans">
+          {text.originalImage}
+        </h1>
         <div className="w-full h-full rounded-3xl overflow-hidden">
           <DICOMViewer
             imageData={imageData}
@@ -104,23 +106,33 @@ const ResultsSection = () => {
 
       <div className="flex flex-col gap-5 pt-3 w-full">
         <div className="flex items-center gap-7 justify-between">
-          <h1 className="font-bold text-3xl font-dm-sans">Result Image</h1>
+          <h1 className="font-bold text-3xl font-dm-sans">
+            {text.finalResult}
+          </h1>
 
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <button className="cursor-pointer flex items-center gap-2 border border-gray-500 px-6 py-2 rounded-4xl font-poppins text-[14px] font-medium hover:border-amber-400 hover:text-amber-400 transition-all">
-                <Download />
-                Download
-              </button>
-            </DialogTrigger>
-            <DialogContent className="max-w-sm [&_svg:not([class*='size-'])]:size-7">
+            {imageSrc && (
+              <DialogTrigger asChild>
+                <button className="cursor-pointer flex items-center gap-2 border border-gray-500 px-6 py-2 rounded-4xl font-poppins text-[14px] font-medium hover:border-amber-400 hover:text-amber-400 transition-all">
+                  <Download />
+                  {text.downloadButton}
+                </button>
+              </DialogTrigger>
+            )}
+            <DialogContent
+              className="max-w-sm [&_svg:not([class*='size-'])]:size-7"
+              style={{ backgroundColor: theme.background, color: theme.text }}
+            >
               <DialogHeader className="flex flex-col items-center text-center">
                 <MdOutlineDownloading className="size-20 mt-2" />
                 <DialogTitle className="text-3xl font-bold font-dm-sans">
-                  Download de Resultado
+                  {text.resultDownloadText}
                 </DialogTitle>
-                <DialogDescription className="mt-2 text-gray-900 font-poppins text-[16px]">
-                  Selecione o formato que deseja fazer o download:
+                <DialogDescription
+                  className="mt-2 font-poppins text-[16px]"
+                  style={{ color: theme.text }}
+                >
+                  {text.resultDownloadDescription}
                 </DialogDescription>
               </DialogHeader>
 
@@ -132,9 +144,13 @@ const ResultsSection = () => {
                       downloadImage(imageSrc, `${fileName}_result.png`);
                     }
                   }}
-                  className="bg-[#141416] flex justify-center items-center text-[#FCFCFD] font-dm-sans font-bold text-[20px] w-[192px] h-[48px] rounded-3xl px-6 py-4 cursor-pointer"
+                  className="flex justify-center items-center font-dm-sans font-bold text-[20px] w-[192px] h-[48px] rounded-3xl px-6 py-4 cursor-pointer"
+                  style={{
+                    backgroundColor: theme.buttonBackground,
+                    color: theme.buttonText,
+                  }}
                 >
-                  .PNG
+                  {text.pngButton}
                 </button>
                 <button
                   onClick={() => {
@@ -143,9 +159,13 @@ const ResultsSection = () => {
                       saveContoursAsCSV(contours, `contours_${fileName}.csv`);
                     }
                   }}
-                  className="bg-[#FCFCFD] flex justify-center items-center text-black font-dm-sans font-bold text-[20px] w-[192px] h-[48px] rounded-3xl px-6 py-4 cursor-pointer border border-gray-800"
+                  className="flex justify-center items-center font-dm-sans font-bold text-[20px] w-[192px] h-[48px] rounded-3xl px-6 py-4 cursor-pointer border border-gray-800"
+                  style={{
+                    backgroundColor: theme.buttonSecondaryBackground,
+                    color: theme.buttonSecondaryText,
+                  }}
                 >
-                  .CSV
+                  {text.csvButton}
                 </button>
               </div>
             </DialogContent>

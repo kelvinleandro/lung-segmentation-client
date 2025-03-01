@@ -10,15 +10,15 @@ import { cn } from "@/lib/utils";
 const Header = () => {
   const navigate = useNavigate();
   const { currentLanguage, toggleLanguage } = useLanguage();
-  const { currentColorScheme, toggleColorScheme, currentTheme } = useTheme();
+  const { currentColorScheme, toggleColorScheme, theme } = useTheme();
   const { text } = useLanguage();
 
   return (
     <header
       className="py-3 px-28 flex items-center justify-between"
       style={{
-        backgroundColor: currentTheme.layoutBackground,
-        color: currentTheme.layoutText,
+        backgroundColor: theme.layoutBackground,
+        color: theme.layoutText,
       }}
     >
       <div
@@ -29,7 +29,7 @@ const Header = () => {
         <Separator
           orientation="vertical"
           className="data-[orientation=vertical]:h-[1.5rem] border-1"
-          style={{ borderColor: currentTheme.text }}
+          style={{ borderColor: theme.text }}
         />
         <p className="font-bold font-dm-sans text-lg">{text.projectTitle}</p>
       </div>
@@ -40,7 +40,7 @@ const Header = () => {
           <Switch
             checked={currentColorScheme === "dark"}
             onClick={toggleColorScheme}
-            className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white"
+            className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white cursor-pointer"
           />
           <Moon className="h-5 w-5" />
         </div>
@@ -49,8 +49,10 @@ const Header = () => {
           onClick={toggleLanguage}
           variant="outline"
           className={cn(
-            "bg-transparent hover:bg-white/20 border-0 font-poppins font-medium",
-            `hover:text-[${currentTheme.text}]`
+            "bg-transparent hover:bg-white/20 border-0 font-poppins font-medium cursor-pointer",
+            currentColorScheme === "dark"
+              ? "hover:text-white"
+              : "hover:text-black"
           )}
         >
           <img

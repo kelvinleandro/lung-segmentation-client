@@ -20,65 +20,68 @@ const DensityScaleSection = () => {
   const [classDistribution, setClassDistribution] =
     useState<ClassDistribution | null>(null);
   const { text } = useLanguage();
-  const { currentTheme } = useTheme();
+  const { theme } = useTheme();
 
   const classDescriptions = useMemo(() => {
     return [
       {
-        class: "Hiperareadas",
-        color: "#3B82F6",
+        class: text.densityHyper,
+        color: theme.hyperHU,
         name: classDistribution?.hyperaerated
-          ? `Hiperareadas (${classDistribution.hyperaerated.toFixed(2)}%)`
-          : "Hiperareadas",
-        limits: "-1000 a -950 HU",
-        description: "Regiões com muito ar, como espaços aéreos no pulmão.",
-        example: "Cavidades aéreas, bronquíolos.",
-      },
-      {
-        class: "Normalmente areadas",
-        color: "#27E23D",
-        name: classDistribution?.normallyAerated
-          ? `Normalmente areadas (${classDistribution.normallyAerated.toFixed(
+          ? `${text.densityHyper} (${classDistribution.hyperaerated.toFixed(
               2
             )}%)`
-          : "Normalmente areadas",
-        limits: "-950 a -500 HU",
-        description:
-          "Tecido pulmonar normal, densidade típica do pulmão saudável.",
-        example: "Parênquima pulmonar normal.",
+          : text.densityHyper,
+        limits: text.hyperRange,
+        description: text.hyperDescription,
+        example: text.hyperExample,
       },
       {
-        class: "Pouco areadas",
-        color: "#E78421",
+        class: text.densityNormal,
+        color: theme.normalHU,
+        name: classDistribution?.normallyAerated
+          ? `${text.densityNormal} (${classDistribution.normallyAerated.toFixed(
+              2
+            )}%)`
+          : text.densityNormal,
+        limits: text.normalRange,
+        description: text.normalDescription,
+        example: text.normalExample,
+      },
+      {
+        class: text.densityLow,
+        color: theme.badHU,
         name: classDistribution?.poorlyAerated
-          ? `Pouco areadas (${classDistribution.poorlyAerated.toFixed(2)}%)`
-          : "Pouco areadas",
-        limits: "-500 a -100 HU",
-        description: "Regiões com menos ar que o normal.",
-        example: "Áreas de atelectasia parcial.",
+          ? `${text.densityLow} (${classDistribution.poorlyAerated.toFixed(
+              2
+            )}%)`
+          : text.densityLow,
+        limits: text.lowRange,
+        description: text.lowDescription,
+        example: text.lowExample,
       },
       {
-        class: "Não areadas",
-        color: "#DC2626",
+        class: text.densityNone,
+        color: theme.noHU,
         name: classDistribution?.nonAerated
-          ? `Não areadas (${classDistribution.nonAerated.toFixed(2)}%)`
-          : "Não areadas",
-        limits: "-100 a 100 HU",
-        description: "Regiões sem ar, possível consolidação.",
-        example: "Consolidação, derrame pleural.",
+          ? `${text.densityNone} (${classDistribution.nonAerated.toFixed(2)}%)`
+          : text.densityNone,
+        limits: text.noneRange,
+        description: text.noneDescription,
+        example: text.noneExample,
       },
       {
-        class: "Osso",
-        color: "#D9D9D9",
+        class: text.densityBone,
+        color: theme.boneHU,
         name: classDistribution?.bone
-          ? `Osso (${classDistribution.bone.toFixed(2)}%)`
-          : "Osso",
-        limits: "600 a 2000 HU",
-        description: "Estruturas ósseas, densidade muito alta.",
-        example: "Costelas, vértebras.",
+          ? `${text.densityBone} (${classDistribution.bone.toFixed(2)}%)`
+          : text.densityBone,
+        limits: text.boneRange,
+        description: text.boneDescription,
+        example: text.boneExample,
       },
     ];
-  }, [classDistribution]);
+  }, [classDistribution, theme, text]);
 
   useEffect(() => {
     const loadImageData = async () => {
@@ -104,7 +107,7 @@ const DensityScaleSection = () => {
     <section className="w-full h-full flex flex-col gap-6 items-center">
       <div className="w-[70%] border-2 rounded-xl flex flex-col p-6 gap-4 items-center justify-center">
         <h2 className="text-xl font-poppins font-medium self-start">
-          Escalas de Densidades (HU)
+          {text.densityScaleTitle}
         </h2>
 
         <div className="w-full rounded-xl overflow-hidden flex">
@@ -120,8 +123,8 @@ const DensityScaleSection = () => {
         </div>
 
         <div className="w-full flex justify-between">
-          <p className="font-poppins font-medium">-1000 HU</p>
-          <p className="font-poppins font-medium">2000 HU</p>
+          <p className="font-poppins font-medium">{text.lowerLimit}</p>
+          <p className="font-poppins font-medium">{text.upperLimit}</p>
         </div>
       </div>
 
