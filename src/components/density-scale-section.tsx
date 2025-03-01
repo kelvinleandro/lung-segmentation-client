@@ -9,6 +9,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ClassDistribution } from "@/types/image";
 import { useParameters } from "@/hooks/use-parameters";
 import { computeClassDistribution } from "@/utils/image";
+import useLanguage from "@/hooks/use-language";
+import useTheme from "@/hooks/use-theme";
 
 coreInit();
 dicomImageLoaderInit();
@@ -17,6 +19,8 @@ const DensityScaleSection = () => {
   const { dicomFile } = useParameters();
   const [classDistribution, setClassDistribution] =
     useState<ClassDistribution | null>(null);
+  const { text } = useLanguage();
+  const { currentTheme } = useTheme();
 
   const classDescriptions = useMemo(() => {
     return [

@@ -8,45 +8,41 @@ import DensityScaleSection from "@/components/density-scale-section";
 import SelectionSection from "@/components/selection-section";
 import { ApplicationMode } from "@/types/parameters";
 import useTheme from "@/hooks/use-theme";
+import useLanguage from "@/hooks/use-language";
 
 const SegmentationPage = () => {
   const mode: ApplicationMode = "segmentation";
-  const { currentColorScheme } = useTheme();
+  const { currentColorScheme, currentTheme } = useTheme();
+  const { text } = useLanguage();
 
   return (
     <PageLayout>
       <main
-        className={cn(
-          "flex w-full flex-1",
-          currentColorScheme == "dark"
-            ? "bg-[#001d3d] text-white"
-            : "bg-white text-black"
-        )}
+        className="flex w-full flex-1"
+        style={{
+          backgroundColor: currentTheme.background,
+          color: currentTheme.text,
+        }}
       >
         <div className="flex-2">
           <ParametersSelector />
         </div>
         <div
-          className={cn(
-            "flex-12 border-l-2",
-            currentColorScheme === "dark" ? "border-white" : "border-black"
-          )}
+          className="flex-12 border-l-2"
+          style={{ borderColor: currentTheme.text }}
         >
           {mode === "segmentation" ? (
             <Tabs defaultValue="results" className="w-full h-full">
               <TabsList
-                className={cn(
-                  "flex pl-8 mt-2 justify-start bg-transparent gap-6 border-b-2 w-full rounded-none relative",
-                  currentColorScheme === "dark"
-                    ? "border-white"
-                    : "border-black"
-                )}
+                className="flex pl-8 mt-2 justify-start bg-transparent gap-6 border-b-2 w-full rounded-none relative"
+                style={{ borderColor: currentTheme.text }}
               >
                 {/* <TabsList className="flex overflow-hidden border border-black mt-1 ml-1"> */}
                 <TabsTrigger
                   value="results"
                   className={cn(
                     "cursor-pointer -translate-y-0.5 text-lg rounded-t-lg transition-all duration-300 ease-in-out border-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-4",
+                    // `data-[state=active]:text-${currentTheme.text} data-[state=active]:border-[${currentTheme.text}] data-[state=active]:border-b-[${currentTheme.background}]  border-gray-600 border-b-0`,
                     currentColorScheme === "dark"
                       ? "data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:border-b-[#001d3d]  border-gray-600 border-b-0"
                       : "data-[state=active]:text-black  data-[state=active]:border-black data-[state=active]:border-b-white  border-gray-600 border-b-0"
@@ -59,7 +55,7 @@ const SegmentationPage = () => {
                   // )}
                 >
                   <ImageIcon />
-                  <p>Resultados</p>
+                  <p>{text.menuResults}</p>
                 </TabsTrigger>
                 <TabsTrigger
                   value="density"
@@ -77,7 +73,7 @@ const SegmentationPage = () => {
                   // )}
                 >
                   <InfoIcon />
-                  <p>Escala de Densidades</p>
+                  <p>{text.menuDensityScale}</p>
                 </TabsTrigger>
               </TabsList>
 

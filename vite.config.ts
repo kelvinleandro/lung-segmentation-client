@@ -16,4 +16,9 @@ export default defineConfig({
       "@": resolve(__dirname, "./src"),
     },
   },
+  server: {
+    hmr: {
+      overlay: false, // Disable the HMR overlay
+    },
+  },
 });

@@ -4,7 +4,7 @@ import { COLORS } from "../constants/colors";
 type ThemeType = "light" | "dark";
 
 interface ThemeContextProps {
-  theme: typeof COLORS.light | typeof COLORS.dark;
+  currentTheme: typeof COLORS.light | typeof COLORS.dark;
   currentColorScheme: ThemeType;
   toggleColorScheme: () => void;
 }
@@ -17,6 +17,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [currentColorScheme, setCurrentColorScheme] =
     useState<ThemeType>("dark");
 
+  const currentTheme =
+    currentColorScheme === "light" ? COLORS.light : COLORS.dark;
+
   useEffect(() => {
     const savedTheme = localStorage.getItem(
       "currentColorScheme"
@@ -26,8 +29,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const theme = currentColorScheme === "light" ? COLORS.light : COLORS.dark;
-
   const toggleColorScheme = () => {
     const newColorScheme = currentColorScheme === "light" ? "dark" : "light";
     setCurrentColorScheme(newColorScheme);
@@ -36,7 +37,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ThemeContext.Provider
-      value={{ theme, currentColorScheme, toggleColorScheme }}
+      value={{ currentTheme, currentColorScheme, toggleColorScheme }}
     >
       {children}
     </ThemeContext.Provider>
