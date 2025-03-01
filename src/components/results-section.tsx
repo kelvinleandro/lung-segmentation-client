@@ -14,6 +14,7 @@ import {
   drawImageWithContours,
   downloadImage,
   saveContoursAsCSV,
+  colorizePixelData,
 } from "@/utils/image";
 import { ImageData } from "@/types/image";
 import {
@@ -31,6 +32,8 @@ coreInit();
 dicomImageLoaderInit();
 
 const ResultsSection = () => {
+  const [classImageSrc, setClassImageSrc] = useState<string | null>(null);
+  const [showColorizedImage, setShowColorizedImage] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   // Desestruturação para obter o dicomFile, os contornos e a função de atualização
   const { dicomFile, contours, setContours } = useParameters();
@@ -54,6 +57,12 @@ const ResultsSection = () => {
           width: image.width,
           height: image.height,
         });
+        const colorizedSrc = colorizePixelData(
+          pixelData,
+          image.width,
+          image.height
+        );
+        setClassImageSrc(colorizedSrc);
       } catch (error) {
         console.error("Error loading DICOM image:", error);
       }
@@ -90,17 +99,34 @@ const ResultsSection = () => {
   return (
     <section className="w-full h-full flex gap-40 px-20 pb-2">
       <div className="flex flex-col gap-5 pt-3 w-full">
-        <h1 className="font-bold text-3xl font-dm-sans">
-          {text.originalImage}
-        </h1>
-        <div className="w-full h-full rounded-3xl overflow-hidden">
-          <DICOMViewer
-            imageData={imageData}
-            contours={null}
-            drawable={false}
-            isPanning={false}
-            isDrawing={false}
-          />
+        <div className="flex items-center justify-between">
+          <h1 className="font-bold text-3xl font-dm-sans">
+            {text.originalImage}
+          </h1>
+
+          {classImageSrc && (
+            <div className="flex gap-2 items-center">
+              <p className="text-lg font-poppins">{text.highlight}:</p>
+              <input
+                type="checkbox"
+                checked={showColorizedImage}
+                onChange={(e) => setShowColorizedImage(e.target.checked)}
+              />
+            </div>
+          )}
+        </div>
+        <div className="relative w-full h-full rounded-3xl overflow-hidden">
+          {!showColorizedImage ? (
+            <DICOMViewer
+              imageData={imageData}
+              contours={null}
+              drawable={false}
+              isPanning={false}
+              isDrawing={false}
+            />
+          ) : (
+            <img src={classImageSrc!} className="absolute top-0 left-0 z-0" />
+          )}
         </div>
       </div>
 
