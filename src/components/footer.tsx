@@ -1,34 +1,29 @@
 import { Separator } from "@/components/ui/separator";
+import useLanguage from "@/hooks/use-language";
 import useTheme from "@/hooks/use-theme";
-import { cn } from "@/lib/utils";
 
 const Footer = () => {
-  const { currentColorScheme } = useTheme();
+  const { theme } = useTheme();
+  const { text } = useLanguage();
 
   return (
     <footer
-      className={cn(
-        "py-2 px-8 flex items-center justify-between ",
-        currentColorScheme === "dark"
-          ? "bg-black text-[#fcfcfd]"
-          : "bg-[#ee6c4d] text-black"
-      )}
+      className="py-2 px-8 flex items-center justify-between"
+      style={{
+        backgroundColor: theme.layoutBackground,
+        color: theme.layoutText,
+      }}
     >
       <div className="flex items-center gap-2 h-full">
         <img src="/images/ufc-crest.png" alt="Logo" className="h-7" />
 
         <Separator
           orientation="vertical"
-          className={cn(
-            "mx-4 border-1 data-[orientation=vertical]:h-[1rem]",
-            currentColorScheme === "dark" ? "border-[#fcfcfd]" : "border-black"
-          )}
+          className="mx-4 border-1 data-[orientation=vertical]:h-[1rem]"
+          style={{ borderColor: theme.layoutText }}
         />
 
-        <p className="font-bold font-dm-sans text-md">
-          TI0147 - Fundamentos de Processamento Digital de Imagens - 2024.2 -
-          Paulo Cesar Cortez
-        </p>
+        <p className="font-bold font-dm-sans text-md">{text.footerCredits}</p>
       </div>
     </footer>
   );

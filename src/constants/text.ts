@@ -4,9 +4,10 @@ export const INTERFACE_TEXT = {
     projectTitle: "Lungs Segmentation",
 
     heroTitle: "Segmentação de Pulmões em imagens de TC",
-    heroDescription: "Segmentação automática de pulmões em imagens de tomografia computadorizada (TC) utilizando o Algoritmo de Contornos Ativos Crisp Adaptativo 2D. Nosso sistema identifica e otimiza os contornos pulmonares por meio de cálculos de energia interna e externa, garantindo precisão na detecção e eficiência no processamento.",
+    heroDescription:
+      "Segmentação automática de pulmões em imagens de tomografia computadorizada (TC) utilizando o Algoritmo de Contornos Ativos Crisp Adaptativo 2D. Nosso sistema identifica e otimiza os contornos pulmonares por meio de cálculos de energia interna e externa, garantindo precisão na detecção e eficiência no processamento.",
 
-    uploadButton: "Upload image", 
+    uploadButton: "Selecionar imagem",
     uploadNote: "Formato de imagem DICOM",
 
     //segunda tela
@@ -59,20 +60,28 @@ export const INTERFACE_TEXT = {
     lowerLimit: "-1000 HU",
     upperLimit: "2000 HU",
 
+    hyperRange: "-1000 a -950 HU",
     hyperDescription: "Regiões com muito ar, como espaços aéreos no pulmão.",
-    hyperExample: "Exemplo: Cavidades aéreas, bronquíolos.",
+    hyperExample: "Cavidades aéreas, bronquíolos.",
 
-    normalDescription: "Tecido pulmonar normal, densidade típica do pulmão saudável.",
-    normalExample: "Exemplo: Parênquima pulmonar normal.",
+    normalRange: "-950 a -500 HU",
+    normalDescription:
+      "Tecido pulmonar normal, densidade típica do pulmão saudável.",
+    normalExample: "Parênquima pulmonar normal.",
 
+    lowRange: "-500 a -100 HU",
     lowDescription: "Regiões com menos ar que o normal.",
-    lowExample: "Exemplo: Áreas de atelectasia parcial.",
+    lowExample: "Áreas de atelectasia parcial.",
 
+    noneRange: "-100 a 100 HU",
     noneDescription: "Regiões sem ar, possível consolidação.",
-    noneExample: "Exemplo: Consolidação, derrame pleural.",
+    noneExample: "Consolidação, derrame pleural.",
 
+    boneRange: "600 a 2000 HU",
     boneDescription: "Estruturas ósseas, densidade muito alta.",
-    boneExample: "Exemplo: Costelas, vértebras.",
+    boneExample: "Costelas, vértebras.",
+
+    example: "Exemplo",
 
     //quinta
     zoom: "ZOOM",
@@ -86,10 +95,12 @@ export const INTERFACE_TEXT = {
     //sexta
     imageErrorText: "Formato de imagem não suportado",
     imageErrorDescription: "Faça o upload de uma imagem no formato DICOM",
+    closeButton: "Fechar",
 
     //oitava tela
     resultDownloadText: "Download de resultado",
-    resultDownloadDescription: "Selecione o formato que deseja fazer o download:",
+    resultDownloadDescription:
+      "Selecione o formato que deseja fazer o download:",
     pngButton: ".PNG",
     csvButton: ".CSV",
 
@@ -103,7 +114,8 @@ export const INTERFACE_TEXT = {
     error404: "Ops, parece que você está perdido!",
     homeButton: "Ir para a página inicial",
 
-    footerCredits: "TI0147 - Fundamentos de Processamento Digital de Imagens - 2024.2 - Paulo Cesar Cortez"
+    footerCredits:
+      "TI0147 - Fundamentos de Processamento Digital de Imagens - 2024.2 - Paulo Cesar Cortez",
   },
 
   english: {
@@ -111,9 +123,10 @@ export const INTERFACE_TEXT = {
     projectTitle: "Lungs Segmentation",
 
     heroTitle: "Lung Segmentation in CT Images",
-    heroDescription: "Automatic lung segmentation in computed tomography (CT) images using the Adaptive Crisp Active Contour Algorithm 2D. Our system identifies and optimizes lung contours through internal and external energy calculations, ensuring precise detection and efficient processing.",
+    heroDescription:
+      "Automatic lung segmentation in computed tomography (CT) images using the Adaptive Crisp Active Contour Algorithm 2D. Our system identifies and optimizes lung contours through internal and external energy calculations, ensuring precise detection and efficient processing.",
 
-    uploadButton: "Upload Image", 
+    uploadButton: "Upload Image",
     uploadNote: "DICOM image format",
 
     //segunda tela
@@ -166,20 +179,28 @@ export const INTERFACE_TEXT = {
     lowerLimit: "-1000 HU",
     upperLimit: "2000 HU",
 
-    hyperDescription: "Regions with a lot of air, such as air spaces in the lungs.",
-    hyperExample: "Example: Air cavities, bronchioles.",
+    hyperRange: "-1000 to -950 HU",
+    hyperDescription:
+      "Regions with a lot of air, such as air spaces in the lungs.",
+    hyperExample: "Air cavities, bronchioles.",
 
+    normalRange: "-950 to -500 HU",
     normalDescription: "Normal lung tissue, typical density of healthy lungs.",
-    normalExample: "Example: Normal pulmonary parenchyma.",
+    normalExample: "Normal pulmonary parenchyma.",
 
+    lowRange: "-500 to -100 HU",
     lowDescription: "Regions with less air than normal.",
-    lowExample: "Example: Areas of partial atelectasis.",
+    lowExample: "Areas of partial atelectasis.",
 
+    noneRange: "-100 to 100 HU",
     noneDescription: "Regions without air, possible consolidation.",
-    noneExample: "Example: Consolidation, pleural effusion.",
+    noneExample: "Consolidation, pleural effusion.",
 
+    boneRange: "600 to 2000 HU",
     boneDescription: "Bone structures, very high density.",
-    boneExample: "Example: Ribs, vertebrae.",
+    boneExample: "Ribs, vertebrae.",
+
+    example: "Example",
 
     //quinta tela
     zoom: "ZOOM",
@@ -193,6 +214,7 @@ export const INTERFACE_TEXT = {
     //sexta tela
     imageErrorText: "Unsupported Image Format",
     imageErrorDescription: "Upload an image in DICOM format",
+    closeButton: "Close",
 
     //oitava tela
     resultDownloadText: "Download Result",
@@ -210,6 +232,7 @@ export const INTERFACE_TEXT = {
     error404: "Oops, looks like you're lost!",
     homeButton: "Go to Homepage",
 
-    footerCredits: "TI0147 - Fundamentals of Digital Image Processing - 2024.2 - Paulo Cesar Cortez"
-  }
+    footerCredits:
+      "TI0147 - Fundamentals of Digital Image Processing - 2024.2 - Paulo Cesar Cortez",
+  },
 };

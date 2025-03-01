@@ -137,11 +137,8 @@
 }
 
 .btn-blk {
-  background-color: var(--btn-bg);
-  color: var(--btn-text);
   border-radius: 100px;
   padding: 10px 20px;
-  font-weight: 600;
   transition:
     background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1),

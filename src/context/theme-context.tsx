@@ -17,6 +17,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [currentColorScheme, setCurrentColorScheme] =
     useState<ThemeType>("dark");
 
+  const theme = currentColorScheme === "light" ? COLORS.light : COLORS.dark;
+
   useEffect(() => {
     const savedTheme = localStorage.getItem(
       "currentColorScheme"
@@ -25,8 +27,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       setCurrentColorScheme(savedTheme);
     }
   }, []);
-
-  const theme = currentColorScheme === "light" ? COLORS.light : COLORS.dark;
 
   const toggleColorScheme = () => {
     const newColorScheme = currentColorScheme === "light" ? "dark" : "light";
