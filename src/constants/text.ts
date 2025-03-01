@@ -46,7 +46,7 @@ export const INTERFACE_TEXT = {
 
     //terceira tela
     finalResult: "Resultado Final",
-
+    highlight: "Destacar",
     downloadButton: "Baixar",
 
     //quarta tela
@@ -165,7 +165,7 @@ export const INTERFACE_TEXT = {
 
     //terceira tela
     finalResult: "Final Result",
-
+    highlight: "Highlight",
     downloadButton: "Download",
 
     //quarta tela

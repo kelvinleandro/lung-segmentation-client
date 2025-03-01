@@ -1,5 +1,6 @@
 import { ImageData, Contours, ClassDistribution } from "@/types/image";
 import { Types } from "@cornerstonejs/core";
+import { COLORS } from "@/constants/colors";
 
 /**
  * Applies windowing to an image represented as a pixel data array.
@@ -15,7 +16,7 @@ export const applyWindowing = (
   imageData: Types.PixelDataTypedArray,
   imgMin: number = -1000,
   imgMax: number = 2000
-) => {
+): Types.PixelDataTypedArray => {
   // Clip values to the window range
   const clippedData = imageData.map((val) =>
     Math.min(Math.max(val, imgMin), imgMax)
@@ -36,7 +37,7 @@ export const applyWindowing = (
 export const drawImageWithContours = (
   { pixelData, width, height }: ImageData,
   contours: Contours | null = null
-) => {
+): string | null => {
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
@@ -85,7 +86,7 @@ export const drawImageWithContours = (
  * @param fileName - The name to be used for the downloaded file, including the file extension (e.g., "image.png").
  * @returns void
  */
-export const downloadImage = (imageSrc: string, fileName: string) => {
+export const downloadImage = (imageSrc: string, fileName: string): void => {
   if (!imageSrc) return;
 
   const link = document.createElement("a");
@@ -106,7 +107,7 @@ export const downloadImage = (imageSrc: string, fileName: string) => {
 export const saveContoursAsCSV = (
   contours: Contours | null = null,
   fileName: string
-) => {
+): void => {
   if (!contours || Object.keys(contours).length === 0) return;
 
   // Create CSV header
@@ -178,4 +179,68 @@ export const computeClassDistribution = (
     nonAerated: (classCounts.nonAerated / totalPixels) * 100,
     bone: (classCounts.bone / totalPixels) * 100,
   };
+};
+
+/**
+ * Converts pixel intensity values to a colorized image based on predefined HU ranges.
+ * @param {Types.PixelDataTypedArray} pixelData - The original, unnormalized pixel data.
+ * @param {number} width - The width of the image.
+ * @param {number} height - The height of the image.
+ * @returns {string | null} A data URL representing the colorized image, or null if rendering fails.
+ */
+export const colorizePixelData = (
+  pixelData: Types.PixelDataTypedArray,
+  width: number,
+  height: number
+): string | null => {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) return null;
+
+  const image = ctx.createImageData(width, height);
+
+  for (let i = 0; i < pixelData.length; i++) {
+    const val = Math.min(Math.max(pixelData[i], -1000), 2000);
+    let color: string;
+
+    if (val >= -1000 && val < -950)
+      color = COLORS.light.hyperHU; // Hyperaerated
+    else if (val >= -950 && val < -500)
+      color = COLORS.light.normalHU; // Normally aerated
+    else if (val >= -500 && val < -100)
+      color = COLORS.light.badHU; // Poorly aerated
+    else if (val >= -100 && val <= 100)
+      color = COLORS.light.noHU; // Non-aerated
+    else if (val >= 600 && val <= 2000) color = COLORS.light.boneHU; // Bone
+    else color = "#000000"; // Default to black for out-of-range values
+
+    const [r, g, b] = hexToRgb(color);
+    image.data[i * 4] = r;
+    image.data[i * 4 + 1] = g;
+    image.data[i * 4 + 2] = b;
+    image.data[i * 4 + 3] = 255; // Alpha channel
+  }
+
+  ctx.putImageData(image, 0, 0);
+  return canvas.toDataURL();
+};
+
+/**
+ * Converts a hex color string to an RGB array.
+ * @param {string} hex - The hex color string.
+ * @returns {[number, number, number]} An array containing RGB values.
+ */
+const hexToRgb = (hex: string): [number, number, number] => {
+  hex = hex.replace("#", "");
+  if (hex.length === 3) {
+    hex = hex
+      .split("")
+      .map((char) => char + char)
+      .join("");
+  }
+  const bigint = parseInt(hex, 16);
+  return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
 };
