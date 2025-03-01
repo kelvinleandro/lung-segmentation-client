@@ -149,7 +149,7 @@ const DensityScaleSection = () => {
                 {classDescription.description}
               </p>
               <p className="text-sm font-poppins font-medium">
-                <span className="font-bold">Exemplo:</span>{" "}
+                <span className="font-bold">{text.example}:</span>{" "}
                 {classDescription.example}
               </p>
             </div>

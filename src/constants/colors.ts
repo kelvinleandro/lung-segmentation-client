@@ -38,10 +38,10 @@ export const COLORS = {
     layoutText: "#ffffff",
     dialogBackground: "#2d2d2d",
     dialogText: "#f8f9fa",
-    buttonBackground: "#000000",
-    buttonText: "#ffffff",
-    buttonSecondaryBackground: "#ffffff",
-    buttonSecondaryText: "#000000",
+    buttonBackground: "#ffffff",
+    buttonText: "#000000",
+    buttonSecondaryBackground: "#000000",
+    buttonSecondaryText: "#ffffff",
 
     //density scale:
     hyperHU: "#3b82f6",

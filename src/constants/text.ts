@@ -7,7 +7,7 @@ export const INTERFACE_TEXT = {
     heroDescription:
       "Segmentação automática de pulmões em imagens de tomografia computadorizada (TC) utilizando o Algoritmo de Contornos Ativos Crisp Adaptativo 2D. Nosso sistema identifica e otimiza os contornos pulmonares por meio de cálculos de energia interna e externa, garantindo precisão na detecção e eficiência no processamento.",
 
-    uploadButton: "Upload image",
+    uploadButton: "Selecionar imagem",
     uploadNote: "Formato de imagem DICOM",
 
     //segunda tela
@@ -81,6 +81,8 @@ export const INTERFACE_TEXT = {
     boneDescription: "Estruturas ósseas, densidade muito alta.",
     boneExample: "Costelas, vértebras.",
 
+    example: "Exemplo",
+
     //quinta
     zoom: "ZOOM",
     config: "Configurações",
@@ -93,6 +95,7 @@ export const INTERFACE_TEXT = {
     //sexta
     imageErrorText: "Formato de imagem não suportado",
     imageErrorDescription: "Faça o upload de uma imagem no formato DICOM",
+    closeButton: "Fechar",
 
     //oitava tela
     resultDownloadText: "Download de resultado",
@@ -197,6 +200,8 @@ export const INTERFACE_TEXT = {
     boneDescription: "Bone structures, very high density.",
     boneExample: "Ribs, vertebrae.",
 
+    example: "Example",
+
     //quinta tela
     zoom: "ZOOM",
     config: "Settings",
@@ -209,6 +214,7 @@ export const INTERFACE_TEXT = {
     //sexta tela
     imageErrorText: "Unsupported Image Format",
     imageErrorDescription: "Upload an image in DICOM format",
+    closeButton: "Close",
 
     //oitava tela
     resultDownloadText: "Download Result",
