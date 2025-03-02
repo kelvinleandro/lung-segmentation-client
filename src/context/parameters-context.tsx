@@ -49,7 +49,7 @@ export const ParametersProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [mode, setMode] = useState<ApplicationMode>("segmentation");
+  const [mode, setMode] = useState<ApplicationMode>("selection");
   const [dicomFile, setDicomFile] = useState<File | null>(null);
   const [contours, setContours] = useState<Contours | null>(null);
   const [selectionParameters, setSelectionParameters] =
