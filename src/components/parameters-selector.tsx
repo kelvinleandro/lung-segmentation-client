@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LucideMove, LucidePenTool } from "lucide-react";
 import useApi from "@/hooks/use-api";
+import { ApplicationMode } from "@/types/parameters";
 
 const ParametersSelector = () => {
   const { currentColorScheme } = useTheme();
@@ -14,6 +15,8 @@ const ParametersSelector = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>('');
+
+  const { dicomFile } = useParameters();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -29,22 +32,6 @@ const ParametersSelector = () => {
   };
 
   const { sendFileToServer } = useApi();
-
-  const handleRun = async () => {
-    if (!selectedFile) {
-      console.error("Nenhum arquivo selecionado.");
-      return;
-    }
-
-    console.log("Enviando arquivo para o servidor...");
-    const response = await sendFileToServer(selectedFile);
-
-    if(response) {
-      console.log("Contornos Recebidos:", response);
-    } else{
-      console.error("Erro ao processar a imagem.");
-    };
-  };
 
   const handleContrastChange = (param: "windowwidth" | "windowcenter", value: number) => {
     setSelectionParameters((prev) => ({ ...prev, [param]: value}));
@@ -65,17 +52,17 @@ const ParametersSelector = () => {
     >
       <h2 className="text-2xl font-bold">Customising</h2>
 
-      <Tabs value={mode} onValueChange={setMode}>
+      <Tabs value={mode} onValueChange={(value) => setMode(value as ApplicationMode)}>
 
         {/* Tabs de Segmentação e Seleção */}
-        <TabsList className="grid grid-cols-2">
-          <TabsTrigger value="selection">Seleção</TabsTrigger>
-          <TabsTrigger value="segmentation" >Segmentação</TabsTrigger>
+        <TabsList className={cn("grid grid-cols-2", currentColorScheme == "dark" ? "bg-[#001d3d]" : "bg-white")}>
+          <TabsTrigger value="selection" className={cn("w-full rounded-l-lg border-2 border-r-0", mode == "selection" && currentColorScheme == "dark"  ? "bg-white text-black border-white" : "", mode != "selection" && currentColorScheme == "dark"  ? "bg-[#001d3d] text-white border-white" : "", mode == "selection" && currentColorScheme != "dark" ? "bg-black text-white border-black" : "", mode != "selection" && currentColorScheme != "dark"  ? "text-black border-black" : "" )}>Seleção</TabsTrigger>
+          <TabsTrigger value="segmentation" className={cn("w-full rounded-r-lg border-2 border-l-0", mode == "segmentation" && currentColorScheme == "dark"  ? "bg-white text-black border-white" : "", mode != "segmentation" && currentColorScheme == "dark"  ? "bg-[#001d3d] text-white border-white" : "", mode == "segmentation" && currentColorScheme != "dark"  ? "bg-black text-white border-black" : "", mode != "segmentation" && currentColorScheme != "dark"  ? "text-black border-black" : "" )}>Segmentação</TabsTrigger>
         </TabsList>
 
         {/* Tabs de Métodos */}
         <TabsContent value="segmentation">
-          <div>
+          <div className="flex flex-col">
             <h3 className="font-semibold">Método de Segmentação</h3>
             <label>
               <input type="radio" name="segmentationMethod" value="Metodo1" checked={segmentationParameters === "OtsuParameters"} onChange={() => handleSegmentationChange("Metodo1")} />
@@ -92,16 +79,29 @@ const ParametersSelector = () => {
           </div>
         </TabsContent>
 
-        {/* Contraste e Interação */}
-        <TabsContent value="selection">
+        {/* Contraste e Text Input*/}
+        <TabsContent value="segmentation">
+        <div>
+          <h3 className="font-semibold">TEXT INPUT</h3>
+          {["Item 1", "Item 2"].map((item, index) => (
+            <div key={index}>
+              <label>{item}:</label>
+              <input type="text" placeholder="Text here" className="border p-2 w-full" />
+            </div>
+          ))}
+        </div>
+
         <div>
           <h3 className="font-semibold">CONTRASTE</h3>
           <label>Window Width:</label>
-          <input type="range" min="0" max="255" value={selectionParameters.windowWidth} onChange={(e) => handleContrastChange("windowwidth", Number(e.target.value))} className="w-full" />
+          <input type="range" min="0" max="255" value={selectionParameters.windowWidth} onChange={(e) => handleContrastChange("windowwidth", Number(e.target.value))} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
           <label>Window Center:</label>
-          <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowcenter", Number(e.target.value))} className="w-full" />
+          <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowcenter", Number(e.target.value))} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
         </div>
+        </TabsContent>
 
+        {/* Interação */}
+        <TabsContent value="selection">
         <div>
           <h3 className="font-semibold">Interação</h3>
           <div className="flex space-x-2">
@@ -116,23 +116,19 @@ const ParametersSelector = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Text Input */}
-      <div>
-        <h3 className="font-semibold">TEXT INPUT</h3>
-        {["Item 1", "Item 2"].map((item, index) => (
-          <div key={index}>
-            <label>{item}:</label>
-            <input type="text" placeholder="Text here" className="border p-2 w-full" />
-          </div>
-        ))}
-      </div>
-
       {/* Botões principais */}
-      <Button className="w-full" onClick={handleRun}>Run</Button>
+      <Button className={cn("w-full", currentColorScheme == "dark" ? "bg-white text-black" : "bg-black text-white")} onClick={async () => {
+        if(!dicomFile) {
+          console.error("Nenhum arquivo Dicom selecionado.");
+          return;
+        }
+        const contours = await sendFileToServer(dicomFile);
+        console.log("Contornos recebidos:", contours);
+      }}>Run</Button>
       <input id="file-upload" type="file" accept=".dcm" onChange={handleFileChange} className="hidden" />
-      <button onClick={() => document.getElementById('file-upload')?.click()} className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 w-full">
+      <Button onClick={() => document.getElementById('file-upload')?.click()} className={cn("w-full rounded-lg", currentColorScheme == "dark" ? "bg-white text-black" : "bg-black text-white")}>
         {fileName ? fileName : 'Choose Image'}
-      </button>
+      </Button>
     </aside>
   );
 };
