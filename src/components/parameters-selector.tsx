@@ -1,53 +1,58 @@
 import useTheme from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
-import { useContext, useState } from "react";
-import { ParametersContext } from "@/context/parameters-context";
+import React, { useState } from "react";
+import { useParameters } from "@/hooks/use-parameters";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LucideMove, LucidePenTool } from "lucide-react";
+import useApi from "@/hooks/use-api";
 
 const ParametersSelector = () => {
   const { currentColorScheme } = useTheme();
-  const parametersContext = useContext(ParametersContext);
+  const { mode, setMode, changeDicomFile, segmentationParameters, setSegmentationParameters, selectionParameters, setSelectionParameters} = useParameters();
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [isPanning, setIsPanning] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState<string>('');
 
-  if(!parametersContext) {
-    return <div>Loading...</div>;
-  }
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
 
-  const {selectionParameters, setSelectionParameters} = useContext(ParametersContext);
-  const handleContrastChange = (param: "windowWidth" | "windowCenter", value: number) => {
-    setSelectionParameters((prev) => ({
-      ...prev,
-      [param]:value,
-    }));
+    if(file && fileName.endsWith('.dcm')) {
+      setFileName(file.name);
+      setSelectedFile(file);
+      changeDicomFile(file)
+    } else {
+      setFileName("Choose Image");
+      setSelectedFile(null);
+    }
   };
 
-  const { segmentationParameters, setSegmentationParameters} = useContext(ParametersContext);
-  const handleSegmentationChange = (method: string, isChecked: boolean) => {
-    setSegmentationParameters((prev) => ({
-      ...prev,
-      method: isChecked ? method : "",
-    }));
+  const { sendFileToServer } = useApi();
+
+  const handleRun = async () => {
+    if (!selectedFile) {
+      console.error("Nenhum arquivo selecionado.");
+      return;
+    }
+
+    console.log("Enviando arquivo para o servidor...");
+    const response = await sendFileToServer(selectedFile);
+
+    if(response) {
+      console.log("Contornos Recebidos:", response);
+    } else{
+      console.error("Erro ao processar a imagem.");
+    };
   };
 
-  const {mode, setMode} = useContext(ParametersContext);
-  const toggleMode = (newMode: "selection" | "segmentation") => {
-    setMode(newMode);
-  }
+  const handleContrastChange = (param: "windowwidth" | "windowcenter", value: number) => {
+    setSelectionParameters((prev) => ({ ...prev, [param]: value}));
+    };
 
-  const changeDicomFile = parametersContext;
-
-  const toggleDrawing = () => {
-    setIsDrawing(true);
-    setIsPanning(false);
+  const handleSegmentationChange = (method: string) => {
+    setSegmentationParameters((prev) => ({ ...prev, method}));
   };
-
-  const togglePanning = () => {
-    setIsPanning((prev) => !prev);
-    setIsDrawing(false);
-  }
 
   return (
     <aside
@@ -60,35 +65,56 @@ const ParametersSelector = () => {
     >
       <h2 className="text-2xl font-bold">Customising</h2>
 
-      {/* Tabs de Segmentação e Seleção */}
-      <div className="flex">
-        <Button
-        className={`text-black px-4 py-2 border rounded-l-lg ${mode == "selection" ? "bg-black text-white" : "bg-white"}`}
-        onClick={() => setMode("selection")}>Seleção</Button>
+      <Tabs value={mode} onValueChange={setMode}>
 
-        <Button 
-        className={`text-black px-4 py-2 border rounded-r-lg ${mode == "segmentation" ? "bg-black text-white" : "bg-white"}`} 
-        onClick={() => setMode("segmentation")}>Segmentação</Button>
-      </div>
+        {/* Tabs de Segmentação e Seleção */}
+        <TabsList className="grid grid-cols-2">
+          <TabsTrigger value="selection">Seleção</TabsTrigger>
+          <TabsTrigger value="segmentation" >Segmentação</TabsTrigger>
+        </TabsList>
 
-      {/* Radio 1 */}
-      <div className="flex flex-col space-y-2 items-center">
-        <h3 className="font-semibold">SELECIONE O MÉTODO</h3>
-        <label>
-          <input type="radio" className="mr-1" checked={segmentationParameters.method === "Metodo1"} onChange={(e) => handleSegmentationChange("Metodo1", e.target.checked)} />
-            Método 1
-        </label>
+        {/* Tabs de Métodos */}
+        <TabsContent value="segmentation">
+          <div>
+            <h3 className="font-semibold">Método de Segmentação</h3>
+            <label>
+              <input type="radio" name="segmentationMethod" value="Metodo1" checked={segmentationParameters === "OtsuParameters"} onChange={() => handleSegmentationChange("Metodo1")} />
+              Método 1
+            </label>
+            <label>
+              <input type="radio" name="segmentationMethod" value="Metodo2" checked={segmentationParameters === "WatershedParameters"} onChange={() => handleSegmentationChange("Metodo2")} />
+              Método 2
+            </label>
+            <label>
+              <input type="radio" name="segmentationMethod" value="Metodo3" checked={segmentationParameters === "CrispParameters"} onChange={() => handleSegmentationChange("Metodo3")} />
+              Método 3
+            </label>
+          </div>
+        </TabsContent>
 
-        <label>
-          <input type="radio" className="mr-1" checked={segmentationParameters.method === "Metodo2"} onChange={(e) => handleSegmentationChange("Metodo2", e.target.checked)} />
-            Método 2
-        </label>
+        {/* Contraste e Interação */}
+        <TabsContent value="selection">
+        <div>
+          <h3 className="font-semibold">CONTRASTE</h3>
+          <label>Window Width:</label>
+          <input type="range" min="0" max="255" value={selectionParameters.windowWidth} onChange={(e) => handleContrastChange("windowwidth", Number(e.target.value))} className="w-full" />
+          <label>Window Center:</label>
+          <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowcenter", Number(e.target.value))} className="w-full" />
+        </div>
 
-        <label>
-          <input type="radio" className="mr-1" checked={segmentationParameters.method === "Metodo3"} onChange={(e) => handleSegmentationChange("Metodo3", e.target.checked)} />
-            Método 3
-        </label>
-      </div>
+        <div>
+          <h3 className="font-semibold">Interação</h3>
+          <div className="flex space-x-2">
+            <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(true)}>
+              <LucidePenTool size={16} />
+            </Button>
+            <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(false)}>
+              <LucideMove size={16} />
+            </Button>
+          </div>
+        </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Text Input */}
       <div>
@@ -101,41 +127,12 @@ const ParametersSelector = () => {
         ))}
       </div>
 
-      {/* Range */}
-      <div>
-        <h3 className="font-semibold">CONTRASTE</h3>
-        <label>Window Width:</label>
-        <input type="range" min="0" max="255" value={selectionParameters.windowWidth} onChange={(e) => handleContrastChange("windowWidth", Number(e.target.value))} className="w-full" />
-        <label>Window Center:</label>
-        <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowCenter", Number(e.target.value))} className="w-full" />
-      </div>
-
-      {/* Radio 2 */}
-      <div>
-        <h3 className="font-semibold">RADIO</h3>
-        {["Item 1", "Item 2"].map((item, index) => (
-          <label key={index} className="flex items-center space-x-2">
-            <input type="radio" name="radio-group" defaultChecked={index === 0} />
-            <span>{item}</span>
-          </label>
-        ))}
-      </div>
-
-      {/* Interação */}
-      <div className="flex space-x-2">
-        <Button variant={isDrawing ? "default" : "outline"} className={`${isDrawing ? "text-white" : "text-black"}`} onClick={() => setIsDrawing(true)}>
-          <LucidePenTool size={16} />
-        </Button>
-        <Button variant={!isDrawing ? "default" : "outline"} className={`${!isDrawing ? "text-white" : "text-black"}`} onClick={() => setIsDrawing(false)}>
-          <LucideMove size={16} />
-        </Button>
-      </div>
-
       {/* Botões principais */}
-      <Button className="w-full">Run</Button>
-      <Button className="w-full text-black" variant="outline" onClick={() => changeDicomFile(null)}>
-        Choose Image
-      </Button>
+      <Button className="w-full" onClick={handleRun}>Run</Button>
+      <input id="file-upload" type="file" accept=".dcm" onChange={handleFileChange} className="hidden" />
+      <button onClick={() => document.getElementById('file-upload')?.click()} className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 w-full">
+        {fileName ? fileName : 'Choose Image'}
+      </button>
     </aside>
   );
 };
