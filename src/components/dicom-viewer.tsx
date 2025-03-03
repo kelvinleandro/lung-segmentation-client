@@ -12,6 +12,7 @@ type Props = {
   clearRef?: React.RefObject<HTMLButtonElement>;
   isPanning: boolean;
   isDrawing: boolean;
+  contoursOnOriginal?: boolean;
 };
 
 const DICOMViewer = ({
@@ -24,6 +25,7 @@ const DICOMViewer = ({
   clearRef,
   isPanning,
   isDrawing,
+  contoursOnOriginal = true,
 }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
@@ -31,8 +33,8 @@ const DICOMViewer = ({
 
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
-    return drawImageWithContours(imageData, contours);
-  }, [imageData, contours]);
+    return drawImageWithContours(imageData, contours, contoursOnOriginal);
+  }, [imageData, contours, contoursOnOriginal]);
 
   // Reset pan offset when zoom level changes
   useEffect(() => {

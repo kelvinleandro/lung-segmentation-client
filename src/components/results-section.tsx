@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { Download } from "lucide-react";
+import { Download, Settings2 } from "lucide-react";
 import { MdOutlineDownloading } from "react-icons/md";
-import { useParameters } from "@/hooks/use-parameters";
 import { init as coreInit, imageLoader } from "@cornerstonejs/core";
 import {
   init as dicomImageLoaderInit,
@@ -25,6 +24,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "./ui/dropdown-menu";
+import { Separator } from "./ui/separator";
+import { useParameters } from "@/hooks/use-parameters";
 import useLanguage from "@/hooks/use-language";
 import useTheme from "@/hooks/use-theme";
 
@@ -33,14 +39,18 @@ dicomImageLoaderInit();
 
 const ResultsSection = () => {
   const [classImageSrc, setClassImageSrc] = useState<string | null>(null);
+  const [preprocessedBase64, setPreprocessedBase64] = useState<string | null>(
+    null
+  );
   const [showColorizedImage, setShowColorizedImage] = useState<boolean>(false);
+  const [drawOnOriginal, setDrawOnOriginal] = useState<boolean>(true);
+  const [showPreprocessed, setShowPreprocessed] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   // Desestruturação para obter o dicomFile, os contornos e a função de atualização
   const { dicomFile, contours, setContours } = useParameters();
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const { text } = useLanguage();
   const { theme } = useTheme();
-
   const { sendFileToServer } = useApi();
 
   // Carrega a imagem DICOM e aplica o windowing
@@ -81,9 +91,12 @@ const ResultsSection = () => {
   const handleSendFile = async () => {
     if (!dicomFile) return;
     try {
-      const contoursResponse = await sendFileToServer(dicomFile);
-      if (contoursResponse) {
-        setContours(contoursResponse);
+      const data = await sendFileToServer(dicomFile);
+      if (data?.contours) {
+        setContours(data.contours);
+      }
+      if (data?.preprocessed) {
+        setPreprocessedBase64(`data:image/png;base64,${data.preprocessed}`);
       }
     } catch (error) {
       console.error("Error sending file:", error);
@@ -93,8 +106,8 @@ const ResultsSection = () => {
   // Cria a imagem final com os contornos retornados do backend
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
-    return drawImageWithContours(imageData, contours);
-  }, [imageData, contours]);
+    return drawImageWithContours(imageData, contours, drawOnOriginal);
+  }, [imageData, contours, drawOnOriginal]);
 
   return (
     <section className="w-full h-full flex gap-40 px-20 pb-2">
@@ -131,10 +144,50 @@ const ResultsSection = () => {
       </div>
 
       <div className="flex flex-col gap-5 pt-3 w-full">
-        <div className="flex items-center gap-7 justify-between">
-          <h1 className="font-bold text-3xl font-dm-sans">
-            {text.finalResult}
-          </h1>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-4 items-center">
+            <h1 className="font-bold text-3xl font-dm-sans">
+              {text.finalResult}
+            </h1>
+            {imageData && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Settings2 size={32} className="cursor-pointer" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-52 font-poppins px-2 flex flex-col gap-1"
+                  style={{
+                    backgroundColor: theme.background,
+                    color: theme.text,
+                  }}
+                >
+                  <div className="flex justify-between">
+                    <p>{text.onlyContours}:</p>
+
+                    <input
+                      type="checkbox"
+                      checked={!drawOnOriginal}
+                      onChange={(e) => setDrawOnOriginal(!e.target.checked)}
+                      disabled={showPreprocessed}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex justify-between">
+                    <p>{text.preprocessed}:</p>
+
+                    <input
+                      type="checkbox"
+                      checked={showPreprocessed}
+                      onChange={(e) => setShowPreprocessed(e.target.checked)}
+                      disabled={!drawOnOriginal}
+                    />
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
 
           <Dialog open={open} onOpenChange={setOpen}>
             {imageSrc && (
@@ -198,14 +251,22 @@ const ResultsSection = () => {
           </Dialog>
         </div>
 
-        <div className="w-full h-full rounded-3xl overflow-hidden">
-          <DICOMViewer
-            imageData={imageData}
-            contours={contours}
-            drawable={false}
-            isPanning={false}
-            isDrawing={false}
-          />
+        <div className="relative w-full h-full rounded-3xl overflow-hidden">
+          {showPreprocessed && preprocessedBase64 ? (
+            <img
+              src={preprocessedBase64}
+              className="absolute top-0 left-0 z-0"
+            />
+          ) : (
+            <DICOMViewer
+              imageData={imageData}
+              contours={contours}
+              drawable={false}
+              isPanning={false}
+              isDrawing={false}
+              contoursOnOriginal={drawOnOriginal}
+            />
+          )}
         </div>
       </div>
     </section>
