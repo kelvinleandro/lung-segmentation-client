@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LucideMove, LucidePenTool } from "lucide-react";
 import useApi from "@/hooks/use-api";
 import { ApplicationMode } from "@/types/parameters";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const ParametersSelector = () => {
   const { currentColorScheme } = useTheme();
@@ -60,44 +61,45 @@ const ParametersSelector = () => {
           <TabsTrigger value="segmentation" className={cn("w-full rounded-r-lg border-2 border-l-0", mode == "segmentation" && currentColorScheme == "dark"  ? "bg-white text-black border-white" : "", mode != "segmentation" && currentColorScheme == "dark"  ? "bg-[#001d3d] text-white border-white" : "", mode == "segmentation" && currentColorScheme != "dark"  ? "bg-black text-white border-black" : "", mode != "segmentation" && currentColorScheme != "dark"  ? "text-black border-black" : "" )}>Segmentação</TabsTrigger>
         </TabsList>
 
-        {/* Tabs de Métodos */}
+        {/* Segmentação */}
         <TabsContent value="segmentation">
-          <div className="flex flex-col">
-            <h3 className="font-semibold">Método de Segmentação</h3>
-            <label>
-              <input type="radio" name="segmentationMethod" value="Metodo1" checked={segmentationParameters === "OtsuParameters"} onChange={() => handleSegmentationChange("Metodo1")} />
-              Método 1
-            </label>
-            <label>
-              <input type="radio" name="segmentationMethod" value="Metodo2" checked={segmentationParameters === "WatershedParameters"} onChange={() => handleSegmentationChange("Metodo2")} />
-              Método 2
-            </label>
-            <label>
-              <input type="radio" name="segmentationMethod" value="Metodo3" checked={segmentationParameters === "CrispParameters"} onChange={() => handleSegmentationChange("Metodo3")} />
-              Método 3
-            </label>
-          </div>
-        </TabsContent>
 
-        {/* Contraste e Text Input*/}
-        <TabsContent value="segmentation">
-        <div>
-          <h3 className="font-semibold">TEXT INPUT</h3>
-          {["Item 1", "Item 2"].map((item, index) => (
-            <div key={index}>
-              <label>{item}:</label>
-              <input type="text" placeholder="Text here" className="border p-2 w-full" />
+          <ScrollArea className="h-[60vh]">
+            <div className="flex flex-col">
+              <h3 className="font-semibold">Método de Segmentação</h3>
+              <label>
+                <input type="radio" name="segmentationMethod" value="Metodo1" checked={segmentationParameters === "OtsuParameters"} onChange={() => handleSegmentationChange("Metodo1")} />
+                  Método 1
+              </label>
+              <label>
+                <input type="radio" name="segmentationMethod" value="Metodo2" checked={segmentationParameters === "WatershedParameters"} onChange={() => handleSegmentationChange("Metodo2")} />
+                  Método 2
+              </label>
+              <label>
+                <input type="radio" name="segmentationMethod" value="Metodo3" checked={segmentationParameters === "CrispParameters"} onChange={() => handleSegmentationChange("Metodo3")} />
+                  Método 3
+              </label>
             </div>
-          ))}
-        </div>
 
-        <div>
-          <h3 className="font-semibold">CONTRASTE</h3>
-          <label>Window Width:</label>
-          <input type="range" min="0" max="255" value={selectionParameters.windowWidth} onChange={(e) => handleContrastChange("windowwidth", Number(e.target.value))} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
-          <label>Window Center:</label>
-          <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowcenter", Number(e.target.value))} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
-        </div>
+            <div>
+              <h3 className="font-semibold">TEXT INPUT</h3>
+              {["Item 1", "Item 2"].map((item, index) => (
+                <div key={index}>
+                  <label>{item}:</label>
+                  <input type="text" placeholder="Text here" className="border p-2 w-full" />
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <h3 className="font-semibold">CONTRASTE</h3>
+              <label>Window Width:</label>
+              <input type="range" min="0" max="255" value={selectionParameters.windowWidth} onChange={(e) => handleContrastChange("windowwidth", Number(e.target.value))} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
+              <label>Window Center:</label>
+              <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowcenter", Number(e.target.value))} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
+            </div>
+          </ScrollArea>
+          
         </TabsContent>
 
         {/* Interação */}
