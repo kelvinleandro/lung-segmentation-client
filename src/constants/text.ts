@@ -48,6 +48,8 @@ export const INTERFACE_TEXT = {
     finalResult: "Resultado Final",
     highlight: "Destacar",
     downloadButton: "Baixar",
+    onlyContours: "Apenas Contornos",
+    preprocessed: "Pré-processada",
 
     //quarta tela
     densityScaleTitle: "Escala de Densidades (HU)",
@@ -167,6 +169,8 @@ export const INTERFACE_TEXT = {
     finalResult: "Final Result",
     highlight: "Highlight",
     downloadButton: "Download",
+    onlyContours: "Only Contours",
+    preprocessed: "Preprocessed",
 
     //quarta tela
     densityScaleTitle: "Density Scale (HU)",

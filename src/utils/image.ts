@@ -32,11 +32,15 @@ export const applyWindowing = (
  * @param imageData - An object containing pixel data, width, and height of the image.
  * @param contours - An optional object where each key represents a contour name,
  *                   and the value is an array of pixel coordinates [x, y].
- * @returns A data URL representing the image with contours drawn or `null` if rendering fails.
+ * @param drawOnOriginal - A boolean flag indicating whether to draw contours over the original image.
+ *                         - `true` (default): Draw contours over the original image.
+ *                         - `false`: Use a black background and draw only the contours.
+ * @returns A data URL representing the image with contours drawn, or `null` if rendering fails.
  */
 export const drawImageWithContours = (
   { pixelData, width, height }: ImageData,
-  contours: Contours | null = null
+  contours: Contours | null = null,
+  drawOnOriginal: boolean = true
 ): string | null => {
   const canvas = document.createElement("canvas");
   canvas.width = width;
@@ -44,15 +48,30 @@ export const drawImageWithContours = (
   const ctx = canvas.getContext("2d");
 
   if (ctx) {
-    const image = ctx.createImageData(width, height);
-    for (let i = 0; i < pixelData.length; i++) {
-      image.data[i * 4] = pixelData[i]; // R
-      image.data[i * 4 + 1] = pixelData[i]; // G
-      image.data[i * 4 + 2] = pixelData[i]; // B
-      image.data[i * 4 + 3] = 255; // Alpha
+    // const image = ctx.createImageData(width, height);
+    // for (let i = 0; i < pixelData.length; i++) {
+    //   image.data[i * 4] = pixelData[i]; // R
+    //   image.data[i * 4 + 1] = pixelData[i]; // G
+    //   image.data[i * 4 + 2] = pixelData[i]; // B
+    //   image.data[i * 4 + 3] = 255; // Alpha
+    // }
+    // ctx.putImageData(image, 0, 0);
+    // ctx.globalCompositeOperation = "source-over";
+    if (drawOnOriginal) {
+      // Draw original image
+      const image = ctx.createImageData(width, height);
+      for (let i = 0; i < pixelData.length; i++) {
+        image.data[i * 4] = pixelData[i]; // R
+        image.data[i * 4 + 1] = pixelData[i]; // G
+        image.data[i * 4 + 2] = pixelData[i]; // B
+        image.data[i * 4 + 3] = 255; // Alpha
+      }
+      ctx.putImageData(image, 0, 0);
+    } else {
+      // Fill background with black
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, width, height);
     }
-    ctx.putImageData(image, 0, 0);
-    ctx.globalCompositeOperation = "source-over";
 
     if (contours) {
       ctx.strokeStyle = `rgba(255, 0, 0, 1)`;

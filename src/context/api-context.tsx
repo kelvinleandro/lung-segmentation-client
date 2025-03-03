@@ -2,10 +2,15 @@ import { createContext, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Contours } from "@/types/image";
 
+type ApiResponse = {
+  contours: Contours;
+  preprocessed?: string;
+};
+
 type ApiContextType = {
   changeBaseUrl: (url: string) => void;
   baseUrl: string;
-  sendFileToServer: (file: File) => Promise<Contours | undefined>;
+  sendFileToServer: (file: File) => Promise<ApiResponse | undefined>;
 };
 
 export const ApiContext = createContext<ApiContextType | null>(null);
@@ -47,14 +52,14 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
       formData.append("dicom", file);
 
       try {
-        const response = await instance.post(`/upload`, formData, {
+        const response = await instance.post<ApiResponse>(`/upload`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
         console.log("Response from server:", response.data);
 
-        if (response.data) {
-          return response.data as Contours;
+        if (response.data.contours) {
+          return response.data;
         }
       } catch (error) {
         console.error("Error sending DICOM file:", error);
