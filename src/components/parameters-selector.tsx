@@ -22,7 +22,7 @@ const ParametersSelector = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
 
-    if(file && fileName.endsWith('.dcm')) {
+    if(file && file.name.endsWith('.dcm')) {
       setFileName(file.name);
       setSelectedFile(file);
       changeDicomFile(file)
@@ -98,34 +98,47 @@ const ParametersSelector = () => {
               <label>Window Center:</label>
               <input type="range" min="0" max="255" value={selectionParameters.windowCenter} onChange={(e) => handleContrastChange("windowcenter", Number(e.target.value))} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
             </div>
+
+            <div>
+              <h3 className="font-semibold">Interação</h3>
+              <div className="flex space-x-2">
+                <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(true)}>
+                  <LucidePenTool size={16} />
+                </Button>
+                <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(false)}>
+                  <LucideMove size={16} />
+                </Button>
+              </div>
+            </div>
           </ScrollArea>
           
         </TabsContent>
 
         {/* Interação */}
         <TabsContent value="selection">
-        <div>
-          <h3 className="font-semibold">Interação</h3>
-          <div className="flex space-x-2">
-            <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(true)}>
-              <LucidePenTool size={16} />
-            </Button>
-            <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(false)}>
-              <LucideMove size={16} />
-            </Button>
-          </div>
-        </div>
+  
         </TabsContent>
       </Tabs>
 
       {/* Botões principais */}
       <Button className={cn("w-full", currentColorScheme == "dark" ? "bg-white text-black" : "bg-black text-white")} onClick={async () => {
-        if(!dicomFile) {
-          console.error("Nenhum arquivo Dicom selecionado.");
+        console.log("Arquivo selecionado para envio:", selectedFile);
+
+        if(!selectedFile) {
+          console.error("Nenhum arquivo Dicom selecionado!");
           return;
         }
-        const contours = await sendFileToServer(dicomFile);
-        console.log("Contornos recebidos:", contours);
+
+        console.log("Enviando arquivo para o servidor...");
+        const contours = await sendFileToServer(selectedFile);
+        console.log("Resposta do servidor", contours)
+
+
+        if(contours) {
+          console.log("Contornos recebidos:", contours);
+        } else {
+          console.error("Erro ao processar a imagem");
+        }
       }}>Run</Button>
       <input id="file-upload" type="file" accept=".dcm" onChange={handleFileChange} className="hidden" />
       <Button onClick={() => document.getElementById('file-upload')?.click()} className={cn("w-full rounded-lg", currentColorScheme == "dark" ? "bg-white text-black" : "bg-black text-white")}>
