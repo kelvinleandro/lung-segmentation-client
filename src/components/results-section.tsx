@@ -91,7 +91,7 @@ const ResultsSection = () => {
   const handleSendFile = async () => {
     if (!dicomFile) return;
     try {
-      const data = await sendFileToServer(dicomFile);
+      const data = await sendFileToServer("/upload", dicomFile);
       if (data?.contours) {
         setContours(data.contours);
       }
