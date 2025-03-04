@@ -21,12 +21,18 @@ export const INTERFACE_TEXT = {
     customizeSelection: "Seleção",
     customizeSegmentation: "Segmentação",
 
+    // pre processamento
     preprocessing: "Pre-processamento",
     gaussianBlur: "Desfoque Gaussiano",
     medianBlur: "Desfoque Mediano",
     meanBlur: "Desfoque da Média",
     kernelSize: "Tamanho do Kernel",
     sigma: "Sigma",
+
+    // limiarização com media movel
+    numberPoints: "Número de Pontos",
+    adjustFactor: "Fator de Ajuste",
+    applyInterpolation: "Aplicar Interpolação",
 
     runButton: "Executar",
     chooseImageButton: "Escolher Imagem",
@@ -131,12 +137,18 @@ export const INTERFACE_TEXT = {
     customizeSelection: "Selection",
     customizeSegmentation: "Segmentation",
 
+    // pre processamento
     preprocessing: "Preprocessing",
     gaussianBlur: "Gaussian Blur",
     medianBlur: "Median Blur",
     meanBlur: "Mean Blur",
     kernelSize: "Kernel Size",
     sigma: "Sigma",
+
+    // limiarização com media movel
+    numberPoints: "Number of points",
+    adjustFactor: "Adjust Factor",
+    applyInterpolation: "Apply Interpolation",
 
     runButton: "Run",
     chooseImageButton: "Choose Image",
