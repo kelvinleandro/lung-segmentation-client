@@ -34,6 +34,16 @@ export const INTERFACE_TEXT = {
     adjustFactor: "Fator de Ajuste",
     applyInterpolation: "Aplicar Interpolação",
 
+    // limiarização com propriedades locais
+    useGlobalMean: "Usar Media Global",
+    windowSize: "Tamanho da Janela",
+
+    // sauvola
+    applyMorphology: "Aplicar Morfologia",
+    iterations: "Iterações",
+
+    noParameters: "Não há parâmetros para esse algoritmo",
+
     runButton: "Executar",
     chooseImageButton: "Escolher Imagem",
 
@@ -149,6 +159,17 @@ export const INTERFACE_TEXT = {
     numberPoints: "Number of points",
     adjustFactor: "Adjust Factor",
     applyInterpolation: "Apply Interpolation",
+
+    // limiarização com propriedades locais
+    useGlobalMean: "Use Global Mean",
+    windowSize: "Window Size",
+
+    // sauvola
+    applyMorphology: "Apply Morphology",
+    iterations: "Iterations",
+
+    // multi thresholding
+    noParameters: "There are no parameters for this algorithm",
 
     runButton: "Run",
     chooseImageButton: "Choose Image",
