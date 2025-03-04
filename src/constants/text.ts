@@ -21,23 +21,12 @@ export const INTERFACE_TEXT = {
     customizeSelection: "Seleção",
     customizeSegmentation: "Segmentação",
 
-    checkbox: "Caixa de Seleção",
-    item1: "Item 1",
-    item2: "Item 2",
-    item3: "Item 3",
-
-    methodSelection: "Entrada de Texto",
-    textInputLabel1: "Item 1:",
-    textInputLabel2: "Item 2:",
-    textHere: "Escreva aqui",
-
-    contrastSettings: "Configuração de Contraste",
-    windowWidth: "Largura da Janela",
-    windowCenter: "Centro da Janela",
-
-    radio: "Radio",
-    radioOption1: "Opção 1",
-    radioOption2: "Opção 2",
+    preprocessing: "Pre-processamento",
+    gaussianBlur: "Desfoque Gaussiano",
+    medianBlur: "Desfoque Mediano",
+    meanBlur: "Desfoque da Média",
+    kernelSize: "Tamanho do Kernel",
+    sigma: "Sigma",
 
     runButton: "Executar",
     chooseImageButton: "Escolher Imagem",
@@ -142,23 +131,12 @@ export const INTERFACE_TEXT = {
     customizeSelection: "Selection",
     customizeSegmentation: "Segmentation",
 
-    checkbox: "Checkbox",
-    item1: "Item 1",
-    item2: "Item 2",
-    item3: "Item 3",
-
-    methodSelection: "Text Input",
-    textInputLabel1: "Item 1:",
-    textInputLabel2: "Item 2:",
-    textHere: "Text here",
-
-    contrastSettings: "Contrast Settings",
-    windowWidth: "Window Width",
-    windowCenter: "Window Center",
-
-    radio: "Radio",
-    radioOption1: "Option 1",
-    radioOption2: "Option 2",
+    preprocessing: "Preprocessing",
+    gaussianBlur: "Gaussian Blur",
+    medianBlur: "Median Blur",
+    meanBlur: "Mean Blur",
+    kernelSize: "Kernel Size",
+    sigma: "Sigma",
 
     runButton: "Run",
     chooseImageButton: "Choose Image",
