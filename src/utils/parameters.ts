@@ -58,6 +58,13 @@ export const prepareParamsToSend = (
       iteracoes_dilatacao: params.dilationIterations,
       fator_dist_transform: params.distFactor,
     };
+  } else if (params.type === "divisionFusion") {
+    // division fusion
+    transformed = {
+      limite_var: params.varLimit,
+      limite_media: params.meanLimit,
+      referencia_media: params.meanReference,
+    };
   } else if (params.type === "postprocessing") {
     // postprocessing
     transformed = {

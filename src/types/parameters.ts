@@ -2,6 +2,7 @@ export type ApplicationMode = "segmentation" | "selection";
 
 export interface Otsu {
   type: "otsu";
+  // nothing
 }
 
 export interface Watershed {
@@ -50,6 +51,13 @@ export interface Sauvola {
   morphologyIterations: number;
 }
 
+export interface DivisionFusion {
+  type: "divisionFusion";
+  varLimit: number;
+  meanLimit: number;
+  meanReference: number;
+}
+
 export type SegmentationParameters =
   | Otsu
   | Watershed
@@ -57,7 +65,8 @@ export type SegmentationParameters =
   | MovingAverage
   | MultiThresholding
   | LocalProperties
-  | Sauvola;
+  | Sauvola
+  | DivisionFusion;
 
 export interface SelectionParameters {
   lineWidth: number;

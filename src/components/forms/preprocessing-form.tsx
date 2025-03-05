@@ -1,5 +1,5 @@
 import useLanguage from "@/hooks/use-language";
-import { Separator } from "./ui/separator";
+import { Separator } from "../ui/separator";
 import { PreprocessingParameters } from "@/types/parameters";
 import {
   PRE_KERNEL_SIZE_MAX,

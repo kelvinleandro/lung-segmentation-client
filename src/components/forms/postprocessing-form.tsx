@@ -17,7 +17,7 @@ const PostprocessingForm = ({ state, setState }: Props) => {
   return (
     <div className="w-full flex flex-col font-poppins">
       <div className="flex items-center justify-between">
-        <p>{text.gaussianBlur}:</p>
+        <p>{text.minArea}:</p>
 
         <input
           type="number"
