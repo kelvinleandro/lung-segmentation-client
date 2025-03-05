@@ -3,6 +3,7 @@ import {
   MultiThresholding,
   LocalProperties,
   Sauvola,
+  Watershed,
 } from "@/types/parameters";
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
@@ -59,9 +60,37 @@ const SAUVOLA_DEFAULT: Sauvola = {
   morphologyIterations: 1,
 };
 
+export const WSHED_THRESH_MIN = 0;
+export const WSHED_THRESH_MAX = 255;
+export const WSHED_THRESH_STEP = 1;
+export const WSHED_KERNEL_MIN = 3;
+export const WSHED_KERNEL_MAX = 9;
+export const WSHED_KERNEL_STEP = 2;
+export const WSHED_IT_MORPH_MIN = 1;
+export const WSHED_IT_MORPH_MAX = 5;
+export const WSHED_IT_MORPH_STEP = 1;
+export const WSHED_IT_DILAT_MIN = 1;
+export const WSHED_IT_DILAT_MAX = 5;
+export const WSHED_IT_DILAT_STEP = 1;
+export const WSHED_DIST_MIN = 0;
+export const WSHED_DIST_MAX = 1;
+export const WSHED_DIST_STEP = 0.1;
+
+const WATERSHED_DEFAULT: Watershed = {
+  type: "watershed",
+  threshold: 60,
+  applyInterpolation: true,
+  applyMorphology: true,
+  kernelSize: 3,
+  morphologyIterations: 2,
+  dilationIterations: 1,
+  distFactor: 0.3,
+};
+
 export const SEGMENTATION_DEFAULTS = {
   movingAverage: MA_DEFAULT,
   multiThresholding: MULTI_THRESHOLDING_DEFAULT,
   localProperties: LOCAL_PROPERTIES_DEFAULT,
   sauvola: SAUVOLA_DEFAULT,
+  watershed: WATERSHED_DEFAULT,
 };
