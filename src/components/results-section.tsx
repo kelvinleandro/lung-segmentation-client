@@ -92,8 +92,8 @@ const ResultsSection = () => {
     if (!dicomFile) return;
     try {
       const data = await sendFileToServer("/upload", dicomFile);
-      if (data?.contours) {
-        setContours(data.contours);
+      if (data?.todos_contornos) {
+        setContours(data.todos_contornos);
       }
       if (data?.preprocessed) {
         setPreprocessedBase64(`data:image/png;base64,${data.preprocessed}`);

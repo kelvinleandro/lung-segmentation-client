@@ -1,10 +1,15 @@
 import { createContext, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Contours } from "@/types/image";
-import { SegmentationParameters } from "@/types/parameters";
+import {
+  PostprocessingParameters,
+  PreprocessingParameters,
+  SegmentationParameters,
+} from "@/types/parameters";
 
 type ApiResponse = {
-  contours: Contours;
+  todos_contornos: Contours;
+  valid_contours: Contours;
   preprocessed?: string;
 };
 
@@ -14,8 +19,9 @@ type ApiContextType = {
   sendFileToServer: (
     endpoint: string,
     file: File,
-    preprocessingParams?: object,
-    segmentationParams?: SegmentationParameters
+    preprocessingParams?: PreprocessingParameters,
+    segmentationParams?: SegmentationParameters,
+    postprocessingParams?: PostprocessingParameters
   ) => Promise<ApiResponse | undefined>;
 };
 
@@ -51,8 +57,9 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
     async (
       endpoint: string = "/upload",
       file: File,
-      preprocessingParams?: object,
-      segmentationParams?: SegmentationParameters
+      preprocessingParams?: PreprocessingParameters,
+      segmentationParams?: SegmentationParameters,
+      postprocessingParams?: PostprocessingParameters
     ) => {
       if (!instance) {
         console.error("Axios instance not initialized yet.");
@@ -69,6 +76,10 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
         "segmentation_params",
         JSON.stringify(segmentationParams)
       );
+      formData.append(
+        "postprocessing_params",
+        JSON.stringify(postprocessingParams)
+      );
 
       try {
         const response = await instance.post<ApiResponse>(endpoint, formData, {
@@ -77,7 +88,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
         console.log("Response from server:", response.data);
 
-        if (response.data.contours) {
+        if (response.data.valid_contours) {
           return response.data;
         }
       } catch (error) {

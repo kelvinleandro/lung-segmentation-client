@@ -2,10 +2,18 @@ export type ApplicationMode = "segmentation" | "selection";
 
 export interface Otsu {
   type: "otsu";
+  // nothing
 }
 
 export interface Watershed {
   type: "watershed";
+  threshold: number;
+  applyInterpolation: boolean;
+  applyMorphology: boolean;
+  kernelSize: number;
+  morphologyIterations: number;
+  dilationIterations: number;
+  distFactor: number;
 }
 
 export interface Crisp {
@@ -43,6 +51,13 @@ export interface Sauvola {
   morphologyIterations: number;
 }
 
+export interface DivisionFusion {
+  type: "divisionFusion";
+  varLimit: number;
+  meanLimit: number;
+  meanReference: number;
+}
+
 export type SegmentationParameters =
   | Otsu
   | Watershed
@@ -50,7 +65,8 @@ export type SegmentationParameters =
   | MovingAverage
   | MultiThresholding
   | LocalProperties
-  | Sauvola;
+  | Sauvola
+  | DivisionFusion;
 
 export interface SelectionParameters {
   lineWidth: number;
@@ -62,10 +78,16 @@ export interface SelectionParameters {
   windowCenter: number;
 }
 
-export type PreprocessingParameters = {
+export interface PreprocessingParameters {
+  type: "preprocessing";
   applyMeanBlur: boolean;
   applyGaussianBlur: boolean;
   applyMedianBlur: boolean;
   kernelSize: number;
   sigma: number;
+}
+
+export interface PostprocessingParameters {
+  type: "postprocessing";
+  minArea: number;
 }

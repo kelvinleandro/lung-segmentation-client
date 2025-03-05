@@ -40,9 +40,23 @@ export const INTERFACE_TEXT = {
 
     // sauvola
     applyMorphology: "Aplicar Morfologia",
-    iterations: "Iterações",
+    iterationsMorphology: "Iterações Morfologia",
 
+    // multi thresholding
     noParameters: "Não há parâmetros para esse algoritmo",
+
+    // watershed
+    threshold: "Limiar",
+    distFactor: "Fator multiplicador",
+    iterationsDilation: "Iterações dilatação",
+
+    // divisao e fusao
+    varLimit: "Limite da Variância",
+    meanLimit: "Limite da Média",
+    meanReference: "Referência da Média",
+
+    // pos processamento
+    minArea: "Área Mínima",
 
     runButton: "Executar",
     chooseImageButton: "Escolher Imagem",
@@ -166,10 +180,23 @@ export const INTERFACE_TEXT = {
 
     // sauvola
     applyMorphology: "Apply Morphology",
-    iterations: "Iterations",
+    iterationsMorphology: "Iterations Morphology",
 
     // multi thresholding
     noParameters: "There are no parameters for this algorithm",
+
+    // watershed
+    threshold: "Threshold",
+    distFactor: "Dist Factor",
+    iterationsDilation: "Iterations Dilation",
+
+    // divisao e fusao
+    varLimit: "Var Limit",
+    meanLimit: "Mean Limit",
+    meanReference: "Mean Reference",
+
+    // pos processamento
+    minArea: "Minimum Area",
 
     runButton: "Run",
     chooseImageButton: "Choose Image",
