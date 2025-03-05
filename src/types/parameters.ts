@@ -58,6 +58,8 @@ export interface SelectionParameters {
   zoom: number;
   isPanning: boolean;
   isDrawing: boolean;
+  windowWidth: number;
+  windowCenter: number;
 }
 
 export type PreprocessingParameters = {
