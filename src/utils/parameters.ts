@@ -1,10 +1,14 @@
 import {
   SegmentationParameters,
   PreprocessingParameters,
+  PostprocessingParameters,
 } from "@/types/parameters";
 
 export const prepareParamsToSend = (
-  params: SegmentationParameters | PreprocessingParameters
+  params:
+    | SegmentationParameters
+    | PreprocessingParameters
+    | PostprocessingParameters
 ) => {
   let transformed = {}; // default for multi and otsu
 
@@ -53,6 +57,11 @@ export const prepareParamsToSend = (
       iteracoes_morfologia: params.morphologyIterations,
       iteracoes_dilatacao: params.dilationIterations,
       fator_dist_transform: params.distFactor,
+    };
+  } else if (params.type === "postprocessing") {
+    // postprocessing
+    transformed = {
+      area_minima: params.minArea,
     };
   }
 

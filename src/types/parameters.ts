@@ -75,3 +75,8 @@ export interface PreprocessingParameters {
   kernelSize: number;
   sigma: number;
 }
+
+export interface PostprocessingParameters {
+  type: "postprocessing";
+  minArea: number;
+}
