@@ -46,6 +46,7 @@ type Props = {
 
 const SegmentationForm = ({ state, dispatcher }: Props) => {
   const { text } = useLanguage();
+
   return (
     <div className="w-full flex flex-col font-poppins gap-1">
       {state.type === "movingAverage" ? (
