@@ -1,9 +1,18 @@
 import useLanguage from "@/hooks/use-language";
 import { Separator } from "./ui/separator";
+import { PreprocessingParameters } from "@/types/parameters";
+import {
+  PRE_KERNEL_SIZE_MAX,
+  PRE_KERNEL_SIZE_MIN,
+  PRE_KERNEL_SIZE_STEP,
+  PRE_SIGMA_MAX,
+  PRE_SIGMA_MIN,
+  PRE_SIGMA_STEP,
+} from "@/constants/preprocessing";
 
 type Props = {
-  state: any;
-  setState: React.Dispatch<React.SetStateAction<any>>;
+  state: PreprocessingParameters;
+  setState: React.Dispatch<React.SetStateAction<PreprocessingParameters>>;
 };
 
 const PreprocessingForm = ({ state, setState }: Props) => {
@@ -59,9 +68,9 @@ const PreprocessingForm = ({ state, setState }: Props) => {
         <div className="flex items-center justify-between">
           <input
             type="range"
-            min="3"
-            max="9"
-            step="2"
+            min={PRE_KERNEL_SIZE_MIN}
+            max={PRE_KERNEL_SIZE_MAX}
+            step={PRE_KERNEL_SIZE_STEP}
             value={state.kernelSize}
             onChange={(e) =>
               setState((prev) => ({
@@ -81,9 +90,9 @@ const PreprocessingForm = ({ state, setState }: Props) => {
         <div className="flex items-center justify-between">
           <input
             type="range"
-            min="0"
-            max="5"
-            step="0.2"
+            min={PRE_SIGMA_MIN}
+            max={PRE_SIGMA_MAX}
+            step={PRE_SIGMA_STEP}
             value={state.sigma}
             onChange={(e) =>
               setState((prev) => ({ ...prev, sigma: parseInt(e.target.value) }))
