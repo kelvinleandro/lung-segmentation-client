@@ -1,10 +1,14 @@
-// import { SegmentationParameters, PreprocessingParameters } from "@/types/parameters";
+import {
+  SegmentationParameters,
+  PreprocessingParameters,
+} from "@/types/parameters";
 
-// export const prepareParamsToSend = (params: SegmentationParameters | PreprocessingParameters) => {
-export const prepareParamsToSend = (params: any) => {
-  let transformed = {};
+export const prepareParamsToSend = (
+  params: SegmentationParameters | PreprocessingParameters
+) => {
+  let transformed = {}; // default for multi and otsu
 
-  if ("sigma" in params) {
+  if (params.type === "preprocessing") {
     // preprocessing params
     transformed = {
       aplicar_desfoque_gaussiano: params.applyGaussianBlur,
@@ -13,12 +17,42 @@ export const prepareParamsToSend = (params: any) => {
       tamanho_kernel: params.kernelSize,
       sigma: params.sigma,
     };
-  } else if ("applyInterpolation" in params) {
+  } else if (params.type === "movingAverage") {
     // moving average limiarization
     transformed = {
       n: params.n,
       b: params.b,
       aplicar_interpolacao: params.applyInterpolation,
+    };
+  } else if (params.type === "localProperties") {
+    // local properties limiarization
+    transformed = {
+      tamanho_janela: params.windowSize,
+      a: params.a,
+      b: params.b,
+      usar_media_global: params.useGlobalMean,
+      aplicar_interpolacao: params.applyInterpolation,
+    };
+  } else if (params.type === "sauvola") {
+    // sauvola
+    transformed = {
+      tamanho_janela: params.windowSize,
+      k: params.k,
+      aplicar_interpolacao: params.applyInterpolation,
+      aplicar_morfologia: params.applyMorphology,
+      tamanho_kernel: params.kernelSize,
+      iteracoes_morfologia: params.morphologyIterations,
+    };
+  } else if (params.type === "watershed") {
+    // watershed
+    transformed = {
+      limiar: params.threshold,
+      aplicar_interpolacao: params.applyInterpolation,
+      aplicar_morfologia: params.applyMorphology,
+      tamanho_kernel: params.kernelSize,
+      iteracoes_morfologia: params.morphologyIterations,
+      iteracoes_dilatacao: params.dilationIterations,
+      fator_dist_transform: params.distFactor,
     };
   }
 

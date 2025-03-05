@@ -6,6 +6,13 @@ export interface Otsu {
 
 export interface Watershed {
   type: "watershed";
+  threshold: number;
+  applyInterpolation: boolean;
+  applyMorphology: boolean;
+  kernelSize: number;
+  morphologyIterations: number;
+  dilationIterations: number;
+  distFactor: number;
 }
 
 export interface Crisp {
@@ -60,7 +67,8 @@ export interface SelectionParameters {
   isDrawing: boolean;
 }
 
-export type PreprocessingParameters = {
+export interface PreprocessingParameters {
+  type: "preprocessing";
   applyMeanBlur: boolean;
   applyGaussianBlur: boolean;
   applyMedianBlur: boolean;

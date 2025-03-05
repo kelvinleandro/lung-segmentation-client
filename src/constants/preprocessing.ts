@@ -1,11 +1,12 @@
 import { PreprocessingParameters } from "@/types/parameters";
 
 export const PREPROCESSING_DEFAULT: PreprocessingParameters = {
-    applyMeanBlur: false,
-    applyGaussianBlur: false,
-    applyMedianBlur: false,
-    kernelSize: 5,
-    sigma: 0,
+  type: "preprocessing",
+  applyMeanBlur: false,
+  applyGaussianBlur: false,
+  applyMedianBlur: false,
+  kernelSize: 5,
+  sigma: 0,
 };
 
 export const KERNEL_SIZE_MIN = 3;
