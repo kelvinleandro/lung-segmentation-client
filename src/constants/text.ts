@@ -21,23 +21,28 @@ export const INTERFACE_TEXT = {
     customizeSelection: "Seleção",
     customizeSegmentation: "Segmentação",
 
-    checkbox: "Caixa de Seleção",
-    item1: "Item 1",
-    item2: "Item 2",
-    item3: "Item 3",
+    // pre processamento
+    preprocessing: "Pre-processamento",
+    gaussianBlur: "Desfoque Gaussiano",
+    medianBlur: "Desfoque Mediano",
+    meanBlur: "Desfoque da Média",
+    kernelSize: "Tamanho do Kernel",
+    sigma: "Sigma",
 
-    methodSelection: "Entrada de Texto",
-    textInputLabel1: "Item 1:",
-    textInputLabel2: "Item 2:",
-    textHere: "Escreva aqui",
+    // limiarização com media movel
+    numberPoints: "Número de Pontos",
+    adjustFactor: "Fator de Ajuste",
+    applyInterpolation: "Aplicar Interpolação",
 
-    contrastSettings: "Configuração de Contraste",
-    windowWidth: "Largura da Janela",
-    windowCenter: "Centro da Janela",
+    // limiarização com propriedades locais
+    useGlobalMean: "Usar Media Global",
+    windowSize: "Tamanho da Janela",
 
-    radio: "Radio",
-    radioOption1: "Opção 1",
-    radioOption2: "Opção 2",
+    // sauvola
+    applyMorphology: "Aplicar Morfologia",
+    iterations: "Iterações",
+
+    noParameters: "Não há parâmetros para esse algoritmo",
 
     runButton: "Executar",
     chooseImageButton: "Escolher Imagem",
@@ -142,23 +147,29 @@ export const INTERFACE_TEXT = {
     customizeSelection: "Selection",
     customizeSegmentation: "Segmentation",
 
-    checkbox: "Checkbox",
-    item1: "Item 1",
-    item2: "Item 2",
-    item3: "Item 3",
+    // pre processamento
+    preprocessing: "Preprocessing",
+    gaussianBlur: "Gaussian Blur",
+    medianBlur: "Median Blur",
+    meanBlur: "Mean Blur",
+    kernelSize: "Kernel Size",
+    sigma: "Sigma",
 
-    methodSelection: "Text Input",
-    textInputLabel1: "Item 1:",
-    textInputLabel2: "Item 2:",
-    textHere: "Text here",
+    // limiarização com media movel
+    numberPoints: "Number of points",
+    adjustFactor: "Adjust Factor",
+    applyInterpolation: "Apply Interpolation",
 
-    contrastSettings: "Contrast Settings",
-    windowWidth: "Window Width",
-    windowCenter: "Window Center",
+    // limiarização com propriedades locais
+    useGlobalMean: "Use Global Mean",
+    windowSize: "Window Size",
 
-    radio: "Radio",
-    radioOption1: "Option 1",
-    radioOption2: "Option 2",
+    // sauvola
+    applyMorphology: "Apply Morphology",
+    iterations: "Iterations",
+
+    // multi thresholding
+    noParameters: "There are no parameters for this algorithm",
 
     runButton: "Run",
     chooseImageButton: "Choose Image",

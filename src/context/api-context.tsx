@@ -1,6 +1,7 @@
 import { createContext, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Contours } from "@/types/image";
+import { SegmentationParameters } from "@/types/parameters";
 
 type ApiResponse = {
   contours: Contours;
@@ -10,7 +11,12 @@ type ApiResponse = {
 type ApiContextType = {
   changeBaseUrl: (url: string) => void;
   baseUrl: string;
-  sendFileToServer: (file: File) => Promise<ApiResponse | undefined>;
+  sendFileToServer: (
+    endpoint: string,
+    file: File,
+    preprocessingParams?: object,
+    segmentationParams?: SegmentationParameters
+  ) => Promise<ApiResponse | undefined>;
 };
 
 export const ApiContext = createContext<ApiContextType | null>(null);
@@ -42,7 +48,12 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const sendFileToServer = useCallback(
-    async (file: File) => {
+    async (
+      endpoint: string = "/upload",
+      file: File,
+      preprocessingParams?: object,
+      segmentationParams?: SegmentationParameters
+    ) => {
       if (!instance) {
         console.error("Axios instance not initialized yet.");
         return;
@@ -50,9 +61,17 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
       const formData = new FormData();
       formData.append("dicom", file);
+      formData.append(
+        "preprocessing_params",
+        JSON.stringify(preprocessingParams)
+      );
+      formData.append(
+        "segmentation_params",
+        JSON.stringify(segmentationParams)
+      );
 
       try {
-        const response = await instance.post<ApiResponse>(`/upload`, formData, {
+        const response = await instance.post<ApiResponse>(endpoint, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
