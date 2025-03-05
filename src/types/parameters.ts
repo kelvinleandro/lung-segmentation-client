@@ -18,3 +18,11 @@ export interface SelectionParameters {
   isPanning: boolean;
   isDrawing: boolean;
 }
+
+export type PreprocessingParameters = {
+  applyMeanBlur: boolean;
+  applyGaussianBlur: boolean;
+  applyMedianBlur: boolean;
+  kernelSize: number;
+  sigma: number;
+}
