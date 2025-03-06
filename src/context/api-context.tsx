@@ -1,17 +1,12 @@
 import { createContext, useState, useCallback, useMemo } from "react";
 import axios from "axios";
-import { Contours } from "@/types/image";
 import {
   PostprocessingParameters,
   PreprocessingParameters,
   SegmentationParameters,
 } from "@/types/parameters";
-
-type ApiResponse = {
-  todos_contornos: Contours;
-  valid_contours: Contours;
-  preprocessed?: string;
-};
+import { ApiResponse } from "@/types/api";
+import { prepareParamsToSend } from "@/utils/parameters";
 
 type ApiContextType = {
   changeBaseUrl: (url: string) => void;
@@ -70,15 +65,15 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
       formData.append("dicom", file);
       formData.append(
         "preprocessing_params",
-        JSON.stringify(preprocessingParams)
+        JSON.stringify(prepareParamsToSend(preprocessingParams))
       );
       formData.append(
         "segmentation_params",
-        JSON.stringify(segmentationParams)
+        JSON.stringify(prepareParamsToSend(segmentationParams))
       );
       formData.append(
         "postprocessing_params",
-        JSON.stringify(postprocessingParams)
+        JSON.stringify(prepareParamsToSend(postprocessingParams))
       );
 
       try {
@@ -88,7 +83,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
         console.log("Response from server:", response.data);
 
-        if (response.data.valid_contours) {
+        if (response.data.contornos_validos) {
           return response.data;
         }
       } catch (error) {

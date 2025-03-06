@@ -12,16 +12,20 @@ import {
   SAUVOLA_MORPHOLOGY_MAX,
   SAUVOLA_MORPHOLOGY_STEP,
 } from "@/constants/segmentation";
+import { SegmentationAction } from "@/context/parameters-context";
 import useLanguage from "@/hooks/use-language";
 import { Sauvola } from "@/types/parameters";
+import { Separator } from "../ui/separator";
+import useTheme from "@/hooks/use-theme";
 
 type Props = {
   state: Sauvola;
-  dispatcher: React.Dispatch<any>;
+  dispatcher: React.Dispatch<SegmentationAction>;
 };
 
 const SauvolaForm = ({ state, dispatcher }: Props) => {
   const { text } = useLanguage();
+  const { theme } = useTheme();
   return (
     <>
       <div className="flex flex-col gap-0.5">
@@ -29,7 +33,6 @@ const SauvolaForm = ({ state, dispatcher }: Props) => {
 
         <div className="flex items-center justify-between">
           <input
-            className="flex-2"
             type="range"
             min={LOCAL_WIN_MIN}
             max={LOCAL_WIN_MAX}
@@ -47,12 +50,13 @@ const SauvolaForm = ({ state, dispatcher }: Props) => {
         </div>
       </div>
 
+      <Separator />
+
       <div className="flex flex-col gap-0.5">
         <p>{text.kernelSize}:</p>
 
         <div className="flex items-center justify-between">
           <input
-            className="flex-2"
             type="range"
             min={SAUVOLA_KERNEL_MIN}
             max={SAUVOLA_KERNEL_MAX}
@@ -70,6 +74,8 @@ const SauvolaForm = ({ state, dispatcher }: Props) => {
         </div>
       </div>
 
+      <Separator />
+
       <div className="flex items-center justify-between">
         <p>k:</p>
 
@@ -80,15 +86,21 @@ const SauvolaForm = ({ state, dispatcher }: Props) => {
           max={SAUVOLA_K_MAX}
           step={SAUVOLA_K_STEP}
           value={state.k}
-          onChange={(e) =>
-            dispatcher({
-              type: "SET_PARAM",
-              key: "k",
-              value: Number(e.target.value),
-            })
-          }
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (value >= SAUVOLA_K_MIN && value <= SAUVOLA_K_MAX) {
+              dispatcher({
+                type: "SET_PARAM",
+                key: "k",
+                value: value,
+              });
+            }
+          }}
+          style={{ backgroundColor: theme.text, color: theme.background }}
         />
       </div>
+
+      <Separator />
 
       <div className="flex items-center justify-between">
         <p>{text.applyInterpolation}:</p>
@@ -106,6 +118,8 @@ const SauvolaForm = ({ state, dispatcher }: Props) => {
         />
       </div>
 
+      <Separator />
+
       <div className="flex items-center justify-between">
         <p>{text.applyMorphology}:</p>
 
@@ -122,12 +136,13 @@ const SauvolaForm = ({ state, dispatcher }: Props) => {
         />
       </div>
 
+      <Separator />
+
       <div className="flex flex-col gap-0.5">
         <p>{text.iterationsMorphology}:</p>
 
         <div className="flex items-center justify-between">
           <input
-            className="flex-2"
             type="range"
             min={SAUVOLA_MORPHOLOGY_MIN}
             max={SAUVOLA_MORPHOLOGY_MAX}

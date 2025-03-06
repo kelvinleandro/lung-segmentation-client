@@ -5,11 +5,17 @@ import {
   Sauvola,
   Watershed,
   DivisionFusion,
+  Otsu,
+  Crisp,
 } from "@/types/parameters";
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
   type: "multiThresholding",
 };
+
+const OTSU_DEFAULT: Otsu = { type: "otsu" };
+
+const CRISP_DEFAULT: Crisp = { type: "crisp" };
 
 export const MA_B_MIN = 0.5;
 export const MA_B_MAX = 1.5;
@@ -112,4 +118,6 @@ export const SEGMENTATION_DEFAULTS = {
   sauvola: SAUVOLA_DEFAULT,
   watershed: WATERSHED_DEFAULT,
   divisionFusion: DIVISION_FUSION_DEFAULT,
+  otsu: OTSU_DEFAULT,
+  crisp: CRISP_DEFAULT,
 };

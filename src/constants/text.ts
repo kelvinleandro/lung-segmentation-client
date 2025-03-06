@@ -20,6 +20,15 @@ export const INTERFACE_TEXT = {
     customizeTitle: "Customização",
     customizeSelection: "Seleção",
     customizeSegmentation: "Segmentação",
+    method: "Método",
+
+    divisionFusion: "Divisão e Fusão",
+    localProperties: "Propriedades Locais",
+    movingAverage: "Média Movel",
+    multiThresholding: "Limiarização Múltipla",
+
+    parameters: "Parâmetros",
+    postprocessing: "Pós-processamento",
 
     // pre processamento
     preprocessing: "Pre-processamento",
@@ -69,6 +78,7 @@ export const INTERFACE_TEXT = {
     downloadButton: "Baixar",
     onlyContours: "Apenas Contornos",
     preprocessed: "Pré-processada",
+    allContours: "Todos os contornos",
 
     //quarta tela
     densityScaleTitle: "Escala de Densidades (HU)",
@@ -105,10 +115,11 @@ export const INTERFACE_TEXT = {
     example: "Exemplo",
 
     //quinta
-    zoom: "ZOOM",
+    zoom: "Zoom",
     config: "Configurações",
-    color: "Cores",
+    color: "Cor",
     paint: "Tamanho do Pincel",
+    interaction: "Interação",
 
     manualSelection: "Seleção manual",
     imageSelectionText: "Selecione uma imagem",
@@ -160,6 +171,15 @@ export const INTERFACE_TEXT = {
     customizeTitle: "Customization",
     customizeSelection: "Selection",
     customizeSegmentation: "Segmentation",
+    method: "Method",
+
+    divisionFusion: "Division and Fusion",
+    localProperties: "Local Properties",
+    movingAverage: "Moving Average",
+    multiThresholding: "Multi Thresholding",
+
+    parameters: "Parâmetros",
+    postprocessing: "Pós-processamento",
 
     // pre processamento
     preprocessing: "Preprocessing",
@@ -209,6 +229,7 @@ export const INTERFACE_TEXT = {
     downloadButton: "Download",
     onlyContours: "Only Contours",
     preprocessed: "Preprocessed",
+    allContours: "Todos os contornos",
 
     //quarta tela
     densityScaleTitle: "Density Scale (HU)",
@@ -245,10 +266,11 @@ export const INTERFACE_TEXT = {
     example: "Example",
 
     //quinta tela
-    zoom: "ZOOM",
+    zoom: "Zoom",
     config: "Settings",
-    color: "Colors",
+    color: "Color",
     paint: "Brush Size",
+    interaction: "Interaction",
 
     manualSelection: "Manual Selection",
     imageSelectionText: "Select an image",

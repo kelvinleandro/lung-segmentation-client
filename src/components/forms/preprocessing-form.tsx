@@ -75,7 +75,7 @@ const PreprocessingForm = ({ state, setState }: Props) => {
             onChange={(e) =>
               setState((prev) => ({
                 ...prev,
-                kernelSize: parseInt(e.target.value),
+                kernelSize: Number(e.target.value),
               }))
             }
           />
@@ -95,7 +95,7 @@ const PreprocessingForm = ({ state, setState }: Props) => {
             step={PRE_SIGMA_STEP}
             value={state.sigma}
             onChange={(e) =>
-              setState((prev) => ({ ...prev, sigma: parseInt(e.target.value) }))
+              setState((prev) => ({ ...prev, sigma: Number(e.target.value) }))
             }
           />
           <p>{state.sigma}</p>

@@ -5,6 +5,7 @@ import {
   POST_AREA_MIN,
   POST_AREA_STEP,
 } from "@/constants/postprocessing";
+import useTheme from "@/hooks/use-theme";
 
 type Props = {
   state: PostprocessingParameters;
@@ -13,6 +14,7 @@ type Props = {
 
 const PostprocessingForm = ({ state, setState }: Props) => {
   const { text } = useLanguage();
+  const { theme } = useTheme();
 
   return (
     <div className="w-full flex flex-col font-poppins">
@@ -25,12 +27,16 @@ const PostprocessingForm = ({ state, setState }: Props) => {
           max={POST_AREA_MAX}
           step={POST_AREA_STEP}
           value={state.minArea}
-          onChange={(e) =>
-            setState((prev) => ({
-              ...prev,
-              minArea: Number(e.target.value),
-            }))
-          }
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (value >= POST_AREA_MIN && value <= POST_AREA_MAX) {
+              setState((prev) => ({
+                ...prev,
+                minArea: value,
+              }));
+            }
+          }}
+          style={{ backgroundColor: theme.text, color: theme.background }}
         />
       </div>
     </div>

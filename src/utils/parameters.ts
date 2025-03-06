@@ -9,7 +9,9 @@ export const prepareParamsToSend = (
     | SegmentationParameters
     | PreprocessingParameters
     | PostprocessingParameters
+    | undefined
 ) => {
+  if (!params) return {};
   let transformed = {}; // default for multi and otsu
 
   if (params.type === "preprocessing") {

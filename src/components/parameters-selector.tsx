@@ -1,65 +1,55 @@
 import useTheme from "@/hooks/use-theme";
-import { init as coreInit, imageLoader } from "@cornerstonejs/core";
-import {init as dicomImageLoaderInit, wadouri} from "@cornerstonejs/dicom-image-loader";
 import { cn } from "@/lib/utils";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useParameters } from "@/hooks/use-parameters";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LucideMove, LucidePenTool } from "lucide-react";
 import useApi from "@/hooks/use-api";
-import DICOMViewer from "@/components/dicom-viewer";
-import { ImageData, Contours } from "@/types/image";
-import { applyWindowing } from "@/utils/image";
-import { ApplicationMode } from "@/types/parameters";
-import { ScrollArea } from "@/components/ui/scroll-area";
-
-coreInit();
-dicomImageLoaderInit();
+import { ApplicationMode, SegmentationType } from "@/types/parameters";
+import { selectFile } from "@/utils/file";
+import useLanguage from "@/hooks/use-language";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import PreprocessingForm from "./forms/preprocessing-form";
+import SegmentationForm from "./forms/segmentation-form";
+import PostprocessingForm from "./forms/postprocessing-form";
 
 const ParametersSelector = () => {
-  const { currentColorScheme } = useTheme();
-  const { mode, setMode, selectionParameters} = useParameters();
-
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [isPanning, setIsPanning] = useState(false);
-  const [imageData, setImageData] = useState<ImageData | null>(null);
-  const [contours, setContours] = useState<Contours | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [color, setColor] = useState("#ff0000");
-  const [lineWidth, setLineWidth] = useState(2);
-  const [zoom, setZoom] = useState(1);
-  const { dicomFile, setDicomFile } = useParameters();
+  const { currentColorScheme, theme } = useTheme();
+  const { text } = useLanguage();
+  const {
+    mode,
+    setMode,
+    selectionParameters,
+    setSelectionParameters,
+    changeDicomFile,
+    dicomFile,
+    preprocessingParameters,
+    setPreprocessingParameters,
+    postprocessingParameters,
+    setPostprocessingParameters,
+    segmentationParameters,
+    dispatchSegmentation,
+    resetSegmentationParameters,
+    setApiResponse,
+    clearRef,
+  } = useParameters();
   const { sendFileToServer } = useApi();
 
-  const handleFileSelect = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    console.log("File selected:", file);
-
-    setDicomFile(file);
-    setContours(null);
-
-    const imageId = wadouri.fileManager.add(file);
-    console.log("Image ID:", imageId);
-
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const _image = await imageLoader.loadImage(imageId);
-      console.log("Loaded image:", _image);
-
-      const pixelData = _image.getPixelData();
-      const normalizedPixelData = applyWindowing(pixelData);
-
-      setImageData({
-        pixelData: normalizedPixelData,
-        width: _image.width,
-        height: _image.height,
-      });
+      const file = selectFile(event);
+      console.log("File selected:", file);
+      if (!file) return;
+      changeDicomFile(file);
     } catch (error) {
-      console.error("Error loading image:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -68,9 +58,15 @@ const ParametersSelector = () => {
 
     try {
       setIsSubmitting(true);
-      const contours = await sendFileToServer(dicomFile);
-      if (contours) {
-        setContours(contours);
+      const response = await sendFileToServer(
+        "/upload",
+        dicomFile,
+        preprocessingParameters,
+        segmentationParameters,
+        postprocessingParameters
+      );
+      if (response) {
+        setApiResponse(response);
       }
     } catch (error) {
       console.error("Error sending file:", error);
@@ -81,138 +77,279 @@ const ParametersSelector = () => {
 
   return (
     <aside
-      className={cn(
-        "h-full w-full p-4 space-y-4",
-        currentColorScheme == "dark"
-          ? "bg-[#001d3d] text-white"
-          : "bg-white text-black"
-      )}>
-      <h2 className="text-2xl font-bold">Customising</h2>
+      className="h-full w-full p-4 space-y-4 font-poppins"
+      style={{ backgroundColor: theme.background, color: theme.text }}
+    >
+      <h2 className="text-2xl font-bold">{text.customizeTitle}</h2>
 
-      <Tabs value={mode} onValueChange={(value) => setMode(value as ApplicationMode)}>
-
+      <Tabs
+        value={mode}
+        onValueChange={(value) => setMode(value as ApplicationMode)}
+      >
         {/* Tabs de Segmentação e Seleção */}
-        <TabsList className={cn("grid grid-cols-2 mb-2", currentColorScheme == "dark" ? "bg-[#001d3d]" : "bg-white")}>
-          <TabsTrigger value="selection" className={cn("w-full rounded-l-lg border-2 border-r-0", mode == "selection" && currentColorScheme == "dark"  ? "bg-white text-black border-white" : "", mode != "selection" && currentColorScheme == "dark"  ? "bg-[#001d3d] text-white border-white" : "", mode == "selection" && currentColorScheme != "dark" ? "bg-black text-white border-black" : "", mode != "selection" && currentColorScheme != "dark"  ? "text-black border-black" : "" )}>Seleção</TabsTrigger>
-          <TabsTrigger value="segmentation" className={cn("w-full rounded-r-lg border-2 border-l-0", mode == "segmentation" && currentColorScheme == "dark"  ? "bg-white text-black border-white" : "", mode != "segmentation" && currentColorScheme == "dark"  ? "bg-[#001d3d] text-white border-white" : "", mode == "segmentation" && currentColorScheme != "dark"  ? "bg-black text-white border-black" : "", mode != "segmentation" && currentColorScheme != "dark"  ? "text-black border-black" : "" )}>Segmentação</TabsTrigger>
+        <TabsList
+          className={cn(
+            "grid grid-cols-2 mb-2",
+            currentColorScheme == "dark" ? "bg-[#001d3d]" : "bg-white"
+          )}
+        >
+          <TabsTrigger
+            value="segmentation"
+            className={cn(
+              "w-full rounded-l-lg border-2 border-r-0",
+              mode == "segmentation" && currentColorScheme == "dark"
+                ? "bg-white text-black border-white"
+                : "",
+              mode != "segmentation" && currentColorScheme == "dark"
+                ? "bg-[#001d3d] text-white border-white"
+                : "",
+              mode == "segmentation" && currentColorScheme != "dark"
+                ? "bg-black text-white border-black"
+                : "",
+              mode != "segmentation" && currentColorScheme != "dark"
+                ? "text-black border-black"
+                : ""
+            )}
+          >
+            {text.customizeSegmentation}
+          </TabsTrigger>
+          <TabsTrigger
+            value="selection"
+            className={cn(
+              "w-full rounded-r-lg border-2 border-l-0",
+              mode == "selection" && currentColorScheme == "dark"
+                ? "bg-white text-black border-white"
+                : "",
+              mode != "selection" && currentColorScheme == "dark"
+                ? "bg-[#001d3d] text-white border-white"
+                : "",
+              mode == "selection" && currentColorScheme != "dark"
+                ? "bg-black text-white border-black"
+                : "",
+              mode != "selection" && currentColorScheme != "dark"
+                ? "text-black border-black"
+                : ""
+            )}
+          >
+            {text.customizeSelection}
+          </TabsTrigger>
         </TabsList>
 
         {/* Segmentação */}
         <TabsContent value="segmentation">
+          <div className="h-[40vh] mb-2 overflow-y-auto scrollbar-hidden">
+            <div className="flex flex-col gap-0.5">
+              <h3 className="font-semibold">{text.method}</h3>
 
-          <ScrollArea className="h-[60vh] mb-2">
-            <div className="flex flex-col mb-5">
-              <h3 className="font-semibold mb-2">Método de Segmentação</h3>
-              <label>
-                <input className="mr-2" type="radio" name="segmentationMethod" value="Metodo1" />
-                  Método 1
-              </label>
-              <label>
-                <input className="mr-2" type="radio" name="segmentationMethod" value="Metodo2" />
-                  Método 2
-              </label>
-              <label>
-                <input className="mr-2" type="radio" name="segmentationMethod" value="Metodo3" />
-                  Método 3
-              </label>
+              <select
+                value={segmentationParameters.type}
+                onChange={(e) =>
+                  resetSegmentationParameters(
+                    e.target.value as SegmentationType
+                  )
+                }
+                className="cursor-pointer"
+                style={{ color: theme.text, backgroundColor: theme.background }}
+              >
+                <option value="crisp">Crisp</option>
+                <option value="watershed">Watershed</option>
+                <option value="otsu">Otsu</option>
+                <option value="sauvola">Sauvola</option>
+                <option value="divisionFusion">{text.divisionFusion}</option>
+                <option value="localProperties">{text.localProperties}</option>
+                <option value="movingAverage">{text.movingAverage}</option>
+                <option value="multiThresholding">
+                  {text.multiThresholding}
+                </option>
+              </select>
             </div>
-
-            <div className="mb-5">
-              <h3 className="font-semibold mb-2">TEXT INPUT</h3>
-              {["Item 1", "Item 2"].map((item, index) => (
-                <div key={index} className="mb-3">
-                  <label>{item}:</label>
-                  <input type="text" placeholder="Text here" className="border p-2 w-full mt-1" />
-                </div>
-              ))}
-            </div>
-
-            <div className="mb-5">
-              <h3 className="font-semibold mb-2">CONTRASTE</h3>
-              <label>Window Width:</label>
-              <input type="range" min="0" max="255" value={selectionParameters.windowWidth} className={cn("w-full mb-3", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
-              <label>Window Center:</label>
-              <input type="range" min="0" max="255" value={selectionParameters.windowCenter} className={cn("w-full", currentColorScheme == "dark" ? "accent-white" : "accent-black")} />
-            </div>
-          </ScrollArea>
-          
+            <Accordion className="w-full" type="single">
+              <AccordionItem value="preprocessing">
+                <AccordionTrigger className="font-semibold uppercase">
+                  {text.preprocessing}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <PreprocessingForm
+                    state={preprocessingParameters}
+                    setState={setPreprocessingParameters}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="parameters">
+                <AccordionTrigger className="font-semibold uppercase">
+                  {text.parameters}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <SegmentationForm
+                    state={segmentationParameters}
+                    dispatcher={dispatchSegmentation}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="postprocessing">
+                <AccordionTrigger className="font-semibold uppercase">
+                  {text.postprocessing}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <PostprocessingForm
+                    state={postprocessingParameters}
+                    setState={setPostprocessingParameters}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
         </TabsContent>
 
         {/* Seleção */}
         <TabsContent value="selection">
-          <div>
-            <DICOMViewer
-            imageData={imageData}
-            drawable
-            zoom={zoom}
-            lineWidth={lineWidth}
-            tintColor={color}
-            isPanning={isPanning}
-            isDrawing={isDrawing}
-            />
+          <div className="flex flex-col gap-2">
+            <label className="flex flex-col gap-0.5">
+              <p>{text.zoom}:</p>
+              <div className="flex items-center justify-between">
+                <input
+                  type="range"
+                  min="1"
+                  max="3"
+                  step="0.2"
+                  value={selectionParameters.zoom}
+                  onChange={(e) =>
+                    setSelectionParameters((prev) => ({
+                      ...prev,
+                      zoom: Number(e.target.value),
+                    }))
+                  }
+                />
+                {selectionParameters.zoom}
+              </div>
+            </label>
+
+            <label className="flex flex-col gap-0.5">
+              <p>{text.paint}:</p>
+              <div className="flex items-center justify-between">
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={selectionParameters.lineWidth}
+                  onChange={(e) =>
+                    setSelectionParameters((prev) => ({
+                      ...prev,
+                      lineWidth: Number(e.target.value),
+                    }))
+                  }
+                />
+                <p>{selectionParameters.lineWidth}px</p>
+              </div>
+            </label>
+
+            <label className="flex items-center justify-between">
+              <p>{text.color}:</p>
+              <input
+                type="color"
+                value={selectionParameters.color}
+                onChange={(e) =>
+                  setSelectionParameters((prev) => ({
+                    ...prev,
+                    color: e.target.value,
+                  }))
+                }
+                className="border rounded"
+              />
+            </label>
           </div>
 
-          <div>
-            <label className="flex items-center gap-2">
-            Zoom:
-            <input
-              type="range"
-              min="1"
-              max="3"
-              step="0.2"
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="w-24"
-            />
-            {zoom}
-            </label>
+          <div className="flex flex-col gap-2">
+            <h3 className="font-semibold">{text.interaction}</h3>
 
-            <label className="flex items-center gap-2">
-            Espessura:
-            <input
-              type="range"
-              min="1"
-              max="10"
-              value={lineWidth}
-              onChange={(e) => setLineWidth(Number(e.target.value))}
-              className="w-24"
-            />
-            {lineWidth}px
-            </label>
-
-            <label className="flex items-center gap-2">
-            Cor:
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="w-10 h-8 border rounded"
-            />
-            </label>
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-2">Interação</h3>
-            <div className="flex space-x-4 mb-3">
-              <Button variant={isDrawing ? "default" : "outline"} onClick={() => setIsDrawing(true)} className={cn(isDrawing == true ? "bg-black text-white" : "bg-white text-black")}>
+            <div className="flex space-x-4">
+              <Button
+                onClick={() => {
+                  setSelectionParameters((prev) => ({
+                    ...prev,
+                    isDrawing: true,
+                    isPanning: false,
+                  }));
+                }}
+                className="cursor-pointer"
+                style={{
+                  backgroundColor: selectionParameters.isDrawing
+                    ? theme.buttonBackground
+                    : theme.buttonSecondaryBackground,
+                  color: selectionParameters.isDrawing
+                    ? theme.buttonText
+                    : theme.buttonSecondaryText,
+                }}
+              >
                 <LucidePenTool size={16} />
               </Button>
-              <Button variant={isDrawing ? "outline" : "default"} onClick={() => setIsDrawing(false)} className={cn(isDrawing == false ? "bg-black text-white" : "bg-white text-black")}>
+              <Button
+                onClick={() => {
+                  setSelectionParameters((prev) => ({
+                    ...prev,
+                    isPanning: true,
+                    isDrawing: false,
+                  }));
+                }}
+                className="cursor-pointer"
+                style={{
+                  backgroundColor: selectionParameters.isPanning
+                    ? theme.buttonBackground
+                    : theme.buttonSecondaryBackground,
+                  color: selectionParameters.isPanning
+                    ? theme.buttonText
+                    : theme.buttonSecondaryText,
+                }}
+              >
                 <LucideMove size={16} />
               </Button>
             </div>
+
+            <button
+              onClick={() => clearRef?.current?.click()}
+              className="font-medium py-1 rounded-lg cursor-pointer"
+              style={{
+                backgroundColor: theme.buttonBackground,
+                color: theme.buttonText,
+              }}
+            >
+              Limpar
+            </button>
           </div>
-              
         </TabsContent>
       </Tabs>
 
       {/* Botões principais */}
-      <Button className={cn("w-full", currentColorScheme == "dark" ? "bg-white text-black" : "bg-black text-white")} onClick={handleSendFile} disabled={!dicomFile || isSubmitting}>Run</Button>
-
-      <input id="file-upload" type="file" accept=".dcm" onChange={handleFileSelect} className="hidden" />
-      <Button onClick={() => document.getElementById('file-upload')?.click()} className={cn("w-full rounded-lg", currentColorScheme == "dark" ? "bg-white text-black" : "bg-black text-white")}>
-        Choose Image
+      <Button
+        onClick={() => document.getElementById("file-upload")?.click()}
+        className="w-full rounded-lg cursor-pointer"
+        style={{
+          backgroundColor: theme.buttonBackground,
+          color: theme.buttonText,
+        }}
+      >
+        {text.imageSelectionText}
       </Button>
+      <input
+        id="file-upload"
+        type="file"
+        accept=".dcm"
+        onChange={handleFileSelect}
+        className="hidden"
+      />
+      {mode === "segmentation" && (
+        <Button
+          className="w-full rounded-lg cursor-pointer"
+          style={{
+            backgroundColor: theme.buttonBackground,
+            color: theme.buttonText,
+          }}
+          onClick={handleSendFile}
+          disabled={!dicomFile || isSubmitting}
+        >
+          {text.runButton}
+        </Button>
+      )}
     </aside>
   );
 };
