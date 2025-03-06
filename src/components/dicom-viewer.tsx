@@ -9,7 +9,7 @@ type Props = {
   tintColor?: string;
   lineWidth?: number;
   zoom?: number;
-  clearRef?: React.RefObject<HTMLButtonElement>;
+  clearRef?: React.RefObject<HTMLButtonElement> | undefined;
   isPanning: boolean;
   isDrawing: boolean;
   contoursOnOriginal?: boolean;
@@ -129,21 +129,6 @@ const DICOMViewer = ({
         }
       }
     };
-
-    // const handleMouseMove = (event: MouseEvent) => {
-    //   if (event.buttons !== 1) return;
-
-    //   if (isDrawing && drawable) {
-    //     const { x, y } = getCanvasCoordinates(event);
-    //     ctx.lineTo(x, y);
-    //     ctx.stroke();
-    //   } else if (isPanning && lastMousePosition.current && zoom > 1) {
-    //     const deltaX = event.clientX - lastMousePosition.current.x;
-    //     const deltaY = event.clientY - lastMousePosition.current.y;
-    //     setPanOffset((prev) => ({ x: prev.x + deltaX, y: prev.y + deltaY }));
-    //     lastMousePosition.current = { x: event.clientX, y: event.clientY };
-    //   }
-    // };
 
     const handleMouseMove = (event: MouseEvent) => {
       if (event.buttons !== 1) return;

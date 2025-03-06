@@ -68,14 +68,17 @@ export type SegmentationParameters =
   | Sauvola
   | DivisionFusion;
 
+export type SegmentationType = Extract<
+  SegmentationParameters,
+  { type: string }
+>["type"];
+
 export interface SelectionParameters {
   lineWidth: number;
   color: string;
   zoom: number;
   isPanning: boolean;
   isDrawing: boolean;
-  windowWidth: number;
-  windowCenter: number;
 }
 
 export interface PreprocessingParameters {

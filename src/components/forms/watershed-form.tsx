@@ -15,16 +15,21 @@ import {
   WSHED_DIST_MAX,
   WSHED_DIST_STEP,
 } from "@/constants/segmentation";
+import { SegmentationAction } from "@/context/parameters-context";
 import useLanguage from "@/hooks/use-language";
 import { Watershed } from "@/types/parameters";
+import { Separator } from "../ui/separator";
+import useTheme from "@/hooks/use-theme";
 
 type Props = {
   state: Watershed;
-  dispatcher: React.Dispatch<any>;
+  dispatcher: React.Dispatch<SegmentationAction>;
 };
 
 const WatershedForm = ({ state, dispatcher }: Props) => {
   const { text } = useLanguage();
+  const { theme } = useTheme();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -37,15 +42,21 @@ const WatershedForm = ({ state, dispatcher }: Props) => {
           max={WSHED_THRESH_MAX}
           step={WSHED_THRESH_STEP}
           value={state.threshold}
-          onChange={(e) =>
-            dispatcher({
-              type: "SET_PARAM",
-              key: "threshold",
-              value: Number(e.target.value),
-            })
-          }
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (value >= WSHED_THRESH_MIN && value <= WSHED_THRESH_MAX) {
+              dispatcher({
+                type: "SET_PARAM",
+                key: "threshold",
+                value: value,
+              });
+            }
+          }}
+          style={{ backgroundColor: theme.text, color: theme.background }}
         />
       </div>
+
+      <Separator />
 
       <div className="flex items-center justify-between">
         <p>{text.applyInterpolation}:</p>
@@ -63,6 +74,8 @@ const WatershedForm = ({ state, dispatcher }: Props) => {
         />
       </div>
 
+      <Separator />
+
       <div className="flex items-center justify-between">
         <p>{text.applyMorphology}:</p>
 
@@ -79,12 +92,13 @@ const WatershedForm = ({ state, dispatcher }: Props) => {
         />
       </div>
 
+      <Separator />
+
       <div className="flex flex-col gap-0.5">
         <p>{text.kernelSize}:</p>
 
         <div className="flex items-center justify-between">
           <input
-            className="flex-2"
             type="range"
             min={WSHED_KERNEL_MIN}
             max={WSHED_KERNEL_MAX}
@@ -102,12 +116,13 @@ const WatershedForm = ({ state, dispatcher }: Props) => {
         </div>
       </div>
 
+      <Separator />
+
       <div className="flex flex-col gap-0.5">
         <p>{text.iterationsMorphology}:</p>
 
         <div className="flex items-center justify-between">
           <input
-            className="flex-2"
             type="range"
             min={WSHED_IT_MORPH_MIN}
             max={WSHED_IT_MORPH_MAX}
@@ -125,12 +140,13 @@ const WatershedForm = ({ state, dispatcher }: Props) => {
         </div>
       </div>
 
+      <Separator />
+
       <div className="flex flex-col gap-0.5">
         <p>{text.iterationsDilation}:</p>
 
         <div className="flex items-center justify-between">
           <input
-            className="flex-2"
             type="range"
             min={WSHED_IT_DILAT_MIN}
             max={WSHED_IT_DILAT_MAX}
@@ -148,6 +164,8 @@ const WatershedForm = ({ state, dispatcher }: Props) => {
         </div>
       </div>
 
+      <Separator />
+
       <div className="flex items-center justify-between">
         <p>{text.distFactor}:</p>
 
@@ -158,13 +176,17 @@ const WatershedForm = ({ state, dispatcher }: Props) => {
           max={WSHED_DIST_MAX}
           step={WSHED_DIST_STEP}
           value={state.distFactor}
-          onChange={(e) =>
-            dispatcher({
-              type: "SET_PARAM",
-              key: "distFactor",
-              value: Number(e.target.value),
-            })
-          }
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (value >= WSHED_DIST_MIN && value <= WSHED_DIST_MAX) {
+              dispatcher({
+                type: "SET_PARAM",
+                key: "distFactor",
+                value: value,
+              });
+            }
+          }}
+          style={{ backgroundColor: theme.text, color: theme.background }}
         />
       </div>
     </>

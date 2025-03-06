@@ -6,12 +6,12 @@ import ParametersSelector from "@/components/parameters-selector";
 import ResultsSection from "@/components/results-section";
 import DensityScaleSection from "@/components/density-scale-section";
 import SelectionSection from "@/components/selection-section";
-import { ApplicationMode } from "@/types/parameters";
 import useTheme from "@/hooks/use-theme";
 import useLanguage from "@/hooks/use-language";
+import { useParameters } from "@/hooks/use-parameters";
 
 const SegmentationPage = () => {
-  const mode: ApplicationMode = "segmentation";
+  const { mode } = useParameters();
   const { currentColorScheme, theme } = useTheme();
   const { text } = useLanguage();
 

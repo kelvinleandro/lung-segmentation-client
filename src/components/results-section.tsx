@@ -7,7 +7,7 @@ import {
   wadouri,
 } from "@cornerstonejs/dicom-image-loader";
 import DICOMViewer from "@/components/dicom-viewer";
-import useApi from "@/hooks/use-api";
+// import useApi from "@/hooks/use-api";
 import {
   applyWindowing,
   drawImageWithContours,
@@ -39,19 +39,20 @@ dicomImageLoaderInit();
 
 const ResultsSection = () => {
   const [classImageSrc, setClassImageSrc] = useState<string | null>(null);
-  const [preprocessedBase64, setPreprocessedBase64] = useState<string | null>(
-    null
-  );
+  // const [preprocessedBase64, setPreprocessedBase64] = useState<string | null>(
+  //   null
+  // );
   const [showColorizedImage, setShowColorizedImage] = useState<boolean>(false);
   const [drawOnOriginal, setDrawOnOriginal] = useState<boolean>(true);
   const [showPreprocessed, setShowPreprocessed] = useState<boolean>(false);
+  const [showAllContours, setShowAllContours] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   // Desestruturação para obter o dicomFile, os contornos e a função de atualização
-  const { dicomFile, contours, setContours } = useParameters();
+  const { dicomFile, apiResponse } = useParameters();
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const { text } = useLanguage();
   const { theme } = useTheme();
-  const { sendFileToServer } = useApi();
+  // const { sendFileToServer } = useApi();
 
   // Carrega a imagem DICOM e aplica o windowing
   useEffect(() => {
@@ -81,33 +82,39 @@ const ResultsSection = () => {
     loadDicomImage();
   }, [dicomFile]);
 
-  useEffect(() => {
-    if (dicomFile) {
-      handleSendFile();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dicomFile]);
+  // useEffect(() => {
+  //   if (dicomFile) {
+  //     handleSendFile();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dicomFile]);
 
-  const handleSendFile = async () => {
-    if (!dicomFile) return;
-    try {
-      const data = await sendFileToServer("/upload", dicomFile);
-      if (data?.todos_contornos) {
-        setContours(data.todos_contornos);
-      }
-      if (data?.preprocessed) {
-        setPreprocessedBase64(`data:image/png;base64,${data.preprocessed}`);
-      }
-    } catch (error) {
-      console.error("Error sending file:", error);
-    }
-  };
+  // const handleSendFile = async () => {
+  //   if (!dicomFile) return;
+  //   try {
+  //     const data = await sendFileToServer("/upload", dicomFile);
+  //     if (data?.todos_contornos) {
+  //       setContours(data.todos_contornos);
+  //     }
+  //     if (data?.preprocessed) {
+  //       setPreprocessedBase64(`data:image/png;base64,${data.preprocessed}`);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error sending file:", error);
+  //   }
+  // };
 
   // Cria a imagem final com os contornos retornados do backend
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
-    return drawImageWithContours(imageData, contours, drawOnOriginal);
-  }, [imageData, contours, drawOnOriginal]);
+    return drawImageWithContours(
+      imageData,
+      showAllContours
+        ? apiResponse?.todos_contornos
+        : apiResponse?.contornos_validos,
+      drawOnOriginal
+    );
+  }, [imageData, showAllContours, drawOnOriginal, apiResponse]);
 
   return (
     <section className="w-full h-full flex gap-40 px-20 pb-2">
@@ -149,7 +156,7 @@ const ResultsSection = () => {
             <h1 className="font-bold text-3xl font-dm-sans">
               {text.finalResult}
             </h1>
-            {imageData && (
+            {imageData && apiResponse && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Settings2 size={32} className="cursor-pointer" />
@@ -182,6 +189,19 @@ const ResultsSection = () => {
                       checked={showPreprocessed}
                       onChange={(e) => setShowPreprocessed(e.target.checked)}
                       disabled={!drawOnOriginal}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex justify-between">
+                    <p>{text.allContours}:</p>
+
+                    <input
+                      type="checkbox"
+                      checked={showAllContours}
+                      onChange={(e) => setShowAllContours(e.target.checked)}
+                      disabled={showPreprocessed}
                     />
                   </div>
                 </DropdownMenuContent>
@@ -233,9 +253,14 @@ const ResultsSection = () => {
                 </button>
                 <button
                   onClick={() => {
-                    if (dicomFile && contours) {
+                    if (dicomFile && apiResponse) {
                       const fileName = dicomFile.name.replace(/\.[^/.]+$/, "");
-                      saveContoursAsCSV(contours, `contours_${fileName}.csv`);
+                      saveContoursAsCSV(
+                        showAllContours
+                          ? apiResponse.todos_contornos
+                          : apiResponse.contornos_validos,
+                        `contours_${fileName}.csv`
+                      );
                     }
                   }}
                   className="flex justify-center items-center font-dm-sans font-bold text-[20px] w-[192px] h-[48px] rounded-3xl px-6 py-4 cursor-pointer border border-gray-800"
@@ -252,15 +277,19 @@ const ResultsSection = () => {
         </div>
 
         <div className="relative w-full h-full rounded-3xl overflow-hidden">
-          {showPreprocessed && preprocessedBase64 ? (
+          {showPreprocessed && apiResponse?.preprocessed ? (
             <img
-              src={preprocessedBase64}
+              src={apiResponse.preprocessed}
               className="absolute top-0 left-0 z-0"
             />
           ) : (
             <DICOMViewer
               imageData={imageData}
-              contours={contours}
+              contours={
+                showAllContours
+                  ? apiResponse?.todos_contornos
+                  : apiResponse?.contornos_validos
+              }
               drawable={false}
               isPanning={false}
               isDrawing={false}

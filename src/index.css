@@ -156,3 +156,13 @@
   background: var(--btn-active-bg);
   color: var(--btn-active-text);
 }
+
+/* Hide scrollbar but keep the scrolling functionality */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}

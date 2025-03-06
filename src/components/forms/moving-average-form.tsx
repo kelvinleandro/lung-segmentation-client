@@ -6,16 +6,21 @@ import {
   MA_B_MAX,
   MA_B_STEP,
 } from "@/constants/segmentation";
+import { SegmentationAction } from "@/context/parameters-context";
 import useLanguage from "@/hooks/use-language";
 import { MovingAverage } from "@/types/parameters";
+import { Separator } from "../ui/separator";
+import useTheme from "@/hooks/use-theme";
 
 type Props = {
   state: MovingAverage;
-  dispatcher: React.Dispatch<any>;
+  dispatcher: React.Dispatch<SegmentationAction>;
 };
 
 const MovingAverageForm = ({ state, dispatcher }: Props) => {
   const { text } = useLanguage();
+  const { theme } = useTheme();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -35,15 +40,17 @@ const MovingAverageForm = ({ state, dispatcher }: Props) => {
               value: Number(e.target.value),
             })
           }
+          style={{ backgroundColor: theme.text, color: theme.background }}
         />
       </div>
+
+      <Separator />
 
       <div className="flex flex-col gap-0.5">
         <p>{text.adjustFactor}:</p>
 
         <div className="flex items-center justify-between">
           <input
-            className="w-1/3"
             type="range"
             min={MA_B_MIN}
             max={MA_B_MAX}
@@ -60,6 +67,8 @@ const MovingAverageForm = ({ state, dispatcher }: Props) => {
           <p>{state.b}</p>
         </div>
       </div>
+
+      <Separator />
 
       <div className="flex items-center justify-between">
         <p>{text.applyInterpolation}:</p>

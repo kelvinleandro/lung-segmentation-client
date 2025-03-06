@@ -5,10 +5,11 @@ import LocalPropertiesForm from "./local-properties-form";
 import SauvolaForm from "./sauvola-form";
 import WatershedForm from "./watershed-form";
 import DivisionFusionForm from "./division-fusion-form";
+import { SegmentationAction } from "@/context/parameters-context";
 
 type Props = {
   state: SegmentationParameters;
-  dispatcher: React.Dispatch<any>;
+  dispatcher: React.Dispatch<SegmentationAction>;
 };
 
 const SegmentationForm = ({ state, dispatcher }: Props) => {
