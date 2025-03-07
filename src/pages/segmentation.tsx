@@ -24,10 +24,10 @@ const SegmentationPage = () => {
           color: theme.text,
         }}
       >
-        <div className="flex-2">
+        <div className="w-[18%]">
           <ParametersSelector />
         </div>
-        <div className="flex-12 border-l-2" style={{ borderColor: theme.text }}>
+        <div className="w-[82%] border-l-2" style={{ borderColor: theme.text }}>
           {mode === "segmentation" ? (
             <Tabs defaultValue="results" className="w-full h-full">
               <TabsList

@@ -50,6 +50,9 @@ const ParametersSelector = () => {
       changeDicomFile(file);
     } catch (error) {
       console.error("Error:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     }
   };
 
@@ -59,7 +62,6 @@ const ParametersSelector = () => {
     try {
       setIsSubmitting(true);
       const response = await sendFileToServer(
-        "/upload",
         dicomFile,
         preprocessingParameters,
         segmentationParameters,

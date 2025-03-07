@@ -21,19 +21,19 @@ export interface Crisp {
 }
 
 export interface MovingAverage {
-  type: "movingAverage";
+  type: "lim_media_mov";
   n: number;
   b: number;
   applyInterpolation: boolean;
 }
 
 export interface MultiThresholding {
-  type: "multiThresholding";
+  type: "lim_multipla";
   // nothing
 }
 
 export interface LocalProperties {
-  type: "localProperties";
+  type: "lim_prop_locais";
   windowSize: number;
   a: number; // std
   b: number; // mu
@@ -52,7 +52,7 @@ export interface Sauvola {
 }
 
 export interface DivisionFusion {
-  type: "divisionFusion";
+  type: "divisao_e_fusao";
   varLimit: number;
   meanLimit: number;
   meanReference: number;

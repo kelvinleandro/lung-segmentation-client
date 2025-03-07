@@ -48,7 +48,7 @@ const SelectionSection = () => {
       <div className="w-[512px] h-[512px] relative overflow-hidden">
         <DICOMViewer
           imageData={imageData}
-          drawable
+          drawable={imageData !== null}
           zoom={selectionParameters.zoom}
           lineWidth={selectionParameters.lineWidth}
           tintColor={selectionParameters.color}

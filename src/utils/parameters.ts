@@ -23,14 +23,14 @@ export const prepareParamsToSend = (
       tamanho_kernel: params.kernelSize,
       sigma: params.sigma,
     };
-  } else if (params.type === "movingAverage") {
+  } else if (params.type === "lim_media_mov") {
     // moving average limiarization
     transformed = {
       n: params.n,
       b: params.b,
       aplicar_interpolacao: params.applyInterpolation,
     };
-  } else if (params.type === "localProperties") {
+  } else if (params.type === "lim_prop_locais") {
     // local properties limiarization
     transformed = {
       tamanho_janela: params.windowSize,
@@ -60,7 +60,7 @@ export const prepareParamsToSend = (
       iteracoes_dilatacao: params.dilationIterations,
       fator_dist_transform: params.distFactor,
     };
-  } else if (params.type === "divisionFusion") {
+  } else if (params.type === "divisao_e_fusao") {
     // division fusion
     transformed = {
       limite_var: params.varLimit,
