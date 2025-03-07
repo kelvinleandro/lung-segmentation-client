@@ -17,10 +17,10 @@ const SegmentationForm = ({ state, dispatcher }: Props) => {
 
   return (
     <div className="w-full flex flex-col font-poppins gap-1">
-      {state.type === "movingAverage" ? (
+      {state.type === "lim_media_mov" ? (
         // moving average thresholding
         <MovingAverageForm state={state} dispatcher={dispatcher} />
-      ) : state.type === "localProperties" ? (
+      ) : state.type === "lim_prop_locais" ? (
         // local properties thresholding
         <LocalPropertiesForm state={state} dispatcher={dispatcher} />
       ) : state.type === "sauvola" ? (
@@ -29,7 +29,7 @@ const SegmentationForm = ({ state, dispatcher }: Props) => {
       ) : state.type === "watershed" ? (
         // watershed thresholding
         <WatershedForm state={state} dispatcher={dispatcher} />
-      ) : state.type === "divisionFusion" ? (
+      ) : state.type === "divisao_e_fusao" ? (
         // division fusion
         <DivisionFusionForm state={state} dispatcher={dispatcher} />
       ) : (

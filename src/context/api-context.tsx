@@ -12,11 +12,10 @@ type ApiContextType = {
   changeBaseUrl: (url: string) => void;
   baseUrl: string;
   sendFileToServer: (
-    endpoint: string,
     file: File,
-    preprocessingParams?: PreprocessingParameters,
-    segmentationParams?: SegmentationParameters,
-    postprocessingParams?: PostprocessingParameters
+    preprocessingParams: PreprocessingParameters,
+    segmentationParams: SegmentationParameters,
+    postprocessingParams: PostprocessingParameters
   ) => Promise<ApiResponse | undefined>;
 };
 
@@ -50,11 +49,10 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
   const sendFileToServer = useCallback(
     async (
-      endpoint: string = "/upload",
       file: File,
-      preprocessingParams?: PreprocessingParameters,
-      segmentationParams?: SegmentationParameters,
-      postprocessingParams?: PostprocessingParameters
+      preprocessingParams: PreprocessingParameters,
+      segmentationParams: SegmentationParameters,
+      postprocessingParams: PostprocessingParameters
     ) => {
       if (!instance) {
         console.error("Axios instance not initialized yet.");
@@ -62,7 +60,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const formData = new FormData();
-      formData.append("dicom", file);
+      formData.append("file", file);
       formData.append(
         "preprocessing_params",
         JSON.stringify(prepareParamsToSend(preprocessingParams))
@@ -77,7 +75,8 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
       );
 
       try {
-        const response = await instance.post<ApiResponse>(endpoint, formData, {
+        const response = await instance.post<ApiResponse>("/upload", formData, {
+          params: { method: segmentationParams.type },
           headers: { "Content-Type": "multipart/form-data" },
         });
 

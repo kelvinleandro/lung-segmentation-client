@@ -110,7 +110,7 @@ const ResultsSection = () => {
     return drawImageWithContours(
       imageData,
       showAllContours
-        ? apiResponse?.todos_contornos
+        ? apiResponse?.todos_os_contornos
         : apiResponse?.contornos_validos,
       drawOnOriginal
     );
@@ -188,7 +188,9 @@ const ResultsSection = () => {
                       type="checkbox"
                       checked={showPreprocessed}
                       onChange={(e) => setShowPreprocessed(e.target.checked)}
-                      disabled={!drawOnOriginal}
+                      disabled={
+                        !drawOnOriginal || !apiResponse.imagem_pre_processada
+                      }
                     />
                   </div>
 
@@ -257,7 +259,7 @@ const ResultsSection = () => {
                       const fileName = dicomFile.name.replace(/\.[^/.]+$/, "");
                       saveContoursAsCSV(
                         showAllContours
-                          ? apiResponse.todos_contornos
+                          ? apiResponse.todos_os_contornos
                           : apiResponse.contornos_validos,
                         `contours_${fileName}.csv`
                       );
@@ -277,9 +279,9 @@ const ResultsSection = () => {
         </div>
 
         <div className="relative w-full h-full rounded-3xl overflow-hidden">
-          {showPreprocessed && apiResponse?.preprocessed ? (
+          {showPreprocessed && apiResponse?.imagem_pre_processada ? (
             <img
-              src={apiResponse.preprocessed}
+              src={`data:image/png;base64,${apiResponse.imagem_pre_processada}`}
               className="absolute top-0 left-0 z-0"
             />
           ) : (
@@ -287,7 +289,7 @@ const ResultsSection = () => {
               imageData={imageData}
               contours={
                 showAllContours
-                  ? apiResponse?.todos_contornos
+                  ? apiResponse?.todos_os_contornos
                   : apiResponse?.contornos_validos
               }
               drawable={false}

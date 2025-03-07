@@ -10,7 +10,7 @@ import {
 } from "@/types/parameters";
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
-  type: "multiThresholding",
+  type: "lim_multipla",
 };
 
 const OTSU_DEFAULT: Otsu = { type: "otsu" };
@@ -25,7 +25,7 @@ export const MA_N_MAX = 200;
 export const MA_N_STEP = 5;
 
 const MA_DEFAULT: MovingAverage = {
-  type: "movingAverage",
+  type: "lim_media_mov",
   n: 170,
   b: 0.5,
   applyInterpolation: true,
@@ -39,7 +39,7 @@ export const LOCAL_WIN_MAX = 191;
 export const LOCAL_WIN_STEP = 20;
 
 const LOCAL_PROPERTIES_DEFAULT: LocalProperties = {
-  type: "localProperties",
+  type: "lim_prop_locais",
   windowSize: 151,
   a: 1,
   b: 0.5,
@@ -105,19 +105,19 @@ export const DF_MREF_MAX = 1;
 export const DF_MREF_STEP = 0.1;
 
 const DIVISION_FUSION_DEFAULT: DivisionFusion = {
-  type: "divisionFusion",
+  type: "divisao_e_fusao",
   varLimit: 1,
   meanLimit: 0.5,
   meanReference: 0.5,
 };
 
 export const SEGMENTATION_DEFAULTS = {
-  movingAverage: MA_DEFAULT,
-  multiThresholding: MULTI_THRESHOLDING_DEFAULT,
-  localProperties: LOCAL_PROPERTIES_DEFAULT,
+  lim_media_mov: MA_DEFAULT,
+  lim_multipla: MULTI_THRESHOLDING_DEFAULT,
+  lim_prop_locais: LOCAL_PROPERTIES_DEFAULT,
   sauvola: SAUVOLA_DEFAULT,
   watershed: WATERSHED_DEFAULT,
-  divisionFusion: DIVISION_FUSION_DEFAULT,
+  divisao_e_fusao: DIVISION_FUSION_DEFAULT,
   otsu: OTSU_DEFAULT,
   crisp: CRISP_DEFAULT,
 };

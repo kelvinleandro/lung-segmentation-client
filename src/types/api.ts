@@ -1,7 +1,7 @@
 import { Contours } from "./image";
 
 export interface ApiResponse {
-  todos_contornos: Contours;
+  todos_os_contornos: Contours;
   contornos_validos: Contours;
-  preprocessed?: string;
+  imagem_pre_processada?: string;
 }
