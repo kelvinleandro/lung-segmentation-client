@@ -9,6 +9,12 @@ import {
 import { useEffect, useState } from "react";
 import { applyWindowing } from "@/utils/image";
 import { ImageData } from "@/types/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 coreInit();
 dicomImageLoaderInit();
@@ -41,9 +47,23 @@ const SelectionSection = () => {
 
   return (
     <section className="w-full h-full flex flex-col pt-4 pl-4 items-center justify-start">
-      <h1 className="text-4xl font-dm-sans font-bold self-start">
-        {text.manualSelection}
-      </h1>
+      <div className="font-dm-sans text-4xl space-x-2 flex items-center self-start">
+        <h1 className="font-bold">{text.manualSelection}</h1>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="bg-gray-300 text-xl rounded-full h-8 w-8">
+              ?
+            </TooltipTrigger>
+            <TooltipContent className="text-lg">
+              <p className="font-bold">{text.helpTitle}</p>
+              <p>{text.help1}</p>
+              <p>{text.help2}</p>
+              <p>{text.help3}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
       <div className="w-[512px] h-[512px] relative overflow-hidden">
         <DICOMViewer
