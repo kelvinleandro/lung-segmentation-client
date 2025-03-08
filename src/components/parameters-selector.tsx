@@ -91,26 +91,19 @@ const ParametersSelector = () => {
         {/* Tabs de Segmentação e Seleção */}
         <TabsList
           className={cn(
-            "grid grid-cols-2 mb-2",
-            currentColorScheme == "dark" ? "bg-[#001d3d]" : "bg-white"
+            "mb-2 overflow-hidden flex w-full rounded-full border",
+            currentColorScheme == "dark"
+              ? "bg-[#001d3d] border-white"
+              : "bg-white border-black"
           )}
         >
           <TabsTrigger
             value="segmentation"
             className={cn(
-              "w-full rounded-l-lg border-2 border-r-0",
-              mode == "segmentation" && currentColorScheme == "dark"
-                ? "bg-white text-black border-white"
-                : "",
-              mode != "segmentation" && currentColorScheme == "dark"
-                ? "bg-[#001d3d] text-white border-white"
-                : "",
-              mode == "segmentation" && currentColorScheme != "dark"
-                ? "bg-black text-white border-black"
-                : "",
-              mode != "segmentation" && currentColorScheme != "dark"
-                ? "text-black border-black"
-                : ""
+              "bg-background text-black flex-1 h-full",
+              currentColorScheme === "dark"
+                ? "border-white data-[state=active]:text-[#001d3d] data-[state=active]:bg-white bg-[#001d3d] text-white hover:bg-white hover:text-[#001d3d]"
+                : "border-black data-[state=active]:text-white data-[state=active]:bg-black bg-white text-black hover:bg-black hover:text-white"
             )}
           >
             {text.customizeSegmentation}
@@ -118,19 +111,10 @@ const ParametersSelector = () => {
           <TabsTrigger
             value="selection"
             className={cn(
-              "w-full rounded-r-lg border-2 border-l-0",
-              mode == "selection" && currentColorScheme == "dark"
-                ? "bg-white text-black border-white"
-                : "",
-              mode != "selection" && currentColorScheme == "dark"
-                ? "bg-[#001d3d] text-white border-white"
-                : "",
-              mode == "selection" && currentColorScheme != "dark"
-                ? "bg-black text-white border-black"
-                : "",
-              mode != "selection" && currentColorScheme != "dark"
-                ? "text-black border-black"
-                : ""
+              "bg-background text-black flex-1 h-full",
+              currentColorScheme === "dark"
+                ? "border-white data-[state=active]:text-[#001d3d] data-[state=active]:bg-white bg-[#001d3d] text-white hover:bg-white hover:text-[#001d3d]"
+                : "border-black data-[state=active]:text-white data-[state=active]:bg-black bg-white text-black hover:bg-black hover:text-white"
             )}
           >
             {text.customizeSelection}
@@ -150,7 +134,7 @@ const ParametersSelector = () => {
                     e.target.value as SegmentationType
                   )
                 }
-                className="cursor-pointer"
+                className="cursor-pointer border-2 border-dashed"
                 style={{ color: theme.text, backgroundColor: theme.background }}
               >
                 <option value="crisp">Crisp</option>
