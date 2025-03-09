@@ -82,7 +82,7 @@ const ParametersSelector = () => {
       className="h-full w-full p-4 space-y-4 font-poppins"
       style={{ backgroundColor: theme.background, color: theme.text }}
     >
-      <h2 className="text-2xl font-bold">{text.customizeTitle}</h2>
+      <h2 className="text-lg 2xl:text-2xl font-bold">{text.customizeTitle}</h2>
 
       <Tabs
         value={mode}
@@ -141,12 +141,10 @@ const ParametersSelector = () => {
                 <option value="watershed">Watershed</option>
                 <option value="otsu">Otsu</option>
                 <option value="sauvola">Sauvola</option>
-                <option value="divisionFusion">{text.divisionFusion}</option>
-                <option value="localProperties">{text.localProperties}</option>
-                <option value="movingAverage">{text.movingAverage}</option>
-                <option value="multiThresholding">
-                  {text.multiThresholding}
-                </option>
+                <option value="divisao_e_fusao">{text.divisionFusion}</option>
+                <option value="lim_prop_locais">{text.localProperties}</option>
+                <option value="lim_media_mov">{text.movingAverage}</option>
+                <option value="lim_multipla">{text.multiThresholding}</option>
               </select>
             </div>
             <Accordion className="w-full" type="single">

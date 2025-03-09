@@ -47,7 +47,7 @@ const SelectionSection = () => {
 
   return (
     <section className="w-full h-full flex flex-col pt-4 pl-4 items-center justify-start">
-      <div className="font-dm-sans text-4xl space-x-2 flex items-center self-start">
+      <div className="font-dm-sans text-lg 2xl:text-4xl space-x-2 flex items-center self-start">
         <h1 className="font-bold">{text.manualSelection}</h1>
 
         <TooltipProvider>
@@ -65,7 +65,7 @@ const SelectionSection = () => {
         </TooltipProvider>
       </div>
 
-      <div className="w-[512px] h-[512px] relative overflow-hidden">
+      <div className="w-[350px] h-[350px] 2xl:w-[512px] 2xl:h-[512px] relative overflow-hidden border">
         <DICOMViewer
           imageData={imageData}
           drawable={imageData !== null}
