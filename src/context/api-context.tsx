@@ -22,7 +22,7 @@ type ApiContextType = {
 export const ApiContext = createContext<ApiContextType | null>(null);
 
 export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
-  const [baseUrl, setBaseUrl] = useState<string>("http://127.0.0.1:5000");
+  const [baseUrl, setBaseUrl] = useState<string>("http://127.0.0.1:8081");
 
   const instance = useMemo(() => {
     return axios.create({
@@ -61,24 +61,24 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append(
-        "preprocessing_params",
-        JSON.stringify(prepareParamsToSend(preprocessingParams))
-      );
-      formData.append(
-        "segmentation_params",
-        JSON.stringify(prepareParamsToSend(segmentationParams))
-      );
-      formData.append(
-        "postprocessing_params",
-        JSON.stringify(prepareParamsToSend(postprocessingParams))
-      );
+
+      const params = {
+        preprocessing_params: prepareParamsToSend(preprocessingParams),
+        segmentation_params: prepareParamsToSend(segmentationParams),
+        postprocessing_params: prepareParamsToSend(postprocessingParams),
+      };
+
+      formData.append("params", JSON.stringify(params));
 
       try {
-        const response = await instance.post<ApiResponse>("/upload", formData, {
-          params: { method: segmentationParams.type },
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const response = await instance.post<ApiResponse>(
+          "/api/image-segmentation",
+          formData,
+          {
+            params: { method: segmentationParams.type },
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
 
         console.log("Response from server:", response.data);
 
