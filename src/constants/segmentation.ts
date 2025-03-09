@@ -11,6 +11,17 @@ import {
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
   type: "lim_multipla",
+  hyperLim: [0, 8],
+  normalLim: [8, 42],
+  poorLim: [42, 76],
+  nonLim: [76, 93],
+  boneLim: [136, 255],
+  activateHyper: true,
+  activateNormal: true,
+  activatePoor: true,
+  activateNon: true,
+  activateBone: false,
+  activateNonClassified: false,
 };
 
 const OTSU_DEFAULT: Otsu = { type: "otsu" };

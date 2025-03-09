@@ -67,6 +67,20 @@ export const prepareParamsToSend = (
       limite_media: params.meanLimit,
       referencia_media: params.meanReference,
     };
+  } else if (params.type === "lim_multipla") {
+    transformed = {
+      lim_hiperaeradas: params.hyperLim,
+      lim_normalmente_aeradas: params.normalLim,
+      lim_pouco_aeradas: params.poorLim,
+      lim_nao_aeradas: params.nonLim,
+      lim_osso: params.boneLim,
+      ativacao_hiperaeradas: params.activateHyper,
+      ativacao_normalmente_aeradas: params.activateNormal,
+      ativacao_pouco_aeradas: params.activatePoor,
+      ativacao_nao_aeradas: params.activateNon,
+      ativacao_osso: params.activateBone,
+      ativacao_nao_classificado: params.activateNonClassified,
+    };
   } else if (params.type === "postprocessing") {
     // postprocessing
     transformed = {
