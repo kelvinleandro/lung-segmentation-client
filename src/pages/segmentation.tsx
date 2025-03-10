@@ -34,7 +34,6 @@ const SegmentationPage = () => {
                 className="flex pl-8 mt-2 justify-start bg-transparent gap-6 border-b-2 w-full rounded-none relative"
                 style={{ borderColor: theme.text }}
               >
-                {/* <TabsList className="flex overflow-hidden border border-black mt-1 ml-1"> */}
                 <TabsTrigger
                   value="results"
                   className={cn(
@@ -43,12 +42,6 @@ const SegmentationPage = () => {
                       ? "data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:border-b-[#001d3d]  border-gray-600 border-b-0"
                       : "data-[state=active]:text-black  data-[state=active]:border-black data-[state=active]:border-b-white  border-gray-600 border-b-0"
                   )}
-                  // className={cn(
-                  //   "bg-background text-black text-lg",
-                  //   currentColorScheme === "dark"
-                  //     ? "data-[state=active]:text-white data-[state=active]:bg-black hover:bg-black hover:text-white"
-                  //     : "data-[state=active]:text-white data-[state=active]:bg-blue-800 hover:bg-blue-800 hover:text-white"
-                  // )}
                 >
                   <ImageIcon />
                   <p>{text.menuResults}</p>
@@ -61,12 +54,6 @@ const SegmentationPage = () => {
                       ? "data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:border-b-[#001d3d]  border-gray-600 border-b-0"
                       : "data-[state=active]:text-black  data-[state=active]:border-black data-[state=active]:border-b-white border-gray-600 border-b-0"
                   )}
-                  // className={cn(
-                  //   "bg-background text-black text-lg",
-                  //   currentColorScheme === "dark"
-                  //     ? "data-[state=active]:text-white data-[state=active]:bg-black hover:bg-black hover:text-white"
-                  //     : "data-[state=active]:text-white data-[state=active]:bg-blue-800 hover:bg-blue-800 hover:text-white"
-                  // )}
                 >
                   <InfoIcon />
                   <p>{text.menuDensityScale}</p>

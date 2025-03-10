@@ -29,7 +29,17 @@ export interface MovingAverage {
 
 export interface MultiThresholding {
   type: "lim_multipla";
-  // nothing
+  hyperLim: [number, number];
+  normalLim: [number, number];
+  poorLim: [number, number];
+  nonLim: [number, number];
+  boneLim: [number, number];
+  activateHyper: boolean;
+  activateNormal: boolean;
+  activatePoor: boolean;
+  activateNon: boolean;
+  activateBone: boolean;
+  activateNonClassified: boolean;
 }
 
 export interface LocalProperties {

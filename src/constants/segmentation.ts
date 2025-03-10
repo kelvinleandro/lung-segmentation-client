@@ -11,6 +11,17 @@ import {
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
   type: "lim_multipla",
+  hyperLim: [0, 8],
+  normalLim: [8, 42],
+  poorLim: [42, 76],
+  nonLim: [76, 93],
+  boneLim: [136, 255],
+  activateHyper: true,
+  activateNormal: true,
+  activatePoor: true,
+  activateNon: true,
+  activateBone: false,
+  activateNonClassified: false,
 };
 
 const OTSU_DEFAULT: Otsu = { type: "otsu" };
@@ -95,20 +106,20 @@ const WATERSHED_DEFAULT: Watershed = {
 };
 
 export const DF_VLIM_MIN = 0;
-export const DF_VLIM_MAX = 1;
-export const DF_VLIM_STEP = 0.1;
+export const DF_VLIM_MAX = 100;
+export const DF_VLIM_STEP = 1;
 export const DF_MLIM_MIN = 0;
-export const DF_MLIM_MAX = 1;
-export const DF_MLIM_STEP = 0.1;
+export const DF_MLIM_MAX = 100;
+export const DF_MLIM_STEP = 1;
 export const DF_MREF_MIN = 0;
-export const DF_MREF_MAX = 1;
-export const DF_MREF_STEP = 0.1;
+export const DF_MREF_MAX = 100;
+export const DF_MREF_STEP = 1;
 
 const DIVISION_FUSION_DEFAULT: DivisionFusion = {
   type: "divisao_e_fusao",
-  varLimit: 1,
-  meanLimit: 0.5,
-  meanReference: 0.5,
+  varLimit: 40,
+  meanLimit: 40,
+  meanReference: 5,
 };
 
 export const SEGMENTATION_DEFAULTS = {

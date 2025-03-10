@@ -6,6 +6,7 @@ import SauvolaForm from "./sauvola-form";
 import WatershedForm from "./watershed-form";
 import DivisionFusionForm from "./division-fusion-form";
 import { SegmentationAction } from "@/context/parameters-context";
+import MultipleThreshForm from "./multiple-thresh-form";
 
 type Props = {
   state: SegmentationParameters;
@@ -32,6 +33,9 @@ const SegmentationForm = ({ state, dispatcher }: Props) => {
       ) : state.type === "divisao_e_fusao" ? (
         // division fusion
         <DivisionFusionForm state={state} dispatcher={dispatcher} />
+      ) : state.type === "lim_multipla" ? (
+        // multiple thresholding
+        <MultipleThreshForm state={state} dispatcher={dispatcher} />
       ) : (
         // others or invalid
         <p>{text.noParameters}</p>

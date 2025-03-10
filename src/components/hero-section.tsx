@@ -44,10 +44,10 @@ const HeroSection = () => {
       <div className="flex justify-between items-center w-full px-12">
         <div className="flex flex-col items-start gap-5 ">
           <div className="flex flex-col max-w-2xl">
-            <h1 className="text-start font-extrabold text-5xl font-dm-sans">
+            <h1 className="text-start font-extrabold text-2xl 2xl:text-5xl font-dm-sans">
               {text.heroTitle}
             </h1>
-            <p className="text-justify text-xl max-w-2xl font-normal mt-4 font-poppins">
+            <p className="text-justify text-lg 2xl:text-xl max-w-2xl font-normal mt-4 font-poppins">
               {text.heroDescription}
             </p>
           </div>

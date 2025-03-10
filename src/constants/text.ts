@@ -53,6 +53,8 @@ export const INTERFACE_TEXT = {
 
     // multi thresholding
     noParameters: "Não há parâmetros para esse algoritmo",
+    notClassified: "Não classificado",
+    limit: "Limite",
 
     // watershed
     threshold: "Limiar",
@@ -204,6 +206,8 @@ export const INTERFACE_TEXT = {
 
     // multi thresholding
     noParameters: "There are no parameters for this algorithm",
+    notClassified: "Not classified",
+    limit: "Limit",
 
     // watershed
     threshold: "Threshold",
@@ -229,7 +233,7 @@ export const INTERFACE_TEXT = {
     downloadButton: "Download",
     onlyContours: "Only Contours",
     preprocessed: "Preprocessed",
-    allContours: "Todos os contornos",
+    allContours: "All Contours",
 
     //quarta tela
     densityScaleTitle: "Density Scale (HU)",
