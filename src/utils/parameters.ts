@@ -12,7 +12,7 @@ export const prepareParamsToSend = (
     | undefined
 ) => {
   if (!params) return {};
-  let transformed = {}; // default for multi and otsu
+  let transformed = {}; // default for otsu
 
   if (params.type === "preprocessing") {
     // preprocessing params
