@@ -78,16 +78,20 @@ export const drawImageWithContours = (
       ctx.lineWidth = 2; // Adjust the thickness of the contour line
 
       Object.values(contours).forEach((points) => {
-        if (points.length > 0) {
-          ctx.beginPath();
-          ctx.moveTo(points[0][0], points[0][1]);
+        try {
+          if (points.length > 0) {
+            ctx.beginPath();
+            ctx.moveTo(points[0][0], points[0][1]);
 
-          points.forEach(([x, y]) => {
-            ctx.lineTo(x, y);
-          });
+            points.forEach(([x, y]) => {
+              ctx.lineTo(x, y);
+            });
 
-          ctx.closePath();
-          ctx.stroke();
+            ctx.closePath();
+            ctx.stroke();
+          }
+        } catch (err) {
+          console.log("Ignoring contour:", err);
         }
       });
     }

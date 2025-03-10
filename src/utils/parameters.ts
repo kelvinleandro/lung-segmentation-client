@@ -4,6 +4,36 @@ import {
   PostprocessingParameters,
 } from "@/types/parameters";
 
+/**
+ * Converts a tuple of two numbers into a string.
+ * The resulting string represents the numbers separated by a comma.
+ *
+ * @param tuple - A tuple containing two numbers.
+ * @returns A string representing the two numbers separated by a comma.
+ *
+ * @example
+ * const result = tupleToString([5, 10]);
+ * console.log(result); // Output: "5,10"
+ */
+export const tupleToString = (tuple: [number, number]) =>
+  `${tuple[0]},${tuple[1]}`;
+
+/**
+ * Prepares a set of parameters to be sent for processing, transforming them into
+ * an appropriate format depending on the type of parameters provided.
+ *
+ * The function handles different types of parameter objects (Segmentation,
+ * Preprocessing, Postprocessing, etc.) and converts them into a standardized
+ * format that can be used in further processing.
+ *
+ * @param params - The parameters to transform, which can be one of the following types:
+ *   - SegmentationParameters
+ *   - PreprocessingParameters
+ *   - PostprocessingParameters
+ *   - `undefined`
+ *
+ * @returns An object containing the transformed parameters, or an empty object if `params` is undefined.
+ */
 export const prepareParamsToSend = (
   params:
     | SegmentationParameters
@@ -68,12 +98,13 @@ export const prepareParamsToSend = (
       referencia_media: params.meanReference,
     };
   } else if (params.type === "lim_multipla") {
+    // multi threshold
     transformed = {
-      lim_hiperaeradas: params.hyperLim,
-      lim_normalmente_aeradas: params.normalLim,
-      lim_pouco_aeradas: params.poorLim,
-      lim_nao_aeradas: params.nonLim,
-      lim_osso: params.boneLim,
+      lim_hiperaeradas: tupleToString(params.hyperLim),
+      lim_normalmente_aeradas: tupleToString(params.normalLim),
+      lim_pouco_aeradas: tupleToString(params.poorLim),
+      lim_nao_aeradas: tupleToString(params.nonLim),
+      lim_osso: tupleToString(params.boneLim),
       ativacao_hiperaeradas: params.activateHyper,
       ativacao_normalmente_aeradas: params.activateNormal,
       ativacao_pouco_aeradas: params.activatePoor,
