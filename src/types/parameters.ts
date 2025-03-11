@@ -1,5 +1,18 @@
 export type ApplicationMode = "segmentation" | "selection";
 
+export interface MCACrisp {
+  type: "segmentation";
+  nPixels: number;
+  radius: number;
+  wCont: number;
+  wAdapt: number;
+  dMax: number;
+  searchArea: number;
+  alpha: number;
+  earlyStop: number;
+  maxIterations: number;
+}
+
 export interface Otsu {
   type: "otsu";
   // nothing
@@ -7,6 +20,7 @@ export interface Otsu {
 
 export interface RegionGrowing {
   type: "crescimento_regioes_fora";
+  // nothing
 }
 
 export interface Watershed {
@@ -18,10 +32,6 @@ export interface Watershed {
   morphologyIterations: number;
   dilationIterations: number;
   distFactor: number;
-}
-
-export interface Crisp {
-  type: "crisp";
 }
 
 export interface MovingAverage {
@@ -75,7 +85,7 @@ export interface DivisionFusion {
 export type SegmentationParameters =
   | Otsu
   | Watershed
-  | Crisp
+  | MCACrisp
   | MovingAverage
   | MultiThresholding
   | LocalProperties

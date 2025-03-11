@@ -6,8 +6,10 @@ import {
   Watershed,
   DivisionFusion,
   Otsu,
-  Crisp,
+  MCACrisp,
   RegionGrowing,
+  SegmentationParameters,
+  SegmentationType,
 } from "@/types/parameters";
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
@@ -31,7 +33,46 @@ const REGION_GROWING_DEFAULT: RegionGrowing = {
   type: "crescimento_regioes_fora",
 };
 
-const CRISP_DEFAULT: Crisp = { type: "crisp" };
+export const MCACRISP_SEARCH_AREA_MIN = 1;
+export const MCACRISP_SEARCH_AREA_MAX = 51;
+export const MCACRISP_SEARCH_AREA_STEP = 2;
+export const MCACRISP_WADAPT_MIN = 0;
+export const MCACRISP_WADAPT_MAX = 1;
+export const MCACRISP_WADAPT_STEP = 0.1;
+export const MCACRISP_WCONT_MIN = 0;
+export const MCACRISP_WCONT_MAX = 1;
+export const MCACRISP_WCONT_STEP = 0.1;
+export const MCACRISP_ALPHA_MIN = 20;
+export const MCACRISP_ALPHA_MAX = 180;
+export const MCACRISP_ALPHA_STEP = 1;
+export const MCACRISP_EARLY_STOP_MIN = 0;
+export const MCACRISP_EARLY_STOP_MAX = 1;
+export const MCACRISP_EARLY_STOP_STEP = 0.001;
+export const MCACRISP_MAX_ITERATIONS_MIN = 0;
+export const MCACRISP_MAX_ITERATIONS_MAX = 1000;
+export const MCACRISP_MAX_ITERATIONS_STEP = 1;
+export const MCACRISP_DMAX_MIN = 5;
+export const MCACRISP_DMAX_MAX = 50;
+export const MCACRISP_DMAX_STEP = 1;
+export const MCACRISP_RADIUS_MIN = 10;
+export const MCACRISP_RADIUS_MAX = 100;
+export const MCACRISP_RADIUS_STEP = 1;
+export const MCACRISP_NPIXELS_MIN = 10;
+export const MCACRISP_NPIXELS_MAX = 100;
+export const MCACRISP_NPIXELS_STEP = 1;
+
+const MCACRISP_DEFAULT: MCACrisp = {
+  type: "segmentation",
+  nPixels: 60,
+  radius: 60,
+  wCont: 0.6,
+  wAdapt: 0.3,
+  dMax: 6,
+  searchArea: 9,
+  alpha: 20,
+  earlyStop: 0.005,
+  maxIterations: 500,
+};
 
 export const MA_B_MIN = 0.5;
 export const MA_B_MAX = 1.5;
@@ -127,7 +168,10 @@ const DIVISION_FUSION_DEFAULT: DivisionFusion = {
   meanReference: 5,
 };
 
-export const SEGMENTATION_DEFAULTS = {
+export const SEGMENTATION_DEFAULTS: Record<
+  SegmentationType,
+  SegmentationParameters
+> = {
   lim_media_mov: MA_DEFAULT,
   lim_multipla: MULTI_THRESHOLDING_DEFAULT,
   lim_prop_locais: LOCAL_PROPERTIES_DEFAULT,
@@ -136,5 +180,5 @@ export const SEGMENTATION_DEFAULTS = {
   divisao_e_fusao: DIVISION_FUSION_DEFAULT,
   otsu: OTSU_DEFAULT,
   crescimento_regioes_fora: REGION_GROWING_DEFAULT,
-  crisp: CRISP_DEFAULT,
+  segmentation: MCACRISP_DEFAULT,
 };
