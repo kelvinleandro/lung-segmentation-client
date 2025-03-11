@@ -7,6 +7,7 @@ import {
   DivisionFusion,
   Otsu,
   Crisp,
+  RegionGrowing,
 } from "@/types/parameters";
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
@@ -25,6 +26,10 @@ const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
 };
 
 const OTSU_DEFAULT: Otsu = { type: "otsu" };
+
+const REGION_GROWING_DEFAULT: RegionGrowing = {
+  type: "crescimento_regioes_fora",
+};
 
 const CRISP_DEFAULT: Crisp = { type: "crisp" };
 
@@ -130,5 +135,6 @@ export const SEGMENTATION_DEFAULTS = {
   watershed: WATERSHED_DEFAULT,
   divisao_e_fusao: DIVISION_FUSION_DEFAULT,
   otsu: OTSU_DEFAULT,
+  crescimento_regioes_fora: REGION_GROWING_DEFAULT,
   crisp: CRISP_DEFAULT,
 };

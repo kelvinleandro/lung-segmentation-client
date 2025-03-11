@@ -144,6 +144,9 @@ const ParametersSelector = () => {
                 <option value="lim_prop_locais">{text.localProperties}</option>
                 <option value="lim_media_mov">{text.movingAverage}</option>
                 <option value="lim_multipla">{text.multiThresholding}</option>
+                <option value="crescimento_regioes_fora">
+                  {text.regionGrowing}
+                </option>
               </select>
             </div>
             <Accordion className="w-full" type="single">
