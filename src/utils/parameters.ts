@@ -42,7 +42,7 @@ export const prepareParamsToSend = (
     | undefined
 ) => {
   if (!params) return {};
-  let transformed = {}; // default for otsu
+  let transformed = {}; // default for otsu / growth of regions
 
   if (params.type === "preprocessing") {
     // preprocessing params

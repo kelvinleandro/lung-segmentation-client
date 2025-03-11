@@ -26,6 +26,7 @@ export const INTERFACE_TEXT = {
     localProperties: "Propriedades Locais",
     movingAverage: "Média Movel",
     multiThresholding: "Limiarização Múltipla",
+    regionGrowing: "Crescimento de Regiões",
 
     parameters: "Parâmetros",
     postprocessing: "Pós-processamento",
@@ -179,6 +180,7 @@ export const INTERFACE_TEXT = {
     localProperties: "Local Properties",
     movingAverage: "Moving Average",
     multiThresholding: "Multi Thresholding",
+    regionGrowing: "Region Growing",
 
     parameters: "Parâmetros",
     postprocessing: "Pós-processamento",

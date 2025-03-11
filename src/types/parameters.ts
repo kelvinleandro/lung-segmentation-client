@@ -5,6 +5,10 @@ export interface Otsu {
   // nothing
 }
 
+export interface RegionGrowing {
+  type: "crescimento_regioes_fora";
+}
+
 export interface Watershed {
   type: "watershed";
   threshold: number;
@@ -76,7 +80,8 @@ export type SegmentationParameters =
   | MultiThresholding
   | LocalProperties
   | Sauvola
-  | DivisionFusion;
+  | DivisionFusion
+  | RegionGrowing;
 
 export type SegmentationType = Extract<
   SegmentationParameters,

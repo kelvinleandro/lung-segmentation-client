@@ -8,7 +8,11 @@ import { AlertCircle } from "react-feather";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import useLanguage from "@/hooks/use-language";
 
-const slides = ["/images/pulmao-b.png", "/images/pulmaob.jpg"];
+const slides = [
+  "/images/otsu.png",
+  "/images/watershed.png",
+  "/images/sauvola.png",
+];
 
 const HeroSection = () => {
   const { theme } = useTheme();
