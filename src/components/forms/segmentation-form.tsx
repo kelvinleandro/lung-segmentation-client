@@ -5,8 +5,9 @@ import LocalPropertiesForm from "./local-properties-form";
 import SauvolaForm from "./sauvola-form";
 import WatershedForm from "./watershed-form";
 import DivisionFusionForm from "./division-fusion-form";
-import { SegmentationAction } from "@/context/parameters-context";
 import MultipleThreshForm from "./multiple-thresh-form";
+import MCACrispForm from "./mcacrisp-form";
+import { SegmentationAction } from "@/context/parameters-context";
 
 type Props = {
   state: SegmentationParameters;
@@ -18,7 +19,10 @@ const SegmentationForm = ({ state, dispatcher }: Props) => {
 
   return (
     <div className="w-full flex flex-col font-poppins gap-1">
-      {state.type === "lim_media_mov" ? (
+      {state.type === "segmentation" ? (
+        // main segmentation method
+        <MCACrispForm state={state} dispatcher={dispatcher} />
+      ) : state.type === "lim_media_mov" ? (
         // moving average thresholding
         <MovingAverageForm state={state} dispatcher={dispatcher} />
       ) : state.type === "lim_prop_locais" ? (

@@ -135,8 +135,9 @@ const ParametersSelector = () => {
                 }
                 className="cursor-pointer border-2 border-dashed"
                 style={{ color: theme.text, backgroundColor: theme.background }}
+                disabled={isSubmitting}
               >
-                <option value="crisp">Crisp</option>
+                <option value="segmentation">MCACrisp</option>
                 <option value="watershed">Watershed</option>
                 <option value="otsu">Otsu</option>
                 <option value="sauvola">Sauvola</option>
@@ -149,7 +150,7 @@ const ParametersSelector = () => {
                 </option>
               </select>
             </div>
-            <Accordion className="w-full" type="single">
+            <Accordion className="w-full" type="single" collapsible>
               <AccordionItem value="preprocessing">
                 <AccordionTrigger className="font-semibold uppercase">
                   {text.preprocessing}
@@ -333,7 +334,7 @@ const ParametersSelector = () => {
           onClick={handleSendFile}
           disabled={!dicomFile || isSubmitting}
         >
-          {text.runButton}
+          {isSubmitting ? text.processing : text.runButton}
         </Button>
       )}
     </aside>

@@ -53,6 +53,19 @@ export const prepareParamsToSend = (
       tamanho_kernel: params.kernelSize,
       sigma: params.sigma,
     };
+  } else if (params.type === "segmentation") {
+    // main segmentation method
+    transformed = {
+      quantidade_pixels: params.nPixels,
+      raio: params.radius,
+      w_cont: params.wCont,
+      w_adapt: params.wAdapt,
+      d_max: params.dMax,
+      area_de_busca: params.searchArea,
+      alpha: params.alpha,
+      early_stop: params.earlyStop,
+      max_iterations: params.maxIterations,
+    };
   } else if (params.type === "lim_media_mov") {
     // moving average limiarization
     transformed = {

@@ -39,6 +39,13 @@ export const INTERFACE_TEXT = {
     kernelSize: "Tamanho do Kernel",
     sigma: "Sigma",
 
+    // metodo principal
+    nPixels: "Quantidade de Pixels",
+    radius: "Raio",
+    maxIterations: "Iterações Máximas",
+    searchArea: "Área de Busca",
+    earlyStop: "Parada Antecipada",
+
     // limiarização com media movel
     numberPoints: "Número de Pontos",
     adjustFactor: "Fator de Ajuste",
@@ -72,6 +79,7 @@ export const INTERFACE_TEXT = {
 
     runButton: "Executar",
     chooseImageButton: "Escolher Imagem",
+    processing: "Processando...",
 
     colorMode: "Modo escuro",
 
@@ -193,6 +201,13 @@ export const INTERFACE_TEXT = {
     kernelSize: "Kernel Size",
     sigma: "Sigma",
 
+    // metodo principal
+    nPixels: "Number of pixels",
+    radius: "Radius",
+    maxIterations: "Max Iterations",
+    searchArea: "Search Area",
+    earlyStop: "Early Stop",
+
     // limiarização com media movel
     numberPoints: "Number of points",
     adjustFactor: "Adjust Factor",
@@ -226,6 +241,7 @@ export const INTERFACE_TEXT = {
 
     runButton: "Run",
     chooseImageButton: "Choose Image",
+    processing: "Processing...",
 
     colorMode: "Dark Mode",
 
