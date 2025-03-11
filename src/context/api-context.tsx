@@ -67,6 +67,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
         segmentation_params: prepareParamsToSend(segmentationParams),
         postprocessing_params: prepareParamsToSend(postprocessingParams),
       };
+      console.log("Params:", params);
 
       formData.append("params", JSON.stringify(params));
 

@@ -88,7 +88,6 @@ const ParametersSelector = () => {
         value={mode}
         onValueChange={(value) => setMode(value as ApplicationMode)}
       >
-        {/* Tabs de Segmentação e Seleção */}
         <TabsList
           className={cn(
             "mb-2 overflow-hidden flex w-full rounded-full border",
@@ -121,7 +120,7 @@ const ParametersSelector = () => {
           </TabsTrigger>
         </TabsList>
 
-        {/* Segmentação */}
+        {/* Segmentation */}
         <TabsContent value="segmentation">
           <div className="h-[40vh] mb-2 overflow-y-auto scrollbar-hidden">
             <div className="flex flex-col gap-0.5">
@@ -185,7 +184,7 @@ const ParametersSelector = () => {
           </div>
         </TabsContent>
 
-        {/* Seleção */}
+        {/* Selection */}
         <TabsContent value="selection">
           <div className="flex flex-col gap-2">
             <label className="flex flex-col gap-0.5">
@@ -303,7 +302,7 @@ const ParametersSelector = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Botões principais */}
+      {/* Main buttons */}
       <Button
         onClick={() => document.getElementById("file-upload")?.click()}
         className="w-full rounded-lg cursor-pointer"

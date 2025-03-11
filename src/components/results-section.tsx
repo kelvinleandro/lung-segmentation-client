@@ -7,7 +7,6 @@ import {
   wadouri,
 } from "@cornerstonejs/dicom-image-loader";
 import DICOMViewer from "@/components/dicom-viewer";
-// import useApi from "@/hooks/use-api";
 import {
   applyWindowing,
   drawImageWithContours,
@@ -39,22 +38,17 @@ dicomImageLoaderInit();
 
 const ResultsSection = () => {
   const [classImageSrc, setClassImageSrc] = useState<string | null>(null);
-  // const [preprocessedBase64, setPreprocessedBase64] = useState<string | null>(
-  //   null
-  // );
   const [showColorizedImage, setShowColorizedImage] = useState<boolean>(false);
   const [drawOnOriginal, setDrawOnOriginal] = useState<boolean>(true);
   const [showPreprocessed, setShowPreprocessed] = useState<boolean>(false);
   const [showAllContours, setShowAllContours] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
-  // Desestruturação para obter o dicomFile, os contornos e a função de atualização
   const { dicomFile, apiResponse } = useParameters();
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const { text } = useLanguage();
   const { theme } = useTheme();
-  // const { sendFileToServer } = useApi();
 
-  // Carrega a imagem DICOM e aplica o windowing
+  // Load DICOM image and apply windowing
   useEffect(() => {
     const loadDicomImage = async () => {
       if (!dicomFile) return;
@@ -82,29 +76,7 @@ const ResultsSection = () => {
     loadDicomImage();
   }, [dicomFile]);
 
-  // useEffect(() => {
-  //   if (dicomFile) {
-  //     handleSendFile();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [dicomFile]);
-
-  // const handleSendFile = async () => {
-  //   if (!dicomFile) return;
-  //   try {
-  //     const data = await sendFileToServer("/upload", dicomFile);
-  //     if (data?.todos_contornos) {
-  //       setContours(data.todos_contornos);
-  //     }
-  //     if (data?.preprocessed) {
-  //       setPreprocessedBase64(`data:image/png;base64,${data.preprocessed}`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error sending file:", error);
-  //   }
-  // };
-
-  // Cria a imagem final com os contornos retornados do backend
+  // Create the final image with the contours returned from the backend
   const imageSrc = useMemo(() => {
     if (!imageData) return null;
     return drawImageWithContours(
@@ -212,7 +184,7 @@ const ResultsSection = () => {
           </div>
 
           <Dialog open={open} onOpenChange={setOpen}>
-            {imageSrc && (
+            {apiResponse && (
               <DialogTrigger asChild>
                 <button className="cursor-pointer flex items-center gap-2 border border-gray-500 px-6 py-2 rounded-4xl font-poppins text-[14px] font-medium hover:border-amber-400 hover:text-amber-400 transition-all">
                   <Download />
