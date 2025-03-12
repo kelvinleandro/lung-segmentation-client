@@ -10,6 +10,7 @@ import {
   RegionGrowing,
   SegmentationParameters,
   SegmentationType,
+  SimpleGlobalThresholding,
 } from "@/types/parameters";
 
 const MULTI_THRESHOLDING_DEFAULT: MultiThresholding = {
@@ -168,11 +169,25 @@ const DIVISION_FUSION_DEFAULT: DivisionFusion = {
   meanReference: 5,
 };
 
+export const SIMPLE_GLOBAL_THRESH_MIN = 0;
+export const SIMPLE_GLOBAL_THRESH_MAX = 255;
+export const SIMPLE_GLOBAL_THRESH_STEP = 1;
+export const SIMPLE_GLOBAL_DELTA_MIN = 0;
+export const SIMPLE_GLOBAL_DELTA_MAX = 255;
+export const SIMPLE_GLOBAL_DELTA_STEP = 1;
+
+const SIMPLE_GLOBAL_DEFAULT: SimpleGlobalThresholding = {
+  type: "lim_global_simples",
+  threshold: 50,
+  deltaThreshold: 5,
+};
+
 export const SEGMENTATION_DEFAULTS: Record<
   SegmentationType,
   SegmentationParameters
 > = {
   lim_media_mov: MA_DEFAULT,
+  lim_global_simples: SIMPLE_GLOBAL_DEFAULT,
   lim_multipla: MULTI_THRESHOLDING_DEFAULT,
   lim_prop_locais: LOCAL_PROPERTIES_DEFAULT,
   sauvola: SAUVOLA_DEFAULT,

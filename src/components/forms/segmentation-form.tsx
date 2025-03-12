@@ -8,6 +8,7 @@ import DivisionFusionForm from "./division-fusion-form";
 import MultipleThreshForm from "./multiple-thresh-form";
 import MCACrispForm from "./mcacrisp-form";
 import { SegmentationAction } from "@/context/parameters-context";
+import SimpleGlobalForm from "./simple-global-form";
 
 type Props = {
   state: SegmentationParameters;
@@ -40,6 +41,9 @@ const SegmentationForm = ({ state, dispatcher }: Props) => {
       ) : state.type === "lim_multipla" ? (
         // multiple thresholding
         <MultipleThreshForm state={state} dispatcher={dispatcher} />
+      ) : state.type === "lim_global_simples" ? (
+        // simple global thresholding
+        <SimpleGlobalForm state={state} dispatcher={dispatcher} />
       ) : (
         // others or invalid
         <p>{text.noParameters}</p>

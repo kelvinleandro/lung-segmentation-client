@@ -41,6 +41,12 @@ export interface MovingAverage {
   applyInterpolation: boolean;
 }
 
+export interface SimpleGlobalThresholding {
+  type: "lim_global_simples";
+  threshold: number;
+  deltaThreshold: number;
+}
+
 export interface MultiThresholding {
   type: "lim_multipla";
   hyperLim: [number, number];
@@ -87,6 +93,7 @@ export type SegmentationParameters =
   | Watershed
   | MCACrisp
   | MovingAverage
+  | SimpleGlobalThresholding
   | MultiThresholding
   | LocalProperties
   | Sauvola
