@@ -49,7 +49,7 @@ export const MCACRISP_EARLY_STOP_MIN = 0;
 export const MCACRISP_EARLY_STOP_MAX = 1;
 export const MCACRISP_EARLY_STOP_STEP = 0.001;
 export const MCACRISP_MAX_ITERATIONS_MIN = 0;
-export const MCACRISP_MAX_ITERATIONS_MAX = 1000;
+export const MCACRISP_MAX_ITERATIONS_MAX = 5000;
 export const MCACRISP_MAX_ITERATIONS_STEP = 1;
 export const MCACRISP_DMAX_MIN = 5;
 export const MCACRISP_DMAX_MAX = 50;
@@ -70,8 +70,8 @@ const MCACRISP_DEFAULT: MCACrisp = {
   dMax: 6,
   searchArea: 9,
   alpha: 20,
-  earlyStop: 0.005,
-  maxIterations: 500,
+  earlyStop: 0.001,
+  maxIterations: 1000,
 };
 
 export const MA_B_MIN = 0.5;
