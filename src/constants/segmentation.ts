@@ -70,8 +70,8 @@ const MCACRISP_DEFAULT: MCACrisp = {
   dMax: 6,
   searchArea: 9,
   alpha: 20,
-  earlyStop: 0.005,
-  maxIterations: 500,
+  earlyStop: 0.001,
+  maxIterations: 1000,
 };
 
 export const MA_B_MIN = 0.5;
