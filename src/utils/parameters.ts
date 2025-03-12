@@ -125,6 +125,12 @@ export const prepareParamsToSend = (
       ativacao_osso: params.activateBone,
       ativacao_nao_classificado: params.activateNonClassified,
     };
+  } else if (params.type === "lim_global_simples") {
+    // simple global thresholding
+    transformed = {
+      limiar: params.threshold,
+      delta_limiar: params.deltaThreshold,
+    };
   } else if (params.type === "postprocessing") {
     // postprocessing
     transformed = {

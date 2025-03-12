@@ -144,6 +144,7 @@ const ParametersSelector = () => {
                 <option value="divisao_e_fusao">{text.divisionFusion}</option>
                 <option value="lim_prop_locais">{text.localProperties}</option>
                 <option value="lim_media_mov">{text.movingAverage}</option>
+                <option value="lim_global_simples">{text.simpleGlobal}</option>
                 <option value="lim_multipla">{text.multiThresholding}</option>
                 <option value="crescimento_regioes_fora">
                   {text.regionGrowing}

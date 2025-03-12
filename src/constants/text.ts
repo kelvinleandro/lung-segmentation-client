@@ -25,6 +25,7 @@ export const INTERFACE_TEXT = {
     divisionFusion: "Divisão e Fusão",
     localProperties: "Propriedades Locais",
     movingAverage: "Média Movel",
+    simpleGlobal: "Limiarização global simples",
     multiThresholding: "Limiarização Múltipla",
     regionGrowing: "Crescimento de Regiões",
 
@@ -187,6 +188,7 @@ export const INTERFACE_TEXT = {
     divisionFusion: "Division and Fusion",
     localProperties: "Local Properties",
     movingAverage: "Moving Average",
+    simpleGlobal: "Simple global thresholding",
     multiThresholding: "Multi Thresholding",
     regionGrowing: "Region Growing",
 
