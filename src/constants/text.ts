@@ -192,8 +192,8 @@ export const INTERFACE_TEXT = {
     multiThresholding: "Multi Thresholding",
     regionGrowing: "Region Growing",
 
-    parameters: "Parâmetros",
-    postprocessing: "Pós-processamento",
+    parameters: "Parameters",
+    postprocessing: "Postprocessing",
 
     // pre processamento
     preprocessing: "Preprocessing",
