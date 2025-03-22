@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a **lung segmentation application** built with React, TypeScript, TailwindCSS, and ShadCN UI. It allows users to upload **DICOM** (.dcm) files, configure segmentation parameters, and send the data to an API for preprocessing, segmentation, and post-processing. Users can also manually edit segmentations, zoom in on images, and **download results**.
+This project is a **lung segmentation application** built with React, TypeScript, TailwindCSS, and ShadCN UI. It allows users to upload **DICOM** (.dcm) files, configure segmentation parameters, and send the data to an [API](https://github.com/kelvinleandro/lung-segmentation-server) for preprocessing, segmentation, and post-processing. Users can also manually edit segmentations, zoom in on images, and **download results**.
 
 ## Preview
 
@@ -40,7 +40,7 @@ This project is a **lung segmentation application** built with React, TypeScript
 
 ## API Integration
 
-The app sends requests to a separate backend API with:
+The app sends requests to a [separate backend API](https://github.com/kelvinleandro/lung-segmentation-server) with:
 
 - DICOM file
 
@@ -60,8 +60,8 @@ The app sends requests to a separate backend API with:
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/ProjetoFinalPDI/frontend.git
-   cd frontend
+   git clone https://github.com/kelvinleandro/lung-segmentation-client
+   cd lung-segmentation-client
    ```
 2. Install dependencies
 

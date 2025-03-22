@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este projeto é um **aplicativo de segmentação pulmonar** desenvolvido com **React, TypeScript, TailwindCSS e ShadCN UI**. Ele permite que os usuários façam upload de **arquivos DICOM (.dcm)**, configurem parâmetros de segmentação e enviem os dados para uma API para pré-processamento, segmentação e pós-processamento. Os usuários também podem **editar segmentações manualmente**, ampliar imagens e **baixar os resultados**.
+Este projeto é um **aplicativo de segmentação pulmonar** desenvolvido com **React, TypeScript, TailwindCSS e ShadCN UI**. Ele permite que os usuários façam upload de **arquivos DICOM (.dcm)**, configurem parâmetros de segmentação e enviem os dados para uma [API](https://github.com/kelvinleandro/lung-segmentation-server) para pré-processamento, segmentação e pós-processamento. Os usuários também podem **editar segmentações manualmente**, ampliar imagens e **baixar os resultados**.
 
 ## Preview
 
@@ -30,7 +30,7 @@ Este projeto é um **aplicativo de segmentação pulmonar** desenvolvido com **R
 
 ## Integração com API
 
-O aplicativo envia requisições para uma **API backend separada** com:
+O aplicativo envia requisições para uma [**API backend separada**](https://github.com/kelvinleandro/lung-segmentation-server) com:
 
 - **Arquivo DICOM**
 - **Parâmetros de pré-processamento, segmentação e pós-processamento** (em JSON)
@@ -47,8 +47,8 @@ O aplicativo envia requisições para uma **API backend separada** com:
 1. **Clone o repositório**
 
    ```bash
-   git clone https://github.com/ProjetoFinalPDI/frontend.git
-   cd frontend
+   git clone https://github.com/kelvinleandro/lung-segmentation-client
+   cd lung-segmentation-client
    ```
 
 2. **Instale as dependências**
